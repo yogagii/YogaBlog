@@ -1,5 +1,5 @@
 Title: 解决VS Code在ubuntu下terminal无法显示下划线的问题
-Date: 2018:10:07 20:47
+Date: 2018-10-07 20:47
 Category: Configuration
 Tags: vscode
 Author: stupidfish

@@ -19,7 +19,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = 'pelican-themes/bootstrap2'
+THEME = 'pelican-themes/new-bootstrap2'
 
 # Blogroll
 LINKS = (('Github', 'https://github.com/sjtuzbx'),

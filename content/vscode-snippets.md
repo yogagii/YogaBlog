@@ -1,5 +1,5 @@
 Title: 利用VS Code Snippets生成C++头文件保护符
-Date: 2018:10:07 20:54
+Date: 2018-10-07 20:54
 Category: Programming
 Tags: vscode, c++ 
 Author: stupidfish

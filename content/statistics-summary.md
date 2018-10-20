@@ -2,7 +2,7 @@ Title: 统计推断复习
 Date: 2018-10-14 20:52
 Category: Math
 Tags: statistics
-Author: stupidfish
+Author: 张本轩
 
 ### 总体
 

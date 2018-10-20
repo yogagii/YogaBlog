@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = 'stupidfish'
-SITENAME = 'StupidFish'
+AUTHOR = '张本轩'
+SITENAME = 'Stupidfish'
 SITEURL = ''
 
 PATH = 'content'
@@ -19,7 +19,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = 'pelican-themes/new-bootstrap2'
+THEME = 'pelican-themes/svbtle'
 
 # Blogroll
 LINKS = (('Github', 'https://github.com/sjtuzbx'),
@@ -32,3 +32,16 @@ DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
+
+# math
+PLUGIN_PATHS=['pelican-plugins']
+PLUGINS = ["render_math"]
+
+## load cache
+LOAD_CONTENT_CACHE = False
+
+## typogrify
+TYPOGRIFY = True
+
+SUMMARY_MAX_LENGTH = 30
+

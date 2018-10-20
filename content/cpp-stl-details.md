@@ -2,7 +2,7 @@ Title: C++ STL常用数据结构整理
 Date: 2018-10-07 20:21
 Category: Programming
 Tags: c++, stl
-Author: stupidfish
+Author: 张本轩
 
 1. vector
     * 插入push_back(), 时间复杂度O(1)

@@ -72,10 +72,13 @@ Author: 张本轩
         * `git checkout [branch-name]`
     * 新建并切换分支: 
         * `git checkout -b [branch-name]`
+        * `git checkout --orphan [branch-name]` 创建一个全新分支，分支历史从零开始
     * 合并到当前分支: 
         * `git merge [branch-name]`
     * 删除分支: 
         * `git branch -d [branch-name]`
+    * 重命名分支:
+        * `git branch -m [new-branch-name]`
     * 推送分支: 
         * `git push [remote] [branch]`
     * 避免输入密码: 

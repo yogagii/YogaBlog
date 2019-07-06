@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = '张本轩'
-SITENAME = 'Stupidfish'
+AUTHOR = 'Yoga'
+SITENAME = 'Yoga_Blog'
 SITEURL = ''
 
 PATH = 'content'
 
 TIMEZONE = 'Asia/Shanghai'
 
-DEFAULT_LANG = 'Chinese (Simplified)'
+DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -19,7 +19,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = 'pelican-themes/svbtle'
+THEME = 'pelican-themes/Responsive-Pelican'
 
 # Blogroll
 LINKS = (('Github', 'https://github.com/sjtuzbx'),
@@ -35,7 +35,7 @@ DEFAULT_PAGINATION = 10
 
 # math
 PLUGIN_PATHS=['pelican-plugins']
-PLUGINS = ["render_math"]
+# PLUGINS = ["render_math"]
 
 ## load cache
 LOAD_CONTENT_CACHE = False

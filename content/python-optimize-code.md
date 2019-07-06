@@ -10,7 +10,7 @@ Author: 张本轩
 
 You can use `timeit` in IPython to time the statement.
 
-![](img/ipython-timeit.png)
+![img](img/ipython-timeit.png)
 
 ### Profiler
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
 You can time the script using following code in ipython:
 
-![](img/ipython-profile.png)
+![img](img/ipython-profile.png)
 
 You can also use `python -m cProfile test.py` to profile.
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     solve()
 ```
 
-![](img/ipython-lineprofile.png)
+![img](img/ipython-lineprofile.png)
 
 ## Reference
 

@@ -1,10 +1,8 @@
-Title: React特点
+Title: React 特点
 Date: 2019-07-06
 Category: React
-Tags: React, 虚拟Dom
+Tags: React, Virtual Dom, Flux
 Author: Yoga
-
-## React特点
 
 
 ### 1. 虚拟Dom

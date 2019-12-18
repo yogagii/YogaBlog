@@ -4,7 +4,6 @@ Category: React
 Tags: React, JSX
 Author: Yoga
 
-## JSX (JavaScript XML)
 JSX语法转义器会识别嵌入JavaScript代码中的HTML标签，当遇到‘<’标识符就会启动JSX转移过程，遇到‘{’标识符就会当作JavaScript代码进行处理。
 
 引用Babel中负责JSX转义的模块browser.js，并将使用JSX语法描述的js文件类型声明为text/babel

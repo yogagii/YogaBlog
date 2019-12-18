@@ -22,8 +22,7 @@ AUTHOR_FEED_RSS = None
 THEME = 'pelican-themes/Responsive-Pelican'
 
 # Blogroll
-LINKS = (('Github', 'https://github.com/sjtuzbx'),
-        ('Blogger', 'https://stupidbookfish.blogspot.com/'))
+LINKS = (('Github', 'https://github.com/yogagii'),)
 
 # Social widget
 # SOCIAL = (('You can add links in your config file', '#'),)

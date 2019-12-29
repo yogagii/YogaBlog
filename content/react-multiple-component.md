@@ -1,4 +1,4 @@
-Title: react 复合组件
+Title: React 复合组件
 Date: 2019-07-13
 Category: React
 Tags: React, Component

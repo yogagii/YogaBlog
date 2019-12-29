@@ -1,5 +1,5 @@
 output/
 __pycache__/
-pelican-themes/
 pelican-plugins/
 *.pyc
+.DS_Store

@@ -1,8 +1,8 @@
 '''
 @Author: your name
 @Date: 2019-12-19 10:13:56
-@LastEditTime : 2019-12-29 22:15:44
-@LastEditors  : Please set LastEditors
+@LastEditTime : 2020-01-20 14:51:26
+@LastEditors  : Yoga
 @Description: In User Settings Edit
 @FilePath: /YogaBlog/pelicanconf.py
 '''
@@ -33,7 +33,7 @@ THEME = 'pelican-themes/Responsive-Pelican'
 # Blogroll
 LINKS = (('Github', 'https://github.com/yogagii'),)
 
-MENUITEMS = (('React', 'category/react.html'),('React-Admin', 'category/react-admin.html'),('Data', 'category/data.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'))
+MENUITEMS = (('Javascript', 'category/javascript.html'),('React', 'category/react.html'),('React-Admin', 'category/react-admin.html'),('Data', 'category/data.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'))
 
 # Social widget
 # SOCIAL = (('You can add links in your config file', '#'),)

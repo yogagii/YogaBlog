@@ -27,5 +27,7 @@ COS对象耦合性算法：名词性问题相似度计算，完整的表述是�
 首次登录的用户没有浏览的历史记录，不能做聚类分析，根据Role, Sector, Region给用户打标签，根据"啤酒与尿布"的原理，相同标签的用户如果在看A类workbooks时也会看B类workbooks，则将AB两类workbooks一起推荐给新用户
 
 关联规则挖掘算法：
+
 * apriori
+
 * association rules learning

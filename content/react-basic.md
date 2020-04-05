@@ -17,20 +17,20 @@ react.js实现React核心的逻辑，与具体的渲染引擎无关，逐级创�
   _参数一是html标签或ReactClass对象，参数二是属性，参数三以后是子元素_
 
 ```javascript
-var parent = React.createElement(‘ul’, {className:’myClass’}, child1, child2);
+var parent = React.createElement('ul', {className:'myClass'}, child1, child2);
 ```
 
 
 * **React.DOM**是预先定义好的HTML元素集，相当于预置了第一个参数
 
-  React.createElement(‘ul’) 等价于 React.DOM.ul() 工厂类方法
+  React.createElement('ul') 等价于 React.DOM.ul() 工厂类方法
 
 * **React.createFactory**
 
   HTML标签的工厂类已经预置，但对于自定义组件而言，首先需要创建一个工厂类
 
 ```javascript
-var divFactory = React.createFactory(‘div’);
+var divFactory = React.createFactory('div');
 ```
 
 * **React.createClass**
@@ -68,7 +68,7 @@ react-dom.js包含了具体的DOM渲染相关逻辑，与浏览器相关，把�
 
 ```javascript
 // 将组件挂接到浏览器DOM中
-ReactDom.render(HelloComponent, document.getElementById(‘app’));
+ReactDom.render(HelloComponent, document.getElementById('app'));
 
 //获得真实DOM元素
 ReactDom.findDOMNode(this.refs.input)

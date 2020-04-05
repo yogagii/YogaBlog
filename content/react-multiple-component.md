@@ -21,7 +21,7 @@ ___
 * **动态参数传递**：展开属性（参数名称是变量）
 
 ```javascript
-  return <Component {...this.props} moreAttr=“value” />
+  return <Component {...this.props} moreAttr="value" />
   // 后面的参数会覆盖this.props中的moreAttr
 ```
 
@@ -31,7 +31,7 @@ ___
 // 剩余属性：除checked之外的属性
 var {checked, ...other} = this.props;
 // 过滤属性
-var other = _.omit(this.props, ’checked’); 
+var other = _.omit(this.props, 'checked'); 
 ```
 
 * **Context特性**：能实现组件树上的数据越级传递
@@ -60,7 +60,7 @@ var other = _.omit(this.props, ’checked’);
       }
       // 上级组件必须声明回调函数
       getChildContext: funtion( ) {
-        return {color: ‘purple’};		
+        return {color: 'purple'};		
       }
   });
 ```
@@ -108,7 +108,7 @@ var Parent = react.creatClass({
   }
   render: function() {
     return (
-      <Child.onClick={this.handleClick.bind(this, i)} ref={‘item’+i} />
+      <Child.onClick={this.handleClick.bind(this, i)} ref={'item'+i} />
     )
   }
 });

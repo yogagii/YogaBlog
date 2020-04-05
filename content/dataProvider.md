@@ -55,7 +55,7 @@ const App = () => (
 
 ## Request Format
 
-Data queries require a type (e.g. GET_ONE), a resource (e.g. ‘posts’) and a set of parameters.
+Data queries require a type (e.g. GET_ONE), a resource (e.g. 'posts') and a set of parameters.
 
 ```javascript
 dataProvider(GET_LIST, 'posts', {

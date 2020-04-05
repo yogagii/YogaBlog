@@ -22,9 +22,9 @@ Author: Yoga
 
 ```javascript
   // bind方法为事件响应函数增加一个参数
-  <input onChange={this.handleChange.bind(this, ‘checked’)} />
+  <input onChange={this.handleChange.bind(this, 'checked')} />
   hangdeChange = function(name, event) {
-    newState[name] = name == ‘checked’ ? event.target.checked : event.target.value’
+    newState[name] = name == 'checked' ? event.target.checked : event.target.value
   }
 ```
 
@@ -34,9 +34,9 @@ Author: Yoga
 
 ```javascript
 	// 要求所有相关的标签都要统一设置name属性
-	<input name=‘checked’ onChange={this.handleChange} />
+	<input name='checked' onChange={this.handleChange} />
 	handleChange: function(event) {
-		newState[event.target.name] = event.target.name == ‘checked’ ? event.target.checked : event.target.value;
+		newState[event.target.name] = event.target.name == 'checked' ? event.target.checked : event.target.value;
 	}
 ```
 

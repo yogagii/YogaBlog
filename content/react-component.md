@@ -33,7 +33,7 @@ ___
 设置props的默认值，仅调用一次，属性如果没有通过父组件传入的话，返回对象中的相应的属性将合并到this.props·
 ```javascript
 getDefaultProps: function(){
-    return {dname:’’};
+    return {dname:''};
 }
 ```
 
@@ -114,7 +114,7 @@ React.PropTypes提供各种验证器来验证传入数据的有效性，为了�
 
 * 基本类型：React.PropTypes.array / bool / func / number / object / string / node / element
 
-* 指定类型之一：instanceOf(Message) / oneOf([‘News’, ‘Photos‘]) / oneOfType([React.ProtoTypes.string])
+* 指定类型之一：instanceOf(Message) / oneOf(['News', 'Photos']) / oneOfType([React.ProtoTypes.string])
 
 * 特定类型的对象：arrayOf(React.PropTypes.number) / objectOf(React.ProtoTypes.number)
 
@@ -132,7 +132,7 @@ var App = React.createClass({​
     staticMethod:function(){}
    }
   //组件调试时显示的组件名
-  displayName : ‘APP’,
+  displayName : 'APP',
   //定义在多个组件之间共享的函数代码
   mixins:[]
   render: function(){return <h1>app</h1>}

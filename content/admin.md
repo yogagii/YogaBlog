@@ -6,7 +6,7 @@ Author: Yoga
 
 The <Admin> component creates an application with its own state, routing, and controller logic. <Admin> requires only a dataProvider prop, and at least one child <Resource> to work:
 
-```javascript
+```html
 const App = () => (
     <Admin dataProvider={simpleRestProvider('http://path.to.my.api')}>
         <Resource name="posts" list={PostList} />
@@ -40,7 +40,7 @@ title="My Custom Admin"
 
 ## dashboard
 
-By default, the homepage of an admin app is the list of the first child 'Resource'. But you can also specify a custom component instead. To fit in the general design, use Material UI’s 'Card' component, and react-admin’s 'Title' component to set the title in the AppBar:
+By default, the homepage of an admin app is the list of the first child 'Resource'. But you can also specify a custom component instead. To fit in the general design, use Material UI's 'Card' component, and react-admin's 'Title' component to set the title in the AppBar:
 
 dashboard={Dashboard}
 
@@ -60,7 +60,7 @@ export default () => (
 
 ## catchAll
 
-When users type URLs that don’t match any of the children <Resource> components, they see a default “Not Found” page. You can customize this page to use the component of your choice by passing it as the catchAll prop. 
+When users type URLs that don't match any of the children <Resource> components, they see a default "Not Found" page. You can customize this page to use the component of your choice by passing it as the catchAll prop. 
 
 ## theme
 

@@ -31,13 +31,13 @@ const App = () => (
 export default App;
 ```
 
-name="users" informs react-admin to fetch the “users” records from the http://jsonplaceholder.typicode.com/users URL.
+name="users" informs react-admin to fetch the "users" records from the http://jsonplaceholder.typicode.com/users URL.
 
 list={ListGuesser} means that react-admin should use the <ListGuesser> component to display the list of posts.
 
 ## Selecting Columns
 
-The <ListGuesser> component is not meant to be used in production - it’s just a way to quicky bootstrap an admin. ListGuesser dumps the code of the list it has guessed to the console:
+The <ListGuesser> component is not meant to be used in production - it's just a way to quicky bootstrap an admin. ListGuesser dumps the code of the list it has guessed to the console:
 
 ```javascript
 // in src/users.js
@@ -74,7 +74,7 @@ Now, the app uses a component that you can customize. React-admin provides more 
 
 ## Customizing Styles
 
-React-admin relies on material-ui, a set of React components modeled after Google’s Material Design UI Guidelines. Material-ui uses JSS, a CSS-in-JS solution, for styling components.
+React-admin relies on material-ui, a set of React components modeled after Google's Material Design UI Guidelines. Material-ui uses JSS, a CSS-in-JS solution, for styling components.
 
 ```javascript
 // in src/MyUrlField.js
@@ -118,7 +118,7 @@ export default enhance(MonthlyRevenue);
 
 ## Handling Relationships
 
-React-admin knows how to take advantage of these foreign keys to fetch references. ReferenceField component alone doesn’t display anything. It just fetches the reference data, and passes it as a record to its child component (a TextField in our case).
+React-admin knows how to take advantage of these foreign keys to fetch references. ReferenceField component alone doesn't display anything. It just fetches the reference data, and passes it as a record to its child component (a TextField in our case).
 
 ```javascript
 <ReferenceField source="userId" reference="users">
@@ -180,11 +180,11 @@ const App = () => (
 );
 ```
 
-React-admin automatically adds a “create” button on top of the posts list to give access to the <PostCreate> component. And the creation form works ; it issues a POST request to the REST API upon submission.
+React-admin automatically adds a "create" button on top of the posts list to give access to the <PostCreate> component. And the creation form works ; it issues a POST request to the REST API upon submission.
 
 ## Undo
 
-When a user edits a record and hits the “Save” button, the UI shows a confirmation and displays the updated data before sending the update query to server. 
+When a user edits a record and hits the "Save" button, the UI shows a confirmation and displays the updated data before sending the update query to server. 
 
 Benefit:
 
@@ -218,7 +218,7 @@ export const PostList = (props) => (
 
 ## responsive
 
-The best compromise would be to use <SimpleList> on small screens, and <Datagrid> on other screens. That’s where the <Responsive> component comes in:
+The best compromise would be to use <SimpleList> on small screens, and <Datagrid> on other screens. That's where the <Responsive> component comes in:
 
 ```javascript
 // in src/posts.js

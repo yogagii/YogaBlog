@@ -17,18 +17,18 @@ Author: Yoga
 
 1. 用ontouchstart绑定事件即可
 
-```
-onTouchEnd={e => {
+```javascript
+onTouchEnd = e => {
   e.preventDefault();
   handleSelectAll(e);
-}}
+}
 ```
 
 用onTouchStart时会有警告：Unable to preventDefault inside passive event listener due to target being treated as passive.
 
 2. 在IOS下，点击页面中的input时，弹出软键盘时，如果input比较靠下，整个页面会上移，document.body.scrollOffset会由0变成大于0。 软键盘消失后，页面会下移。但是document.body.scrollOffset并不会变成0，所以这时候触控不准；
 
-```
+```javascript
 $('textarea,input').on('blur', function (event) {
   document.body.scrollTop = 0;
 });

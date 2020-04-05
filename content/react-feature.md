@@ -26,7 +26,7 @@ _在文本框中输入任意文本，在禁止文本框，可以发现文本框�
 * dangerouslySetInnerHTML: 用来直接插入纯HTML文本字符串，避免React的自动转义。
 
 ```html
-var content = ‘<span>文本内容</span>’;
+var content = '<span>文本内容</span>';
 <div dangerouslySetInnerHTML={{_html: content}}></div>
 ```
 

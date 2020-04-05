@@ -186,7 +186,7 @@ git rebase [branch-name]
 * 打tag:
 ```
 git tag 2019-R6
-git push -- tag
+git push --tag
 ```
 * 拷贝本地文件去服务器:
 ```

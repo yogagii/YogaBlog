@@ -6,11 +6,11 @@ Author: Yoga
 
 ## MVC
 
-![Flux](img/swift-mvc.png)
+![Swift](img/swift-mvc.png)
 
-![Flux](img/swift-mvc2.png)
+![Swift](img/swift-mvc2.png)
 
-![Flux](img/swift-mvc3.png)
+![Swift](img/swift-mvc3.png)
 
 view: your controller's minions (Main.storyboard)
 
@@ -116,6 +116,22 @@ for _ in 1...numberOfPairsOfCards {
 
 结构体是值类型，每次使用时复制
 
+### 遍历数组
+
+```swift
+for button in cardButtons {
+
+}
+// count数组长度
+for index in 0...<cardButtons.count {
+  let button = cardButtons[index]
+}
+// indices = a countable range of all the indexes
+for index in cardButtons.indices {
+  
+}
+```
+
 ## 静态方法
 
 Static function is a function even though it's in the Card class, you can't send it to a card
@@ -159,3 +175,30 @@ If you make a var lazy, that means it doesn't actually initialize until someone 
 链接：https://www.jianshu.com/p/d1c4cbb5bede
 
 缺点：没有didSet
+
+## Dictionary 字典
+
+> Dictionary is a generic type like array, but you specify the type both of the key and the value.
+
+Dictionary是一种散列表，可以通过关键值（key）快速地访问其中的元素（value），key必须是符合Hashable协议的类型，而value可以是任何类型。创建空的Dictionary时，必须声明key和value的类型。
+
+```swift
+var emoji = Dictionary<Int,String>()
+var emoji = [Int:String]()
+```
+
+Looking something up in the dictionary returns an optional.
+
+## Random
+
+伪随机数生成器
+
+arc4random_uniform is a pseudo-random number generator, and it generates a random number between 0 and upper bound.
+
+生成[0, 上限-1]之间的随机数，上限需为UInt32类型，count为Int类型，UInt32是struct，可用UInt32()初始化函数把Int转化为UInt32，同样Int()可将UInt32转化为Int类型
+
+```swift
+if emojiChoices.count > 0 {
+  let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)))
+}
+```

@@ -13,7 +13,7 @@ hook button and controller up:
 
 2. 点击dashboard上黄色按钮，拖拽到UI，选择函数
 
-![Flux](img/swift4.png)
+![Swift](img/swift4.png)
 
 函数参数（外部名称 内部名称：类型）
 
@@ -64,7 +64,7 @@ connection:
 
 3. Outlet Collection: create an array of the things in UI
 
-![Flux](img/swift5.png)
+![Swift](img/swift5.png)
 
 ```swift
 @IBOutlet weak var flipCountLabel: UILabel! //感叹号的变量不必初始化
@@ -77,7 +77,7 @@ var flipCount = 0 {
 }
 ```
 
-![Flux](img/swift6.png)
+![Swift](img/swift6.png)
 
 ```swift
 @IBOutlet var cardButtons: [UIButton]! 
@@ -104,4 +104,29 @@ var emojiChoices = ["🎃", "👻", "🎃", "👻 "]
 }
 
 func index(of element: UIButton) -> Int? // 返回值可选，只有两种状态：int/nil
+```
+
+## Optional
+
+返回值为optional的函数：
+* index
+* dictionary
+* ...
+
+定义optional变量
+```swift
+// 法一
+if let chosenEmoji = emoji[card.identifier] {
+  return chosenEmoji
+}
+
+// 法二
+if emoji[card.identifier] != nil {
+  return emoji[card.identifier]!
+} else {
+  return "?"
+}
+
+// 法三
+return emoji[card.identifier] ?? "?"
 ```

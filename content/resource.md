@@ -1,6 +1,6 @@
-Title: Resource
+Title: React-Admin -- Resource
 Date: 2019-09-21
-Category: React-Admin
+Category: React
 Tags: React-Admin
 Author: Yoga
 

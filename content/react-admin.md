@@ -1,6 +1,6 @@
 Title: React-Admin
 Date: 2019-09-10
-Category: React-Admin
+Category: React
 Tags: React-Admin
 Author: Yoga
 

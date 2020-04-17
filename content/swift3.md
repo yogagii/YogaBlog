@@ -12,7 +12,7 @@ load view -> fetch data(Network) -> save data -> display(Multithread) -> action
 
 UIwebview 有内存泄漏的问题，苹果优化做了 webkitbweview
 
-```
+```swift
   class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     var webView: WKWebView!
@@ -71,7 +71,7 @@ WebViewController -> WebView -> ScriptMessageHandler -> WebViewController
 
 WebViewController -> WebView -> ScriptMessageHandler -> WeekHandler ...>弱引用...> WebViewController
 
-```
+```swift
   class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         <#code#>

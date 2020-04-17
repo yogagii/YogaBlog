@@ -1,6 +1,6 @@
-Title: Data Provider
+Title: React-Admin -- Data Provider
 Date: 2019-09-21
-Category: React-Admin
+Category: React
 Tags: React-Admin
 Author: Yoga
 

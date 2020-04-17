@@ -1,6 +1,6 @@
-Title: Admin
+Title: React-Admin -- Admin
 Date: 2019-09-21
-Category: React-Admin
+Category: React
 Tags: React-Admin
 Author: Yoga
 

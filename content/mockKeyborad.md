@@ -73,7 +73,42 @@ eventObj.which = keyCode
 el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent('onkeydown', eventObj)
 ```
 
-困难：试了三种都失败了，首先是初始化的时候keycode赋值无效，即使用Object.defineProperty强行修改keycode，也无法触发原生事件，因为isTrusted值为false，参考下文：https://www.jianshu.com/p/3ca5075229d4
+困难：试了三种都失败了，首先是初始化的时候keycode赋值无效，即使用Object.defineProperty强行修改keycode，也无法触发原生事件，因为isTrusted值为false
+
+```js
+var oEvent = document.createEvent('KeyboardEvent');
+Object.defineProperty(oEvent, 'keyCode', {
+  get : function() {
+    return this.keyCodeVal;
+  }
+}); 
+oEvent.initKeyboardEvent("keydown", true, true, document.defaultView, k, k, false, false, false, true);
+
+$(window).keydown(function(e){
+  console.log(e);
+});
+// Event {
+//   isTrusted: false
+//   type: "keydown"
+//   target: body
+//   currentTarget: null
+//   eventPhase: 0
+//   bubbles: true
+//   cancelable: true
+//   defaultPrevented: false
+//   composed: false
+//   timeStamp: 74508.58999999764
+//   srcElement: body
+//   returnValue: true
+//   cancelBubble: false
+//   path: (4) [body, html.no-js, document, Window]
+//   keyCode: 83
+//   which: 83
+//   metaKey: true
+// }
+```
+
+参考下文：https://www.jianshu.com/p/3ca5075229d4
 
 * 事件生成的用户代理,作为用户交互的结果,或直接导致修改DOM,可信的用户代理与特权,不提供事件生成的脚本通过createEvent()方法,使用initEvent修改()方法,或通过dispatchEvent派遣()方法。可信事件的isTrusted属性值为true，而不可信事件的isTrusted属性值为false。
 

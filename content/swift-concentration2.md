@@ -110,11 +110,23 @@ for indentifier in 1...numberOfPairsOfCards {
 // 用underbar作为control variable of loop，表示ignore this
 for _ in 1...numberOfPairsOfCards {
   let card = Card()
-  cards += [card, card]
+  cards += [card, card] // 结构体是值类型，每次使用时复制
 }
 ```
 
-结构体是值类型，每次使用时复制
+**Stride** is a global function that will create a CountableRange from floating point values. The return type of stride is CountableRange.
+
+按照指定的递进值生成一个序列
+
+through包含终点值ClosedCountableaRange
+
+to不包含终点值CountableaRange
+
+```swift
+for i in stride(from: 0.5, through: 15.25, by: 0.3) {
+
+}
+```
 
 ### 遍历数组
 
@@ -175,19 +187,6 @@ If you make a var lazy, that means it doesn't actually initialize until someone 
 链接：https://www.jianshu.com/p/d1c4cbb5bede
 
 缺点：没有didSet
-
-## Dictionary 字典
-
-> Dictionary is a generic type like array, but you specify the type both of the key and the value.
-
-Dictionary是一种散列表，可以通过关键值（key）快速地访问其中的元素（value），key必须是符合Hashable协议的类型，而value可以是任何类型。创建空的Dictionary时，必须声明key和value的类型。
-
-```swift
-var emoji = Dictionary<Int,String>()
-var emoji = [Int:String]()
-```
-
-Looking something up in the dictionary returns an optional.
 
 ## Random
 

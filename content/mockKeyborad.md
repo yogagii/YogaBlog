@@ -4,6 +4,12 @@ Category: Javascript
 Tags:
 Author: Yoga
 
+背景：
+
+添加按钮，模拟tableau的保存按钮，点击后可保存iframe内的正在编辑的workbook
+
+![mockKeyboard](img/mockKeyboard.jpg)
+
 ### 尝试方法一：
 
 Tableau文档提供的接口
@@ -22,7 +28,7 @@ https://prodbitabcrp.jnj.com/vizportal/api/web/v1/getDestinationProjects
 
 前端做个按钮，点击后向后端发送workbook信息，让后端调用tableau的接口完成保存
 
-困难：wenyu说后端保存workbook会使发布人从用户变为某个admin账号
+困难：wenyu说后端保存workbook会使发布人从用户变为某个admin账号，而且后端拿不到session id
  
 ### 尝试方法四：
 

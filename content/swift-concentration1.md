@@ -105,28 +105,3 @@ var emojiChoices = ["🎃", "👻", "🎃", "👻 "]
 
 func index(of element: UIButton) -> Int? // 返回值可选，只有两种状态：int/nil
 ```
-
-## Optional
-
-返回值为optional的函数：
-* index
-* dictionary
-* ...
-
-定义optional变量
-```swift
-// 法一
-if let chosenEmoji = emoji[card.identifier] {
-  return chosenEmoji
-}
-
-// 法二
-if emoji[card.identifier] != nil {
-  return emoji[card.identifier]!
-} else {
-  return "?"
-}
-
-// 法三
-return emoji[card.identifier] ?? "?"
-```

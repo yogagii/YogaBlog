@@ -1,6 +1,6 @@
 Title: React Hook
 Date: 2019-09-07
-Category: React-Admin
+Category: React
 Tags: React, hook
 Author: Yoga
 

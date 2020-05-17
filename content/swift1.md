@@ -1,4 +1,4 @@
-Title: Swift入门
+Title: Swift Data Structures
 Date: 2020-03-12
 Category: IOS
 Tags: Swift
@@ -6,9 +6,19 @@ Author: Yoga
 
 IOS, iPadOS, maxOS, iwatch
 
+# Data Structures
+
 ## class类：面向对象，动物类，引用类型reference type
 
+> Examples: ViewController, UIButton, Concentration
+
 传递时只是传递指针just passing pointers to it
+
+When does it get cleaned up out of the heap?
+
+java--garbage collection 垃圾收集(track->mark->clean)
+
+swift--reference counting 引用计数(instantly removes it as soon as no one point to it)
 
 init在堆内存Heap里引用计数+1,deinit计数-1，容量大，速度慢，计数到0被清理
 
@@ -88,10 +98,6 @@ enum ADC: String {
 let digital = ADC.digital
 ```
 
-## Object 面相对象
-
-## Functional
-
 ## Protocal协议
 
 ```swift
@@ -125,8 +131,9 @@ extension Car where Self: ElectricDrive {
 let tesla = Tesla(name: "tesla", maxSpeed: 200.0)
 print(tesla.isElectric) //true
 ```
+</br>
 
-## keywords关键字
+# keywords 关键字
 
 inout
 
@@ -144,16 +151,28 @@ let
 
 var +1 -1(0时deinit)
 
-week 弱引用（对象销毁时deinit）
+## strong 强引用(default)
 
-## modifier修饰符
+normal reference counting
 
-## optional chain可选链式调用
+当一个对象被声明为strong时，就表示父层级对该对象有一个强引用的指向。此时该对象的引用计数会增加1。
 
-```swift
-class ClassA {
-  var name:String? //?可能有可能没有 nil &非nil
-  var grade:String! //!初始化时一定要有值
-  var nameA: String = "123" //默认值
-}
-```
+## weak 弱引用
+
+对象销毁时deinit，弱引用对象的引用计数不会+1
+
+当对象被声明为weak时，父层级对此对象没有指向，该对象的引用计数不会增加1。它在对象释放后弱引用也随即消失。继续访问该对象，程序会得到nil，不会崩溃。
+
+A weak pointer will never keep an object in the heap. It gets set to nil if all the other strong points go away. It has to be an optional.
+
+在声明弱引用对象是必须用var关键字, 不能用let.
+因为弱引用变量在没有被强引用的条件下会变为nil, 而let常量在运行的时候不能被改变.
+
+## unowned
+
+对象在释放后，它指引的对象不会清零，依然有一个无效的引用指向对象，它不是Optional也不指向nil。如果继续访问该对象，程序就会崩溃。
+
+当访问对象确定不可能被释放，则用unowned。比如self的引用。
+
+The one time we use this is to avoid a memory cycle. We will use unowned with closures闭包.
+

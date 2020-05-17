@@ -168,6 +168,10 @@ git config --global credential.helper cache
 git checkout -b [branch-name] [remote-name]/[branch-name]
 git checkout --track [remote-name]/[branch-name]
 ```
+* 将本地分支与远程分支关联: 
+```
+git branch --set-upstream-to=origin/dev
+```
 * 修改上游分支: 
 ```
 git checkout -u [remote-name]/[branch-name]
@@ -236,11 +240,60 @@ chmod 777 ./build.sh
 ./build.sh
 ```
 
+## netstat
 
+* 查看占用端口号27999的进程
+```
+netstat -pan | grep 27999
+// tcp6  0  0  :::27999  :::*  LISTEN  15460/node
+```
+* 查看指定进程详情
+```
+ps -aux | grep 15460
+// root 15460  0.0  0.2 867324 42508 pts/5 Sl+ 10:14 0:00 node index
+```
+* 杀死指定进程
+```
+kill 15460
+```
 
+## PM2
 
+* 启动index.js（node index）并起名:
+```
+pm2 start index.js --name wxAuthorize
+```
+* 列表 PM2 启动的所有的应用程序:
+```
+pm2 list
+```
+* 删除指定应用 id 0:
+```
+pm2 delete 0
+```
+* 停止指定应用:
+```
+pm2 stop wxAuthorize
+```
 
+## less
 
+* 显示CSV的行数:
+```
+cat data.csv | wc -l // wordcount -line
+```
+
+* 高级的cat:
+
+大写G文件尾，小写g到文件头，小写q退出, /搜索关键字
+```
+less data.csv
+```
+
+* 显示行号
+```
+less -N data.csv 
+```
 
 
 

@@ -1,4 +1,4 @@
-Title: F1nance recommend system
+Title: Recommend system
 Date: 2020-01-17
 Category: Analytics
 Tags: Algorithm

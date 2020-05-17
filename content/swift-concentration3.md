@@ -4,7 +4,7 @@ Category: IOS
 Tags: Swift
 Author: Yoga
 
-## UIStackView 堆栈视图
+# UIStackView 堆栈视图
 
 UIStackView is class in IOS (like UI Button and UI Label). It will take other views and stack them together. It only knows how to stack horizontally or vertically.
 
@@ -51,3 +51,9 @@ The safe area is a safe edge around the screen where you can safely draw without
 右边距：trailing space to save area
 
 底边距：bottom space to save area
+
+居中对齐：center horizontally in save area
+
+垂直距离：vertical spacing
+
+relation: greater than or equal (确保卡片在文字上方)

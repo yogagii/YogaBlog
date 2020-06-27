@@ -275,6 +275,14 @@ pm2 delete 0
 ```
 pm2 stop wxAuthorize
 ```
+* 显示log:
+```
+pm2 log wxAuthorize
+```
+* 重启指定应用:
+```
+pm2 reload wechat_auth
+```
 
 ## less
 

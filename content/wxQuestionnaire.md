@@ -308,8 +308,8 @@ const Client = require('ssh2-sftp-client');
 const sftpOption = require('./sftp_option')
 
 const scheduleCronstylePostData = () => {
-  //每小时0分0秒触发:
-  schedule.scheduleJob('0 0 * * * *', () => {
+  //每小时0分30秒触发:
+  schedule.scheduleJob('0 30 * * * *', () => {
     console.log('>>> scheduleCronstylePostData: ' + new Date())
     const sftp = new Client();
     sftp.connect(sftpOption).then(() => {
@@ -318,13 +318,13 @@ const scheduleCronstylePostData = () => {
         console.log("---- Upload finish ----");
         sftp.end()
         // 删除文件
-        // fs.unlink('data.csv',function(error){
-        //   if (error){
-        //       console.error(error);
-        //       return false;
-        //   }
-        //   console.log('---- delete csv success ----');
-        // })
+        fs.unlink('data.csv',function(error){
+          if (error){
+              console.error(error);
+              return false;
+          }
+          console.log('---- delete csv success ----');
+        })
     }).catch((err) => {
         console.error(err);
     });
@@ -332,6 +332,99 @@ const scheduleCronstylePostData = () => {
 }
 scheduleCronstylePostData();
 ```
+
+### 静态资源访问权限
+
+https://blog.csdn.net/x746655242/article/details/53318464
+
+中间件有很多用处，可以做权限的配置，访问前的各种参数校验，
+
+```javascript
+const path = require("path");
+
+app.use(function(req,res,next){
+  var static= /^(\/data)/g;
+  if (static.test(req.path)) {
+    console.log('>>> user: ', req.query.user);
+    console.log('>>> password: ', req.query.password);
+    if (req.query.user!=="yoga" || req.query.password!=="123") {
+      console.log('---- illegal request ----');
+      return res.end('请求非法');
+    }
+  }
+  next()
+});
+app.use('/data',express.static(path.join(__dirname,'data')));
+
+// http://localhost:27999/data/total_data.csv?user=yoga&password=123
+```
+
+### 发送文件
+
+* res.sendFile (chrome在浏览器里打开，ie下载)
+
+```javascript
+app.get('/data', function (req, res, next) {
+  var options = {
+    root: __dirname + '/data/',
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  };
+  var fileName = 'total_data.csv';
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log('>>> Sent:', fileName);
+    }
+  });
+});
+
+```
+* res.download (所有浏览器都下载)
+
+```javascript
+app.get('/data', function (req, res, next) {
+  const fileName = 'total_data.csv';
+  res.download(`./data/${fileName}`, fileName, function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log('>>> Sent:', fileName);
+    }
+  });
+});
+```
+
+nodejs解析csv成json
+
+```javascript
+const parse = require('csv-parse/lib/sync')
+
+app.get('/data', function(req, res, next) {
+  fs.readFile('./data/total_data.csv', 'utf8', function (err, existData) {
+    if (err) {
+      console.error(err)
+      res.send({});
+    } else {
+      const records = parse(existData, {
+        columns: true,
+        skip_empty_lines: true
+      })
+      res.send(records);
+    }
+  })
+});
+```
+
+# Microsoft flow
+
+创建定时任务，每小时通过接口获取数据，创建csv并存入sharepoint
+
+![flow](img/flow1.png)
 
 # 压力测试
 
@@ -343,6 +436,10 @@ https://blog.csdn.net/yaorongke/article/details/82799609
 ![jmeter](img/jmeter4.png)
 ![jmeter](img/jmeter5.png)
 
-Mac运行jmeter：sh jmeter
+Mac运行jmeter：
+
+cd bin
+
+sh jmeter
 
 https://blog.csdn.net/u012972942/article/details/80392792

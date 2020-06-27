@@ -40,7 +40,8 @@ Text("Hello World") 创建一个内容为Hello World的文本
 
 ContentView_Previews是用来在Xcode中用来预览调试的部分
 
-> option+command+enter 预览 </br>
+> option+command+enter 打开/关闭预览 </br>
+option+command+p 生成预览 </br>
 SwiftUI Previews require macOS 10.15 or later
 
 链接：https://www.jianshu.com/p/e86d110a897f

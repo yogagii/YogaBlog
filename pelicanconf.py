@@ -33,7 +33,7 @@ THEME = 'pelican-themes/Responsive-Pelican'
 # Blogroll
 LINKS = (('Github', 'https://github.com/yogagii'),)
 
-MENUITEMS = (('Javascript', 'category/javascript.html'),('React', 'category/react.html'),('IOS', 'category/ios.html'),('Data', 'category/data.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'),('Project', 'category/project.html'))
+MENUITEMS = (('Javascript', 'category/javascript.html'),('React', 'category/react.html'),('IOS', 'category/ios.html'),('Data', 'category/data.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'),('Project', 'category/project.html'),('Backend', 'category/backend.html'))
 
 # Social widget
 # SOCIAL = (('You can add links in your config file', '#'),)

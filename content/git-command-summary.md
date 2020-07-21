@@ -257,7 +257,7 @@ ps -aux | grep 15460
 kill 15460
 ```
 
-## PM2
+## PM2进程管理工具
 
 * 启动index.js（node index）并起名:
 ```
@@ -273,13 +273,18 @@ pm2 delete 0
 ```
 * 停止指定应用:
 ```
+pm2 stop 0
 pm2 stop wxAuthorize
+```
+* 重启指定应用:
+```
+pm2 restart wechat_auth
 ```
 * 显示log:
 ```
 pm2 log wxAuthorize
 ```
-* 重启指定应用:
+* 重新加载指定应用:
 ```
 pm2 reload wechat_auth
 ```

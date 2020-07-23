@@ -55,7 +55,9 @@ useState就是一个Hook。通过在函数组件里调用它来给组件添加�
 
 useState 唯一的参数就是初始state。值得注意的是，不同于 this.state，这里的 state 不一定要是一个对象。这个初始 state 参数只有在第一次渲染时会被用到。
 
-。
+
+eslint会在commit时自动把useEffect相关的变量加到中括号中
+![hook](img/hook1.png)
 
 
 

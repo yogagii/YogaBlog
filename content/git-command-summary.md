@@ -308,7 +308,13 @@ less data.csv
 less -N data.csv 
 ```
 
+## Linux
 
-
+```
+sudo su -
+su f1nance
+cd ~/fpa_backend/
+pm2 reload app
+```
 
 

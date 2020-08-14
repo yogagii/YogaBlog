@@ -93,3 +93,55 @@ buf.fill('a') // <Buffer 61 61>
 buf.writeUInt16BE(2) // <Buffer 00 02> 大端字节序
 buf.writeUInt16LE(2) // <Buffer 02 00> 小端字节序
 ```
+
+## Event Loop 事件循环
+
+tick(phase):
+
+timers (setTimeout, setInterval)
+
+-> pending callbacks (错误事件) 
+
+-> idle, prepare 
+
+-> poll (绝大多数的callback在这个阶段执行，到队列里把callback找出来执行，socket事件，文件IO) 
+
+-> check (setImmediate)
+
+-> close callbacks (close事件)
+
+每个阶段都有一个事件队列，队列里有多个等待执行的事件，有个可以执行的数量上限
+
+```js
+var fs = require('fs');
+// 在poll阶段的回调，下一个阶段是check，所以永远是setImmediate先执行
+fs.readFile(path.join(_dirname, './project.csv'), () => {
+  setTimeout(() => {
+    console.log('setTimeout');
+  }, 0);
+  setImmediate(() => {
+    console.log('setImmediate');
+  });
+});
+```
+
+process.nextTick() 当前阶段的队列尾部，无限递归的话会永远停留在这个阶段，上限1000次
+
+```js
+function MyEmitter() {
+  EventEmitter.call(this);
+  this.emit('event');
+
+  // use nextTick to emit the event once a handler is assigned
+  process.nextTick(() => {
+    this.emit('event');
+  });
+}
+util.inherits(MyEmitter, EventEmitter);
+
+const myEmitter = new MyEmitter();
+myEmitter.on('event', () => {
+  console.log('an event occurred!');
+});
+// 可能会错过这一次发出的事件
+```

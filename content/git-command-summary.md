@@ -19,6 +19,9 @@ git config --global user.name "yourname"
 ```
 git config --global user.email "youremail@emai.com"
 ```
+```
+git config remote.origin.url "https://jyu36@sourcecode.jnj.com/scm/asx-xxxx/fpa_frontend.git"
+```
 * 你可以使用以下指令检查你的配置: 
 ```
 git config --list
@@ -95,6 +98,10 @@ git reset HEAD filename
 * 撤销对文件的修改: 
 ```
 git checkout -- filename
+```
+* 将所有untracked file删除: 
+```
+git  clean  -f
 ```
 * 查看远程仓库: 
 ```

@@ -288,6 +288,7 @@ describe('Autocomplete for search input', () => {
 ```
 
 ## setTimeout
+
 ```js
 it('test autocomplete effects', (done) => {
   setImmediate(() => {
@@ -298,6 +299,61 @@ it('test autocomplete effects', (done) => {
       expect(item.querySelector('img')).toBeDefined()
     })
     done()
+  })
+})
+```
+
+## Simulate check
+
+```js
+const spy_fetchData = jest.spyOn(fetchDatas, 'fetchData')
+let options = dashboardPage.find('input')
+options.at(0).simulate('change', { target: { checked: true } })
+// checked
+options = dashboardPage.find('input')
+expect(options.at(0).prop('checked')).toBe(true)
+expect(spy_fetchData).toHaveBeenCalled()
+```
+
+## Simulate input
+
+```js
+let inputWrapper = items.at(0).find('Input')
+inputWrapper.simulate('change', { target: { value: 'test' } })
+UpdateModalWrapper.update() // 刷新根组件
+items = UpdateModalWrapper.find(Item)
+inputWrapper = items.at(0).find('Input')
+expect(inputWrapper.props().value).toBe('test')
+```
+
+## className
+
+```js
+import { shallow, mount } from 'enzyme'
+
+it('test filter icon close', () => {
+  const FilterIconShallow = shallow(<FilterIcon isOpen={false} />)
+  const FilterIconMount = mount(<FilterIcon isOpen={false} />)
+  expect(FilterIconMount.props().isOpen).toBe(false)
+  expect(FilterIconShallow.props().className).toContain('close')
+})
+
+it('test modeSwitch icon', () => {
+  const modeWrapper = mount(
+    <MockProvider>
+      <ModeSwitch />
+    </MockProvider>
+  )
+  // simulate open options;
+  switchIcon.at(0).simulate('click')
+
+  options = modeWrapper.find('#view')
+  options.forEach((item) => {
+    if (item.text() === 'Grid View') {
+      expect(item.hasClass('redText')).toBe(true)
+    } else if (item.text() === 'Table View') {
+      expect(item.hasClass('redText')).toBe(false)
+    }
   })
 })
 ```

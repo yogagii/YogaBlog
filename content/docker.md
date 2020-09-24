@@ -4,6 +4,21 @@ Category: Analytics
 Tags: Docker
 Author: Yoga
 
+```
+git clone https://github.com/docker/getting-started.git
+
+cd getting-started
+docker build -t docker101tutorial
+
+docker run -d -p 80:80 \ —name docker-tutorial docker101tutorial
+
+docker tag docker101tutorial yogadock/docker101tutorial
+docker push yogadock/docker101tutorial
+
+```
+
+## XENA
+
 username: TST-ITS-SCMStudent17
 
 password: Scm$tudent17a
@@ -34,3 +49,4 @@ git clone https://sourcecode.jnj.com/scm/asx-ncnl/student#.git
 JPM Application Development Pipeline
 
 ![docker](img/jpm.png)
+

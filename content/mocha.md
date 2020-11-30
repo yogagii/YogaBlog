@@ -67,3 +67,51 @@ describe('search.autocomplete', () => {
   })
 })
 ```
+## sinon
+```js
+const supertest = require('supertest');
+const sinon = require('sinon');
+
+describe('external-resource.list', () => {
+  before(async () => {
+    await ExternalResource.create({
+      user: global.user.id,
+      title: 'resource1',
+      link: 'https://www.baidu.com',
+      attachment: {
+        url: 'sitePublicFiles/public/jsonconfig/6faf8565-ceb9-4cd8-a3c7-6f4bcf465aa4/u%3D3720661285%2C1522818110%26fm%3D26%26gp%3D0.jpg',
+        moved: true,
+        filename: 'u=3720661285,1522818110&fm=26&gp=0.jpg',
+      },
+      description: 'description',
+      role: ['COE'],
+      position: ['PVP'],
+      region: ['AP'],
+      sector: ['CONS'],
+    });
+  });
+
+  describe('#list()', () => {
+    it('responds with json', (done) => {
+      sinon.stub(sails.helpers, 'arrayContains').returns(true);
+      supertest(sails.hooks.http.app)
+        .get('/external-resource/list')
+        .set('Cookie', [authedUserCookie])
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .expect(({ body }) => {
+          if (!body.list || !body.pagination) {
+            throw new Error('format error.');
+          }
+          if (body.list.find((item) => !item.tags)) {
+            throw new Error('return data without tags');
+          }
+          if (!body.list[0].tags.region || !body.list[0].tags.sector) {
+            throw new Error('missing tags');
+          }
+        })
+        .end(done);
+    });
+  });
+});
+```

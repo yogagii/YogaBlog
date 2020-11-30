@@ -165,7 +165,7 @@ SELECT name FROM person_tbl WHERE name REGEXP '^st';
 
 查询缓存：缓存相同查询语句的结果
 
-```
+```sql
 SHOW ENGINES
 ```
 
@@ -179,7 +179,7 @@ Charset 字符集：
 - utf8 (utf8mb3 一个字符最多三个字节，emoji 是 4 字节编码)
 - utf8mb4 (完整)
 
-```
+```sql
 SET character_set_client='utf8mb4' // 数据库接收到的
 SET character_set_connection='utf8mb4' // 当前连接
 SET character_set_results='utf8mb4' // 返回给客户端的
@@ -196,7 +196,7 @@ SET character_set_results='utf8mb4' // 返回给客户端的
 回表：根据主键索引 id 查询很快，能拿到完整数据，根据二级索引 name 查询只能拿到 name 和 id
 
 
-```
+```sql
 SELECT * FROM fpa.test WHERE NAME = 'aaa'
 SELECT * FROM fpa.test WHERE NAME LIKE = 'aaa%' // 模糊匹配: 以aaa开头的字符串
 ```
@@ -205,7 +205,7 @@ SELECT * FROM fpa.test WHERE NAME LIKE = 'aaa%' // 模糊匹配: 以aaa开头的
 
 idx_a_b_c
 
-```
+```sql
 SELECT * FROM fpa.test WHERE a = 'xxx' AND b = 'yyy'
 SELECT * FROM fpa.test WHERE b = 'xxx' AND c = 'yyy' // 用不到联合索引
 SELECT * FROM fpa.test WHERE a = 'xxx' OR b = 'yyy' // a和b两个索引都用不到
@@ -215,7 +215,7 @@ SELECT * FROM fpa.test WHERE a = 'xxx' OR b = 'yyy' // a和b两个索引都用�
 
 联表查询
 
-```
+```sql
 const query = {
   order: [['updatedAt', 'createdAt']],
   include: [user] // 必须有外键才能联表查询 foreignKey: 'user'
@@ -228,3 +228,23 @@ const query = {
 - 写合理的查询语句 (select a,b 不要select *，尽量少做连表查询）
 - 分表和分库 （根据功能模块，把有业务关联的数据分库）
 
+```sql
+// set announcement unread
+UPDATE fpa.`Notifications` SET isUnread=1 WHERE USER='9ca53fc1-5644-4bf4-bc6e-d598218c8af2' AND TYPE='comment'
+SELECT * FROM fpa.`Notifications` WHERE USER='9ca53fc1-5644-4bf4-bc6e-d598218c8af2' AND TYPE='comment'
+
+// add sap permission
+INSERT INTO fpa.`Permissions` (resource, USER, TYPE, createdAt, updatedAt) VALUES('SAP', '9ca53fc1-5644-4bf4-bc6e-d598218c8af2', 'GENERAL', NOW(), NOW())
+DELETE FROM fpa.`Permissions` where user='9ca53fc1-5644-4bf4-bc6e-d598218c8af2' AND resource='SAP'
+SELECT * FROM fpa.`Permissions` where user='9ca53fc1-5644-4bf4-bc6e-d598218c8af2'
+
+// select external resource
+SELECT count(*) AS `count` FROM `ExternalResources` AS `ExternalResource` WHERE (JSON_CONTAINS(`position`, JSON_ARRAY('PVP')) = 1 AND JSON_CONTAINS(`role`, JSON_ARRAY('IT')) = 1 AND JSON_CONTAINS(`region`, JSON_ARRAY('AP')) = 1 AND JSON_CONTAINS(`sector`, JSON_ARRAY('ALLSECTORS')) = 1);
+
+// update
+UPDATE fpa.`ViewsCountRecords` SET TYPE = 'SAP'
+
+// delete user
+delete from fpa.users where userId="wfang9"
+DELETE FROM fpa.Permissions WHERE `user`='c8a5d877-2a18-4bff-8070-b5a4d5d033a3'
+```

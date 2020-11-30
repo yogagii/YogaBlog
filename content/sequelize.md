@@ -104,3 +104,9 @@ User.init(
 Sequelize 在数据库中期望一个名为 users 的表,其中包含 firstName 和 lastName 字段. 默认情况下,表名自动复数。
 
 Sequelize 还默认为每个模型定义了字段id(主键),createdAt和updatedAt。
+
+## 更新表结构
+```
+npx sails c --dontLift
+ExternalResource.sync({alter:true}).then(console.log).catch(console.error)
+```

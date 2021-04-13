@@ -36,7 +36,7 @@ cookie 的过期时间和 redis 保持一致
 // local.js
 session: {
   adapter: '@sailshq/connect-redis',
-  pass: 'QPllwnqWyIHJiCwJ1XE2',
+  pass: 'XXXXXXXXXXXXX',
   db: 5,
 },
 ```
@@ -71,6 +71,17 @@ async function flushCacheWithDomain(domain) {
 
   await innerScan('0')
 }
+```
+
+## 本地启动
+
+```
+brew services start redis
+brew services list
+redis-cli ping
+redis-cli -h 127.0.0.1
+CONFIG SET requirepass "xxxxxx" // 同local.js
+AUTH "root"
 ```
 
 ## 数据类型

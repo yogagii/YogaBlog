@@ -27,6 +27,7 @@ sails lift
 
 http://localhost:1337/
 
+
 > 约定优于配置 CoC（convention over configuration）—— Ruby on Rails
 
 _就是用事先约定好的规则作为框架来写代码，而不是利用一个中心配置文件。具体例子来说，比如在 rails 里面，生成一个 model 和 controller，约定好了 model 默认用名词单数形式，controller 默认用名词复数形式。rails 框架本身会按照这种约定的形式去寻找相应的文件而不是通过一个配置文件告诉框架说我要把这两个文件关联起来。_

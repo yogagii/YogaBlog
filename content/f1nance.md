@@ -50,6 +50,38 @@ hideTabs | true
 ':render' | false
 width | '100%'
 
+```js
+const Workbook = () => {
+  option = {
+    hideTabs: true,
+    ':toolbar': 'top',
+    ':showShareOptions': false,
+    ':linktarget': '_self',
+    ':render': false,
+    width: '100%',
+  };
+
+  useEffect(() => {
+    viz && viz.dispose();
+    const vizContainer = document.getElementById('vizContainer');
+    viz = new window.tableau.Viz(iframeContent, url, option);
+  }, [url]);
+
+  return (
+    <div className={styles.vizContainerWrapper}>
+      <div
+        id='vizContainer'
+        ref={node => {
+          iframeContent = node;
+        }}
+      />
+    </div>
+  );
+};
+
+export default Workbook;
+```
+
 ## Viz API:
 
 Class | Properties | Type | Description
@@ -77,257 +109,6 @@ FILTER_CHANGE | FilterEvent | Raised when any filter has changed state.
 TAB_SWITCH | TabSwitchEvent | Raised after the tab switched.
 
 link: https://help.tableau.com/v2018.2/api/js_api/en-us/JavaScriptAPI/js_api_ref.htm
-
-```js
-const Workbook = ({ workbook, userDetail, siteConfig, edit, changedFilter }) => {
-  const [url, setUrl] = useState('');
-
-  option[id] = {
-    hideTabs: true,
-    ':toolbar': 'top',
-    ':showShareOptions': false,
-    ':linktarget': '_self',
-    ':render': false,
-    width: '100%',
-    onFirstInteractive: () => {
-      mainWorkbook = viz[id].getWorkbook();
-      const _tabName = mainWorkbook.getActiveSheet().getName();
-      const _tabKey = current.tabs?.find(tab => tab.name === _tabName);
-      if (_tabKey && _tabKey.contentUrl) {
-        setTabName(_tabKey.contentUrl.split('/').pop());
-      } else {
-        setTabName(_tabName);
-      }
-      if (isMix) {
-        // Fetch all the filter
-        if (mainWorkbook.getActiveSheet().getSheetType() === 'worksheet') {
-          worksheets.push(mainWorkbook.getActiveSheet());
-        } else {
-          worksheets = mainWorkbook.getActiveSheet().getWorksheets();
-        }
-        const arr = [];
-        worksheets.forEach(sheet => {
-          arr.push(
-            sheet.getFiltersAsync().then(filters => {
-              return filters.map(filter => ({
-                name: filter.getFieldName(),
-                type: 'filter',
-              }));
-            }),
-          );
-        });
-        // Fetch all the parameters
-        arr.push(
-          mainWorkbook.getParametersAsync().then(parameters => {
-            return parameters.map(param => ({
-              name: param.getName(),
-              type: 'param',
-            }));
-          }),
-        );
-        Promise.all(arr).then(filters => {
-          const filterNames = new Set();
-          const reportFilters = [];
-          filters.forEach(data => {
-            data.forEach(filter => {
-              if (!filterNames.has(filter.name)) {
-                filterNames.add(filter.name);
-                reportFilters.push(filter);
-              }
-            });
-          });
-        });
-      }
-      // Fetch all the collection
-      mainWorkbook.getCustomViewsAsync().then(customViews => {
-        const impl = '_impl';
-        viewlists.viewlistMy = [];
-        viewlists.viewlistOther = [];
-
-        customViews.forEach(view => {
-          if (
-            view[impl].$i.owner.username.toLowerCase().indexOf(userDetail.userId.toLowerCase()) > -1
-          ) {
-            viewlists.viewlistMy.push({
-              id: view[impl].$i.id,
-              name: view[impl].$i.name,
-              url: view[impl].$i.url,
-            });
-          } else {
-            viewlists.viewlistOther.push({
-              id: view[impl].$i.id,
-              name: view[impl].$i.name,
-              url: view[impl].$i.url,
-            });
-          }
-        });
-        viewlists.viewlistMy.sort((a, b) => b.id - a.id);
-        setViewlist({
-          ...viewlist,
-          loading: false,
-          viewlistMy: viewlists.viewlistMy,
-          viewlistOther: viewlists.viewlistOther,
-        });
-      });
-      viz[id].addEventListener('customviewload', () => {
-        setViewlist({
-          ...viewlist,
-          ...viewlists,
-          loading: false,
-        });
-      });
-      viz[id].addEventListener(window.tableau.TableauEventName.TAB_SWITCH, tabsEvent => {
-        const _tabUrl = tabsEvent
-          .getViz()
-          .getWorkbook()
-          .getActiveSheet()
-          .getUrl();
-        const _tabName = _tabUrl.split('/').pop();
-        setTabName(_tabName);
-        window.history.pushState(null, null, `${window.location.pathname}?tab=${_tabName}`);
-      });
-      if (isMix) {
-        viz[id].addEventListener(window.tableau.TableauEventName.FILTER_CHANGE, filterEvent => {
-          filterEvent.getFilterAsync().then(filter => {
-            dispatch({
-              type: 'webiWorkbook/changeFilter',
-              payload: {
-                data: {
-                  name: filter.getFieldName(),
-                  value: filter.getAppliedValues().map(i => i.value),
-                },
-                id,
-              },
-            });
-          });
-        });
-        viz[id].addEventListener(
-          window.tableau.TableauEventName.PARAMETER_VALUE_CHANGE,
-          parameterEvent => {
-            parameterEvent.getParameterAsync().then(parameter => {
-              dispatch({
-                type: 'webiWorkbook/changeFilter',
-                payload: {
-                  data: {
-                    name: parameter.getName(),
-                    value: parameter.getCurrentValue().formattedValue,
-                  },
-                  id,
-                },
-              });
-            });
-          },
-        );
-      }
-    },
-  };
-
-  // add tableau session in IE11
-  useEffect(() => {
-    if (
-      !document.getElementById('myFrame') &&
-      !!window.MSInputMethodContext &&
-      !!document.documentMode
-    ) {
-      const ifrm = document.createElement('iframe');
-      ifrm.setAttribute('id', 'myFrame');
-      ifrm.setAttribute('src', siteConfig.tableBaseUrl);
-      ifrm.style.width = '0';
-      ifrm.style.height = '0';
-      document.body.appendChild(ifrm);
-      const ifr = document.getElementById('myFrame');
-      ifr.onload = () => {
-        if (!document.cookie.match(/^(.*;)?\s*frameLoaded\s*=\s*[^;]+(.*)?$/)) {
-          const delay = (() => {
-            let timer = 0;
-            return (callback, ms) => {
-              clearTimeout(timer);
-              timer = setTimeout(callback, ms);
-            };
-          })();
-          delay(() => {
-            document.cookie = 'frameLoaded=yes; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/';
-            window.location.reload();
-          }, 5000);
-        }
-      };
-    }
-  }, [siteConfig.tableBaseUrl]);
-
-  // Combine the workbook url with the location search
-  useEffect(() => {
-    let urlTemp = null;
-    if (current.id !== id) {
-      return () => {};
-    }
-    urlTemp = current.content_url || current.document_url;
-    if (isEdit) {
-      const { content } = current;
-      urlTemp = `${siteConfig.tableBaseUrl}/t/WWFPA/authoring/`;
-      urlTemp = `${urlTemp +
-        content.slice(0, content.indexOf('/')) +
-        content.slice(content.lastIndexOf('/'))}#1`;
-    } else if (location.search) {
-      const searchParams = new URLSearchParams(location.search);
-      if (location.search.indexOf('share') > -1) {
-        const share = searchParams.get('share');
-        urlTemp = `${urlTemp}?share=${share}`;
-      }
-      if (location.search.indexOf('?tab') > -1) {
-        let tab = searchParams.get('tab');
-        setTabName(tab);
-        urlTemp = `${urlTemp}/${tab}`;
-      }
-    }
-    setUrl(urlTemp);
-  }, [isEdit, current, id, location.search, siteConfig.tableBaseUrl]);
-
-  // When set url, it will render workbook by Viz, the follow code is the detail.
-  useEffect(() => {
-    if (current.id === id && url) {
-      try {
-        viz[id] && viz[id].dispose();
-        console.time('tableau');
-        tableauStart = new Date().getTime();
-        const vizContainer = document.getElementById(`vizContainer${id}`);
-        if (vizContainer) {
-          if (window.tableau) {
-            console.log('>>> new viz', url);
-            viz[id] = new window.tableau.Viz(iframeContent[id], url, option[id]);
-            vizContainer
-              .getElementsByTagName('iframe')[0]
-              .setAttribute(
-                'sandbox',
-                'allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation allow-downloads',
-              );
-          } else {
-            const div = document.createElement('div');
-            div.setAttribute('style', messageStyle);
-            div.innerHTML = errorMessage.tableau;
-            vizContainer.appendChild(div);
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [current.id, current.no_tabs, id, url, userDetail.userId, location.pathname]);
-
-  return (
-    <div className={styles.vizContainerWrapper}>
-      <div
-        id={`vizContainer${id}`}
-        ref={node => {
-          iframeContent[id] = node;
-        }}
-        className={styles.vizContainer}
-      />
-    </div>
-  );
-};
-
-export default Workbook;
-```
 
 ### split report
 

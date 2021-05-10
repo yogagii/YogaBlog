@@ -75,13 +75,31 @@ async function flushCacheWithDomain(domain) {
 
 ## 本地启动
 
-```
+```js
 brew services start redis
 brew services list
 redis-cli ping
 redis-cli -h 127.0.0.1
 CONFIG SET requirepass "xxxxxx" // 同local.js
-AUTH "root"
+AUTH "xxxxxx"
+select 4 // db
+flushdb // clear database
+```
+
+## 启用 Redis 密钥空间通知
+
+```js
+CONFIG SET notify-keyspace-events Ex
+
+// client 1
+redis-cli -h xxx-dev-rep-group-1-001.ugvuyh.0001.use1.cache.amazonaws.com
+setex name 10 yoga
+
+// client 2
+redis-cli -h xxx-dev-rep-group-1-001.ugvuyh.0001.use1.cache.amazonaws.com --csv psubscribe '*'
+// Reading messages... (press Ctrl-C to quit)
+// "psubscribe","*",1
+// "pmessage","*","__keyevent@0__:expired","name"
 ```
 
 ## 数据类型

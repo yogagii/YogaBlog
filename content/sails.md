@@ -366,6 +366,45 @@ csrf: true
 
 在生产环境中，使用 forever start app.js --prod 或 pm2 start app.js -x -- --prod 启动服务器，这和 sails lift --prod 所做的事相同，但是当服务器崩溃时，它会自动重新启动。
 
+```js
+pm2 start ecosystem.config.js --env development // dev environment
+pm2 start ecosystem.config.js --env staging // stage environment
+pm2 start ecosystem.config.js --env production // production environment
+```
+```js
+// ecosystem.config.js 
+const env = process.argv[process.argv.indexOf('--env') + 1];
+const isDev = env === 'development';
+
+module.exports = {
+  apps: [{
+    name: 'app',
+    script: 'app.js',
+    log_date_format: 'YYYY-MM-DD HH:mm Z',
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '1G',
+    exec_mode: 'cluster',
+    instances: isDev ? 1 : 0,
+    env_development: {
+      NODE_ENV: 'development',
+      AWS_ACCESS_KEY_ID: 'XXXXXXXXXXX',
+      AWS_SECRET_ACCESS_KEY: 'XXXXXXXXXXXXXXX',
+    },
+    env_staging: {
+      NODE_ENV: 'staging',
+      AWS_ACCESS_KEY_ID: 'XXXXXXXXXXX',
+      AWS_SECRET_ACCESS_KEY: 'XXXXXXXXXXXXXXX',
+    },
+    env_production: {
+      NODE_ENV: 'production',
+      AWS_ACCESS_KEY_ID: 'XXXXXXXXXXX',
+      AWS_SECRET_ACCESS_KEY: 'XXXXXXXXXXXXXXX',
+    },
+  }],
+};
+```
+
 ---
 
 ## Views

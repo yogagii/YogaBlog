@@ -31,7 +31,7 @@ AUTHOR_FEED_RSS = None
 THEME = 'pelican-themes/Responsive-Pelican'
 
 # Blogroll
-LINKS = (('Github', 'https://github.com/yogagii'),('UI/UX/Frontend/Game Design', 'https://preview-static.clewm.net/cli/view-doc/view.html?url=//alicliimg.clewm.net/148/295/3295148/1537082834907429de68ef592b2817b37bcae93e547761537082781.pdf&t=1615824412&_=1615824412000&web_url=&shareName=&free=1&collect=0&from=active&filename=%E4%BD%9C%E5%93%81%E9%9B%86-%E5%89%8D%E7%AB%AF.pdf'),('Industrial Design Portfolio', 'https://preview-static.clewm.net/cli/view-doc/view.html?url=//alicliimg.clewm.net/148/295/3295148/1537389637354fb1ef05e2c2e77035e81f861378884fd1537389631.pdf&t=1615824215&_=1615824215000&web_url=&shareName=%E4%BD%9C%E5%93%81%E9%9B%86-%E4%BA%A7%E5%93%81&free=1&collect=0&from=active&filename=%E4%BD%9C%E5%93%81%E9%9B%86-%E4%BA%A7%E5%93%81.pdf'))
+LINKS = (('Github', 'https://github.com/yogagii'),('UI/UX/Frontend/Game Design', 'https://preview-static.clewm.net/cli/view-doc/view.html?url=https%3A%2F%2Fncstatic.clewm.net%2Frsrc%2F2021%2F0510%2F20%2F013c587ff42ef5f36ccb923c9d7a3765.pdf'),('Industrial Design Portfolio', 'https://preview-static.clewm.net/cli/view-doc/view.html?url=https%3A%2F%2Fncstatic.clewm.net%2Frsrc%2F2021%2F0510%2F19%2F64852862e888e4db944b06eea147d035.pdf'))
 
 MENUITEMS = (('Javascript', 'category/javascript.html'),('React', 'category/react.html'),('IOS', 'category/ios.html'),('Data', 'category/data.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'),('Project', 'category/project.html'),('Backend', 'category/backend.html'))
 

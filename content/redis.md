@@ -7,29 +7,6 @@ Author: Yoga
 - 用作缓存
 - 用作存 cookie,session: 容量小，提升速度; 负载均衡指到其他进程里，
 
-```js
-// callback.js
-req.session.aadAccessToken = tokenRes.data.access_token
-req.session.aadRefreshToken = tokenRes.data.refresh_token
-req.session.aadExpiresAt = Date.now() + tokenRes.data.expires_in * 1000
-
-req.session.userId = user.userId;
-req.session.uid = user.id;
-req.session.role = user.sysRole;
-
-// isLoggedIn.js
-if (req.session && req.session.uid && req.session.aadRefreshToken) {
-  return proceed()
-}
-
-return res.status(401).json({
-  message: 'Unauthorized',
-  sso_url: `https://login.microsoftonline.com/3ac94b33-9135-4821-9502-eafda6592a35/oauth2/v2.0/authorize?${qs.stringify(
-    params
-  )}`,
-})
-```
-
 cookie 的过期时间和 redis 保持一致
 
 ```js
@@ -84,6 +61,27 @@ CONFIG SET requirepass "xxxxxx" // 同local.js
 AUTH "xxxxxx"
 select 4 // db
 flushdb // clear database
+KEYS * // get all keys
+get sapToken // get certain key
+ttl sapToken // get expire time
+```
+## Redis 读写
+
+```js
+const redis = require('redis');
+const { promisify } = require('util');
+
+const redisClient = redis.createClient({
+  db: sails.config.session.db,
+  password: sails.config.session.pass,
+  port: sails.config.session.port,
+  host: sails.config.session.host,
+});
+const getRedisAsync = promisify(redisClient.get).bind(redisClient);
+
+redisClient.psetex(sapTokenKey, 25 * 60 * 1000, val);
+
+extoken = await getRedisAsync(sapTokenKey);
 ```
 
 ## 启用 Redis 密钥空间通知
@@ -100,6 +98,27 @@ redis-cli -h xxx-dev-rep-group-1-001.ugvuyh.0001.use1.cache.amazonaws.com --csv 
 // Reading messages... (press Ctrl-C to quit)
 // "psubscribe","*",1
 // "pmessage","*","__keyevent@0__:expired","name"
+```
+
+```js
+const SubscribeExpired = () => {
+  const sub = redis.createClient({
+    db: sails.config.session.db,
+    password: sails.config.session.pass,
+    port: sails.config.session.port,
+    host: sails.config.session.host,
+  });
+  const expiredSubKey = `__keyevent@${sails.config.session.db}__:expired`;
+  sub.psubscribe(expiredSubKey, () => {
+    sub.on('pmessage', async (pattern, channel, message) => {
+      ...
+    });
+  });
+};
+// 只在instance1上注册事件
+if (process.env.NODE_APP_INSTANCE === '0' || !process.env.NODE_APP_INSTANCE) {
+  redisClient.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], SubscribeExpired);
+}
 ```
 
 ## 数据类型

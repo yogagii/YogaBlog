@@ -357,3 +357,30 @@ it('test modeSwitch icon', () => {
   })
 })
 ```
+
+### Problems in CI/CD
+
+"@@/history" is referencing to src/pages/.umi/history.js
+
+"@@/umiExports" is referencing to src/pages/.umi/umiExports.ts
+
+Folder .umi will only be created when running "umi dev" The folder.umi will consist of the following files by default or other files such as history.js and umiExports.ts based on plugins(umi.js, router.js)
+
+Folder .umi will not be tracked under git as it will be created every time "umi dev" is run.
+
+Folder .umi-production will only be created when running "umi build" and will be deleted automatically when build has completed
+
+Temporary files under .umi is important as there are functions that has dependencies on it, including test scripts.
+
+This causes issue when we are setting up the unit test in Jenkins as there is no folder .umi for functions to import or reference
+
+It does not make sense to run "umi dev" in Jenkins as it will increase the cost of Continuous Integration.
+
+reference:
+
+https://v2.umijs.org/guide/app-structure.html#src-pages-umi
+
+https://v2.umijs.org/guide/mock-data.html
+
+![jest](img/jest1.png)
+

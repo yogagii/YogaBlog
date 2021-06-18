@@ -28,7 +28,7 @@ By implementing effective performance management systems, anticipating the types
 ### data visualization
 
 ![hr](img/hr9.png)
-![hr](img/hr6.jpg)
+![hr](img/hr11.jpg)
 
 ## Strategic Workforce Planning
 

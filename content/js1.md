@@ -83,3 +83,48 @@ this.state->
 
 //csrf
 React
+
+
+## 防抖
+
+```js
+// use.js
+let timeout;
+export function useDebounce(func, delay) {
+  return function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this, arguments);
+    }, delay);
+  };
+}
+
+// search.js
+import { useDebounce } from '@/services/use.js';
+
+let lastFetchId = 0;
+
+const [options, setOptions] = useState<OptionProps[]>([]);
+const [fetching, setFetching] = useState(false);
+
+const handleSearch = useDebounce((value: string) => {
+  if (value) {
+    lastFetchId += 1;
+    const fetchId = lastFetchId;
+    setFetching(true);
+    dispatch({ ...fetchOption, payload: { query: { q: value } } }).then((res: OptionProps[]) => {
+      if (fetchId === lastFetchId) {
+        setFetching(false);
+        setOptions(res);
+      }
+    });
+  }
+}, 800);
+
+return (
+  <Select
+    showSearch
+    onSearch={handleSearch}
+  />
+)
+```

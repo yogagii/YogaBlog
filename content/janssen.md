@@ -275,3 +275,7 @@ onst customRequest = useCallback(
     [axios, spark],
   );
 ```
+
+## Layered Architecture
+
+![janssen](img/janssen4.png)

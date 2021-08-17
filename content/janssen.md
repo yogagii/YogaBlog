@@ -278,4 +278,10 @@ onst customRequest = useCallback(
 
 ## Layered Architecture
 
+### Application
+
 ![janssen](img/janssen4.png)
+
+### Encoder
+
+![janssen](img/janssen5.png)

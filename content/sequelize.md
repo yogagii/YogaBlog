@@ -108,5 +108,8 @@ Sequelize 还默认为每个模型定义了字段id(主键),createdAt和updatedA
 ## 更新表结构
 ```
 npx sails c --dontLift
+// 更新表
 ExternalResource.sync({alter:true}).then(console.log).catch(console.error)
+// 新建表
+SummitTrainingContent.sync().then(console.log).catch(console.error)
 ```

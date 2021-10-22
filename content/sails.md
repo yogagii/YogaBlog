@@ -439,3 +439,11 @@ module.exports.policies = {
   '*': ['is-logged-in', 'accesslog'], // 排在前面的先执行
 }
 ```
+
+## Cron job
+
+调试
+```
+npx sails c --dontLift
+require('./api/hooks/cron/tasks/sapJob.js')()
+```

@@ -269,6 +269,7 @@ kill 15460
 * 启动index.js（node index）并起名:
 ```
 pm2 start index.js --name wxAuthorize
+pm2 start ecosystem.config.js --env development
 ```
 * 列表 PM2 启动的所有的应用程序:
 ```
@@ -290,10 +291,20 @@ pm2 restart wechat_auth
 * 显示log:
 ```
 pm2 log wxAuthorize
+pm2 log --out --lines 100
+pm2 log 2 —err --lines 100
+pm2 log --err --lines 100 | grep Logoff
 ```
 * 重新加载指定应用:
 ```
 pm2 reload wechat_auth
+pm2 reload app --log-date-format 'DD-MM HH:mm:ss.SSS'
+```
+
+* 参数
+```
+pm2 info app
+pm2 env 0
 ```
 
 ## less
@@ -322,6 +333,26 @@ sudo su -
 su f1nance
 cd ~/fpa_backend/
 pm2 reload app
+
+vi config/local.js
+d G // 删除所有行
 ```
 
+* 使用scl命令显式启用已安装的包
+```
+scl enable rh-nodejs10 bash
+exit
+```
+
+* 下载文件
+```
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-cloudwatch-agent.rpm
+```
+
+## OpenSSL
+
+```
+openssl s_client -connect wddfx.jnj.com:443 // https默认443
+nslookup 10.47.227.107 // 诊断网络问题
+```
 

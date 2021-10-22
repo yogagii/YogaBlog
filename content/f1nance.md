@@ -16,6 +16,8 @@ link: https://yogagii.github.io/recommend-system.html
 
 There are more than 600 finance users actively utilize the platform service every month. Because of the good customizable personal user experience, the utilization of the platform is to keep increasing. Every user uses 8.2 times of the Digital Platform every month. User's experiences are improved and users spend more than 700 hours per month on the Digital Platform. The digital platform is providing users the customized personalized experience also keeping improve the financial reporting based on feedback.
 
+![f1nance](img/f1nance19.png)
+
 
 # Dashboard
 

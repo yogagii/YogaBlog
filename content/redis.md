@@ -64,6 +64,8 @@ flushdb // clear database
 KEYS * // get all keys
 get sapToken // get certain key
 ttl sapToken // get expire time
+PSETEX sapToken 1500000 "xxx" // set
+del sapToken // delete
 ```
 ## Redis 读写
 

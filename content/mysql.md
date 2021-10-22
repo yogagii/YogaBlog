@@ -95,6 +95,12 @@ FROM table_name
 // OFFSET 开始查询的数据偏移量, 默认为0
 ```
 
+更新表
+
+```
+ALTER TABLE `CustomViews` ADD `prompts` JSON;
+ALTER TABLE fpa.CustomViews DROP COLUMN prompts;
+```
 更新数据
 
 ```

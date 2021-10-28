@@ -4,7 +4,22 @@ Category: Backend
 Tags: Microsoft
 Author: Yoga
 
-## Token
+## Authentication and Authorization
+The basic steps required to use the OAuth 2.0 authorization code grant flow to get an access token from the Microsoft identity platform endpoint are:
+
+1. Register your app with Azure AD.
+2. Get authorization.
+3. Get an access token.
+4. Call Microsoft Graph with the access token.
+5. Use a refresh token to get a new access token.
+
+To configure an app to use the OAuth 2.0 authorization code grant flow, you'll need to save the following values when registering the app:
+
+1. The Application (client) ID assigned by the app registration portal.
+2. A Client (application) Secret
+3. A Redirect URI (or reply URL) for your app to receive responses from Azure AD.
+
+The first step to getting an access token for OAuth 2.0 flow is to redirect the user to the Microsoft identity platform /authorize endpoint. Azure AD will sign the user in and ensure their consent for the permissions your app requests. In the authorization code grant flow, after consent is obtained, Azure AD will return an authorization_code to your app that it can use at the Microsoft identity platform /token endpoint for an access token.
 
 ### grant_type: authorization_code
 
@@ -90,7 +105,7 @@ async function retriveToken() {
 }
 ```
 
-### grant_type: client_credentials
+### grant_type: refresh_token
 
 ```js
 // azureTokenRefresher.js

@@ -1,7 +1,7 @@
 Title: 二分搜索的各种写法
 Date: 2018-10-14 21:04
 Category: Programming
-Tags: binary search, algorithm
+Tags: algorithm
 Author: 张本轩
 
 1. 对于已排序的数组x[0..n-1]，想查找数t，若t在x中则返回其下标（如有多个重复，返回其中之一)，若t不在x中则返回-1。

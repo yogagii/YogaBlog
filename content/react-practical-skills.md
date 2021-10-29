@@ -1,7 +1,7 @@
 Title: React 实用技巧
 Date: 2019-08-03
 Category: React
-Tags: React, Ref, AJAX, className.js, Immutable.js
+Tags: React, Ref, AJAX
 Author: Yoga
 
 ### 绑定未提供的事件

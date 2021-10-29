@@ -121,7 +121,7 @@
                     Tagcloud
                 </div>
                 <div>
-                    {% for tag, size in tag_cloud %}
+                    {% for tag, size in tags %}
                         <span><a href="{{ SITEURL }}/{{ tag.url }}">{{ tag.name }}</a></span>
                     {% endfor %}
                 </div>

@@ -1,7 +1,6 @@
 Title: pelican blog搭建
 Date: 2018-10-20 16:32
 Category: Programming
-Tags: pelican, blog
 Author: 张本轩
 
 ## Installation

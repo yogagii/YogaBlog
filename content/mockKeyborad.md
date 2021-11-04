@@ -20,7 +20,7 @@ Tableau文档提供的接口
 
 前端模拟tableau保存的流程，点击我们的按钮时，请求五六个tableau的接口，根据返回的数据照着做一个保存的窗口，例如:
 
-https://prodbitabcrp.jnj.com/vizportal/api/web/v1/getDestinationProjects
+https://prodbitabcrp.juj.com/vizportal/api/web/v1/getDestinationProjects
 
 困难：跨域问题，无法直接调用tableau的接口
 

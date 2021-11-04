@@ -19,7 +19,7 @@ git config --global user.name "yourname"
 git config --global user.email "youremail@emai.com"
 ```
 ```
-git config remote.origin.url "https://jyu36@sourcecode.jnj.com/scm/asx-xxxx/fpa_frontend.git"
+git config remote.origin.url "https://user@sourcecode.juj.com/scm/asx-xxxx/fpa_frontend.git"
 ```
 * 你可以使用以下指令检查你的配置: 
 ```
@@ -62,7 +62,7 @@ vim .gitconfig
 // 	name = xx
 //	email = xx@xx.com
 // [core]
-// 	excludesfile = /Users/jyu36/.gitignore_global
+// 	excludesfile = /Users/user/.gitignore_global
 git config --list
 ```
 * 查看文件中具体更新细节: 
@@ -200,8 +200,8 @@ git push --tag
 ```
 * 拷贝本地文件去服务器:
 ```
-scp ~/Desktop/m/index.html root@47.100.43.192:~/deployf
-fpa_share_doc jyu36$ scp ~/Desktop/userAvatar.png root@47.100.43.192:~/www/chatbot_hackathon/img
+scp ~/Desktop/m/index.html root@47.100.43.xxx:~/deployf
+fpa_share_doc user$ scp ~/Desktop/userAvatar.png root@47.100.43.xxx:~/www/chatbot_hackathon/img
 ```
 * 配置文件:
 
@@ -212,7 +212,7 @@ vim 网址
 ```
 // build
 server {
-    server_name hr_hackathon.jnjadc.com;
+    server_name hr_hackathon.jujadc.com;
     root /usr/share/nginx/fpa_share_doc/dist;
     location / {
       try_files $uri $uri/ /index.html;
@@ -220,7 +220,7 @@ server {
   }
 // 单页
 server {
-  server_name project_organization.jnjadc.com;
+  server_name project_organization.jujadc.com;
   root /root/www/project_organization;
   index dateBar.html;
 }
@@ -228,7 +228,7 @@ server {
 
 * 软连接:
 ```
-ln -s /etc/nginx/sites-available/hr_hackathon.jnjadc.com /etc/nginx/sites-enabled
+ln -s /etc/nginx/sites-available/hr_hackathon.jujadc.com /etc/nginx/sites-enabled
 ```
 * Nginx:
 ```
@@ -351,7 +351,7 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-
 ## OpenSSL
 
 ```
-openssl s_client -connect wddfx.jnj.com:443 // https默认443
-nslookup 10.47.227.107 // 诊断网络问题
+openssl s_client -connect wddfx.juj.com:443 // https默认443
+nslookup 10.47.227.xxx // 诊断网络问题
 ```
 

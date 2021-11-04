@@ -1,7 +1,7 @@
 Title: Sails.js
 Date: 2020-07-19
 Category: Backend
-Tags: sails, nodeJS
+Tags: sails
 Author: Yoga
 
 sails.js 是类似于 Ruby on Rails 的开发平台，可以快速整合数据库资源，非常适合网站和 API 服务的构建

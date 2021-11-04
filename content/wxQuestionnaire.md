@@ -156,7 +156,7 @@ async function sendWelcomeMessage(CALLBACK_CODE, TOKEN) {
           title: '消费者调研问卷',
           picurl: `${host}/icon.png`,
           desc: ' ',
-          url: 'http://wxquestionnaire.jnjadc.com/',
+          url: 'http://wxquestionnaire.jujadc.com/',
         },
       }),
     }
@@ -206,7 +206,7 @@ function getClientInfo(client_id, TOKEN) {
 
 # 问卷部分
 
-http://wxquestionnaire.jnjadc.com/
+http://wxquestionnaire.jujadc.com/
 
 <img src="img/wx4.png" width="300px" />
 

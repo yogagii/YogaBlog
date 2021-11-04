@@ -1,7 +1,7 @@
 Title: Egg.js
 Date: 2020-12-31
 Category: Backend
-Tags: egg, nodeJS
+Tags: egg
 Author: Yoga
 
 https://eggjs.org/zh-cn/intro/index.html

@@ -1,6 +1,6 @@
 Title: 二分搜索的各种写法
 Date: 2018-10-14 21:04
-Category: Programming
+Category: Javascript
 Tags: algorithm
 Author: 张本轩
 

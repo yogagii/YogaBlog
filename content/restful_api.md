@@ -1,10 +1,33 @@
 Title: RESTful API
 Date: 2019-09-21
-Category: Data
+Category: Backend
 Tags: Rest
 Author: Yoga
 
-## 路径
+> REST，即Representational State Transfer(表现层状态转化)。它是一种互联网应用程序的API设计理念：URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。
+
+Restful与传统接口对比
+
+操作 | 传统风格 | RESTful风格
+| - | - | - 
+查询 | /user/query?name=tom GET | /user?name=tom GET
+详情 | /user/getInfo?id=1 GET | /user/1 GET
+创建 | /user/create?name=tom POST | /user POST
+修改 | /user/update?id=1&name=jquery POST | /user/1 PUT
+删除 | /user/delete?id=1 GET | /user/1 DELETE
+
+Resultful特点:
+
+1.使用URL描述资源
+
+2.使用HTTP方法描述行为。使用HTTP状态码来表示不同的结果
+
+3.使用json交互数据，传统模式使用的是键值对形式
+
+
+## 路径 Endpoint
+
+> url地址中只包含名词表示资源，使用http动词表示动作进行操作资源
 
 https://api.example.com/v1/
 

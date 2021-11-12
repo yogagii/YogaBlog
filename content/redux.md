@@ -1,6 +1,6 @@
 Title: Redux
 Date: 2019-08-24
-Category: Data
+Category: Frontend
 Tags: Redux
 Author: Yoga
 

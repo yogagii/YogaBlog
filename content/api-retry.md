@@ -1,6 +1,6 @@
 Title: 错误重试和指数退避
 Date: 2021-08-19
-Category: Javascript
+Category: Frontend
 Tags: AWS
 Author: Ron, Adarsh
 

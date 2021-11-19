@@ -52,6 +52,8 @@ element1：要添加的新元素
 
 * lastIndexof 从后往前找
 
+* findIndex() 方法返回符合条件的数组第一个元素位置。
+
 * forEach
 
 * every 都满足
@@ -107,6 +109,7 @@ howmany：截取几位，负数为空
 * trim 删除前后空格
 
 * replace
+
 
 ## Object
 

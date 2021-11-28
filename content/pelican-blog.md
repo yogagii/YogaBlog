@@ -36,3 +36,20 @@ This is the content of my blog post.
 [pelican](http://docs.getpelican.com/en/stable/install.html)
 
 [typogrify](https://pypi.org/project/typogrify/)
+
+```
+pip3 install pelican
+
+echo $PATH
+vim ~/.zshrc
+export PATH="/Users/yoga/Library/Python/3.8/bin:$PATH"
+source ~/.zshrc // 使修改的环境变量生效
+which pelican
+
+pip3 install typogrify
+pip3 install Markdown
+
+make html
+make serve
+``` ziji google
+诶呦黑

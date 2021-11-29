@@ -38,6 +38,16 @@ NaN !== NaN
 1 == true
 ```
 
+a== 1 && a ==2 && a==3
+```js
+const a = {
+  i: 1,
+  toString: function () {
+    return a.i++;
+  }
+}
+```
+
 ## String
 
 ```js

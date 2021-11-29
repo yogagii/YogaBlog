@@ -51,5 +51,4 @@ pip3 install Markdown
 
 make html
 make serve
-``` ziji google
-诶呦黑
+```

@@ -1,4 +1,4 @@
-Title: Angular
+Title: 理解Angular
 Date: 2021-11-29
 Category: Angular
 Tags: Angular
@@ -30,76 +30,3 @@ angular的核心是组件，react的核心是虚拟DOM
 * angular是一种组件架构，用户可以与组件交互，组件之间互相路由，组件和服务之间通过依赖注入调用，服务调用webSocket与服务器端发生http通信。
 
 ![angular](img/angular.png)
-
-### 组件 Components
-
-带有 @Component() 装饰器的 TypeScript 类
-
-@Component() 装饰器:
-* CSS 选择器
-* HTML 模板
-* 一组可选的 CSS 样式
-
-```js
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
-})
-export class AppComponent { }
-```
-
-### 模板 Templates
-
-* 双花括号：插入动态值
-
-```ts
-//app.component.html
-<p>{{ message }}</p>
-//app.component.ts
-export class HelloWorldInterpolationComponent {
-    message = 'Hello, World!';
-}
-```
-
-* 方括号：属性绑定
-
-```html
-<p
-  [id]="sayHelloId"
-  [style.color]="fontColor">
-  You can set my color in the component!
-</p>
-```
-
-* 圆括号：事件监听器
-
-```ts
-//app.component.html
-<button
-  [disabled]="canClick"
-  (click)="sayMessage()">
-  Trigger alert message
-</button>
-//app.component.ts
-export class HelloWorldBindingsComponent {
-  canClick = false;
-  message = 'Hello, World';
- 
-  sayMessage() {
-    alert(this.message);
-  }
- 
-}
-```
-
-* 指令directives：*ngIf，*ngFor
-
-```ts
-<div *ngIf="canEdit; else noEdit">
-  <p>You can edit the following paragraph.</p>
-</div>
-```
-
-### 依赖注入 Dependency injection

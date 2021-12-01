@@ -106,10 +106,112 @@ Sequelize 在数据库中期望一个名为 users 的表,其中包含 firstName 
 Sequelize 还默认为每个模型定义了字段id(主键),createdAt和updatedAt。
 
 ## 更新表结构
+
 ```
 npx sails c --dontLift
 // 更新表
 ExternalResource.sync({alter:true}).then(console.log).catch(console.error)
 // 新建表
 SummitTrainingContent.sync().then(console.log).catch(console.error)
+```
+
+## 表关联
+
+收藏夹表 (源)
+```js
+// api/hooks/sequelize/models/Collection.js
+const { Model, DataTypes } = require('sequelize');
+
+class Collection extends Model { }
+Collection.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  isDeleted: {
+    type: DataTypes.BOOLEAN,
+  },
+}, {
+  sequelize,
+  timestamps: true,
+});
+
+module.exports = Collection;
+```
+
+收藏夹中report表 (目标)
+```js
+// api/hooks/sequelize/models/CollectionReportMapping.js
+const { Model, DataTypes } = require('sequelize');
+
+class CollectionReportMapping extends Model { }
+CollectionReportMapping.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  reportId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  sequelize,
+  timestamps: true,
+});
+
+const Collection = require('./Collection');
+
+CollectionReportMapping.belongsTo(Collection);
+Collection.hasMany(CollectionReportMapping);
+
+module.exports = CollectionReportMapping;
+```
+> 从源传入参数到目标，Collection将自己的外键id传到了CollectionReportMapping中，Collection是source(“源”)，CollectionReportMapping是targe(“目标”)。
+
+运行表关联，CollectionReportMapping表中多了一个字段collectionId，collectionId是源的外键 id。
+
+collection 自动获得 createCollectionReportMapping、setCollectionReportMapping 和 getCollectionReportMapping 方法。
+
+为收藏夹中创建新report
+```js
+// api/hooks/cron/tasks/collectionReportMigration.js
+module.exports = async function collectionReportMigration() {
+  const originalCollections = await Collection.findAll({
+    where: {
+      isDeleted: 0,
+    },
+  });
+
+  originalCollections.forEach((collection) => {
+    Object.values(collection.reports).forEach(async (report) => {
+      await collection.createCollectionReportMapping({
+        reportId: report.id,
+      });
+    });
+  });
+};
+```
+
+查找所有收藏夹并列出其中的report，include是sequelize实现连表查询的一个语法
+```js
+// api/controllers/collection/list.js
+const collectiondata = await Collection.findAll({
+  where: {
+    isDeleted: 0,
+  },
+  include: {
+    model: CollectionReportMapping,
+    attributes: ['reportId'],
+  },
+});
+```
+
+```sql
+SELECT c.id, c.name, r.reportId FROM Collections as c LEFT JOIN CollectionReportMappings as r on r.collectionId = c.id
 ```

@@ -9,7 +9,7 @@ Author: Yoga
 带有 @Component() 装饰器的 TypeScript 类
 
 @Component() 装饰器:
-* CSS 选择器
+* CSS 选择器 ('app-'+组件名称)
 * HTML 模板
 * 一组可选的 CSS 样式
 
@@ -22,6 +22,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent { }
 ```
+
+@input() 装饰器：
+
+用来把某个类字段标记为输入属性，并提供配置元数据。 当变更检测时，Angular 会自动使用这个 DOM 属性的值来更新此数据属性。
 
 ## 模板 Templates
 

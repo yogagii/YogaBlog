@@ -37,11 +37,11 @@ This is the content of my blog post.
 
 [typogrify](https://pypi.org/project/typogrify/)
 
-```
+```bash
 pip3 install pelican
 
 echo $PATH
-vim ~/.zshrc
+vim ~/.zshrc // .bash_profile
 export PATH="/Users/yoga/Library/Python/3.8/bin:$PATH"
 source ~/.zshrc // 使修改的环境变量生效
 which pelican

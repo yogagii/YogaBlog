@@ -66,6 +66,7 @@ get sapToken // get certain key
 ttl sapToken // get expire time
 PSETEX sapToken 1500000 "xxx" // set
 del sapToken // delete
+shutdown // shutdown
 ```
 ## Redis 读写
 

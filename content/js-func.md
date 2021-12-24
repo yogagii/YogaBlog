@@ -106,6 +106,15 @@ howmany：截取几位，负数为空
 
 * toLowerCase/toUpperCase
 
+* localeCompare 字符串比较
+
+```js
+reportsData.sort((a,b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+reportsData.sort((a, b) =>
+  a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1,
+);
+```
+
 * trim 删除前后空格
 
 * replace

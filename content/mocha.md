@@ -4,6 +4,19 @@ Category: Backend
 Tags: Unit test
 Author: Yoga
 
+### 单元测试 Unit Testing
+
+单元测试是检测一小段代码的良好实践，典型的单元测试是测试独立的function，要保证这个测试是单独孤立的。如果你写的测试用了外部的资源，比如网络或者数据库，它就不是一个单元测试。
+
+### 集成测试 Integration Testing
+
+集成测试想要测试的是这个系统的各个部分在一起合作的如何－将各个代码块集成在一起。当你需要验证两个不同的系统是否在一起正常的通信和正常运转，比如你的应用程序和数据库是否集成正确，运转正常，这个时候就需要集成测试了。结果是，当验证集成测试结果时，你通过写数据库连接语句检查数据库状态是否正常而顺便做了数据库连接测试。
+
+https://blog.csdn.net/aajx90520/article/details/101658973
+
+sails-disk still is a database: so it's prone to "corruption from outside" during the course of tests. On top of that this makes testing actually slow. It's not really a unit test if the entire app has to be started first, with sails lift. Unit tests should not spin up server or hit databases
+
+
 lifecycle.test.js
 
 ```js

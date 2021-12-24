@@ -27,6 +27,9 @@ There are more than 600 finance users actively utilize the platform service ever
 # Tableau Report
 
 ![f1nance](img/f1nance2.png)
+![c4model](img/tableauDiagram1.png)
+![c4model](img/tableauDiagram2.png)
+![c4model](img/tableauDiagram3.png)
 
 ## Tableau REST API:
 

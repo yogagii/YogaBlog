@@ -4,6 +4,8 @@ Category: IOS
 Tags: Flutter
 Author: Yoga
 
+> Flutter 中万物皆为Widget。
+
 Flutter Widget采用现代响应式框架构建，这是从 React 中获得的灵感，中心思想是用widget构建你的UI。 Widget描述了他们的视图在给定其当前配置和状态时应该看起来像什么。当widget的状态发生变化时，widget会重新构建UI，Flutter会对比前后变化的不同， 以确定底层渲染树从一个状态转换到下一个状态所需的最小更改（类似于React/Vue中虚拟DOM的diff算法）。
 
 ## Widget
@@ -13,6 +15,8 @@ runApp函数接受给定的Widget并使其成为widget树的根，根widget强�
 * 无状态的 StatelessWidget
 * 有状态的 StatefulWidget
 
+@immutable 代表 Widget 是不可变的，这会限制 Widget 中定义的属性（即配置信息）必须是不可变的（final）
+
 widget的主要工作是实现一个build函数，用以构建自身。一个widget通常由一些较低级别widget组成。Flutter框架将依次构建这些widget，直到构建到最底层的子widget时，这些最低层的widget通常为RenderObject
 
 * Text
@@ -20,7 +24,28 @@ widget的主要工作是实现一个build函数，用以构建自身。一个wid
 * Stack: 基于web position absolute
 * Container: background, margins, padding...
 
-Widget是不可变的, Widget中定义的属性必须是 final.
+build方法有一个context参数，它是BuildContext类的一个实例，表示当前 widget 在 widget 树中的上下文，每一个 widget 都会对应一个 context 对象（因为每一个 widget 都是 widget 树上的一个节点）。
+
+```dart
+class ContextRoute extends StatelessWidget  {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Context测试"),
+      ),
+      body: Container(
+        child: Builder(builder: (context) {
+          // 在 widget 树中向上查找最近的父级`Scaffold`  widget 
+          Scaffold scaffold = context.findAncestorWidgetOfExactType<Scaffold>();
+          // 直接返回 AppBar的title， 此处实际上是Text("Context测试")
+          return (scaffold.appBar as AppBar).title;
+        }),
+      ),
+    );
+  }
+}
+```
 
 ## Stateful widget有状态的部件
 
@@ -33,3 +58,70 @@ Stateful widget 可以拥有状态，这些状态在 widget 生命周期中是�
 
 调用setState() 会为State对象触发build()方法，从而导致对UI的更新
 
+### State生命周期
+
+![flutter](img/flutter2.jpg)
+
+* initState：当 widget 第一次插入到 widget 树时会被调用，对于每一个State对象，Flutter 框架只会调用一次该回调，通常在该回调中做一些一次性的操作，如状态初始化、订阅子树的事件通知等。
+
+* didChangeDependencies()：当State对象的依赖发生变化时会被调用；Inherited widget发生变化，那么Inherited widget的子 widget 的didChangeDependencies()回调都会被调用。
+
+* build()：会在如下场景被调用：
+
+在调用initState()之后。
+
+在调用didUpdateWidget()之后。
+
+在调用setState()之后。
+
+在调用didChangeDependencies()之后。
+
+在State对象从树中一个位置移除后（会调用deactivate）又重新插入到树的其它位置之后。
+
+* reassemble()：此回调是专门为了开发调试而提供的，在热重载(hot reload)时会被调用，此回调在Release模式下永远不会被调用。
+
+* didUpdateWidget ()：在 widget 重新构建时，会调用widget.canUpdate来检测 widget 树中同一位置的新旧节点，然后决定是否需要更新，在新旧 widget 的key和runtimeType同时相等时widget.canUpdate返回true，didUpdateWidget()就会被调用。
+
+* deactivate()：当 State 对象从树中被移除时，会调用此回调。如果移除后没有重新插入到树中则紧接着会调用dispose()方法。
+
+* dispose()：当 State 对象从树中被永久移除时调用；通常在此回调中释放资源。
+
+### 在子 widget 树中获取父级 StatefulWidget 的State 对象
+
+1.通过Context获取：context对象有一个findAncestorStateOfType()方法，该方法可以从当前节点沿着 widget 树向上查找指定类型的 StatefulWidget 对应的 State 对象
+
+```dart
+ // 查找父级最近的Scaffold对应的ScaffoldState对象
+  ScaffoldState _state = context.findAncestorStateOfType<ScaffoldState>()!;
+  // 打开抽屉菜单
+  _state.openDrawer();
+
+  // 如果 StatefulWidget 的状态是希望暴露出的，应当在 StatefulWidget 中提供一个of 静态方法来获取其 State 对象
+  ScaffoldState _state=Scaffold.of(context);
+  // 打开抽屉菜单
+  _state.openDrawer();
+```
+
+2.通过GlobalKey: GlobalKey 是 Flutter 提供的一种在整个 App 中引用 element 的机制。
+
+* globalKey.currentWidget: 该 widget 对象
+* globalKey.currentElement: widget 对应的element对象
+* globalKey.currentState: widget 对应的state对象。
+
+```dart
+//定义一个globalKey, 由于GlobalKey要保持全局唯一性，我们使用静态变量存储
+static GlobalKey<ScaffoldState> _globalKey= GlobalKey();
+...
+Scaffold(
+    key: _globalKey , //设置key
+    ...  
+)
+
+_globalKey.currentState.openDrawer()
+```
+
+### 状态管理
+
+* 如果状态是用户数据，如复选框的选中状态、滑块的位置，则该状态最好由父 Widget 管理。
+* 如果状态是有关界面外观效果的，例如颜色、动画，那么状态最好由 Widget 本身来管理。
+* 如果某一个状态是不同 Widget 共享的则最好由它们共同的父 Widget 管理。

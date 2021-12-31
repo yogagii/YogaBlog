@@ -27,24 +27,14 @@ widget的主要工作是实现一个build函数，用以构建自身。一个wid
 build方法有一个context参数，它是BuildContext类的一个实例，表示当前 widget 在 widget 树中的上下文，每一个 widget 都会对应一个 context 对象（因为每一个 widget 都是 widget 树上的一个节点）。
 
 ```dart
-class ContextRoute extends StatelessWidget  {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Context测试"),
-      ),
-      body: Container(
-        child: Builder(builder: (context) {
-          // 在 widget 树中向上查找最近的父级`Scaffold`  widget 
-          Scaffold scaffold = context.findAncestorWidgetOfExactType<Scaffold>();
-          // 直接返回 AppBar的title， 此处实际上是Text("Context测试")
-          return (scaffold.appBar as AppBar).title;
-        }),
-      ),
-    );
-  }
-}
+body: Container(
+  child: Builder(builder: (context) {
+    // 在 widget 树中向上查找最近的父级`Scaffold`  widget 
+    Scaffold scaffold = context.findAncestorWidgetOfExactType<Scaffold>();
+    // 直接返回 AppBar的title， 此处实际上是Text("Context测试")
+    return (scaffold.appBar as AppBar).title;
+  }),
+),
 ```
 
 ## Stateful widget有状态的部件
@@ -64,7 +54,9 @@ Stateful widget 可以拥有状态，这些状态在 widget 生命周期中是�
 
 * initState：当 widget 第一次插入到 widget 树时会被调用，对于每一个State对象，Flutter 框架只会调用一次该回调，通常在该回调中做一些一次性的操作，如状态初始化、订阅子树的事件通知等。
 
-* didChangeDependencies()：当State对象的依赖发生变化时会被调用；Inherited widget发生变化，那么Inherited widget的子 widget 的didChangeDependencies()回调都会被调用。
+* didChangeDependencies()：当State对象的依赖发生变化时会被调用；InheritedWidget发生变化，那么InheritedWidget的子 widget 的didChangeDependencies()回调都会被调用。
+
+这种机制可以使子组件在所依赖的InheritedWidget变化时来更新自身！比如当主题、locale(语言)等发生变化时，依赖其的子 widget 的didChangeDependencies方法将会被调用。
 
 * build()：会在如下场景被调用：
 
@@ -120,8 +112,54 @@ Scaffold(
 _globalKey.currentState.openDrawer()
 ```
 
-### 状态管理
+## 状态管理
 
 * 如果状态是用户数据，如复选框的选中状态、滑块的位置，则该状态最好由父 Widget 管理。
 * 如果状态是有关界面外观效果的，例如颜色、动画，那么状态最好由 Widget 本身来管理。
 * 如果某一个状态是不同 Widget 共享的则最好由它们共同的父 Widget 管理。
+
+* 跨组件状态共享（Provider）
+
+Model变化后会自动通知ChangeNotifierProvider（订阅者），ChangeNotifierProvider内部会重新构建InheritedWidget，而依赖该InheritedWidget的子孙Widget就会更新。
+
+```dart
+Builder(builder: (context){
+  var cart=ChangeNotifierProvider.of<CartModel>(context);
+  return Text("总价: ${cart.totalPrice}");
+}),
+```
+
+## 路由
+
+MaterialPageRoute 是 Material组件库提供的组件，它可以针对不同平台，实现与平台页面切换动画风格一致的路由切换动画：
+
+* 对于 Android，新页面从屏幕底部滑动到屏幕顶部；关闭页面时，当前页面从屏幕顶部滑动到屏幕底部后消失。
+* 对于 iOS，新页面从屏幕右侧边缘一直滑动到屏幕左边，关闭页面时，当前页面从屏幕右侧滑出。
+
+```dart
+TextButton(
+  child: Text("open new route"),
+  textColor: Colors.blue,
+  onPressed: () {
+    //导航到新路由   
+    Navigator.push( 
+      context,
+      MaterialPageRoute(builder: (context) {
+        return NewRoute();
+      }),
+    );
+  },
+),
+```
+
+### 命名路由
+
+### COLORS
+
+color使用的是ARGB, 前两位表示透明度
+
+```dart
+// RED
+#ff0000 // RGB
+0xffff0000 // ARGB
+```

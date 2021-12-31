@@ -447,3 +447,22 @@ module.exports.policies = {
 npx sails c --dontLift
 require('./api/hooks/cron/tasks/sapJob.js')()
 ```
+
+## Session
+
+Sessions are defined to be a few components that together allow you to store information about a user agent between requests.
+
+The session store can either be in memory (this is the default Sails session store) or in a database (Sails has built-in support for using Redis for this purpose). Sails builds on top of Connect middleware to manage the session, which includes using a cookie to store a session id (sid) on the user agent.
+
+When the user agent makes the next request, the Sails.sid stored on the cookie is checked for authenticity. If it matches an existing sid in the session store, the contents of the session store are added as a property on the req dictionary (req.session). We can access properties on req.session (e.g. req.session.userId) or set properties on it (e.g. req.session.userId == someValue). 
+
+```
+vital-dev-xxx.xxx.ng.XXX.use1.cache.amazonaws.com:6379[4]> keys *
+   1) "sess:kNilQUaltMEFCsqNUGVmMiwMhaAu_a66"
+   2) "sess:37913vO-G7vzOSOwpTzOOW47vDK0l2Ue"
+   3) "sess:yjDcKXARet6tK_Lm1jLSyxNbtykWvFny"
+   4) "sess:y9diDK3tBbFw9vj7DmoADC30WYkm6zge"
+   5) "sess:MqTcODSkoF9IYZeu4hUIJYIs_8__PSl4"
+   6) "sess:GGmQiqJkmgqbBocduu2N6CwKbOoab1uB"
+   7) "sess:D4HlVxf1SlqjjT6aNlHHt7G617e394FR"
+```

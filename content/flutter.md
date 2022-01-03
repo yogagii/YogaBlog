@@ -145,7 +145,9 @@ TextButton(
     Navigator.push( 
       context,
       MaterialPageRoute(builder: (context) {
-        return NewRoute();
+        return NewPage(
+          text: 'params' // 可传路由参数
+        );
       }),
     );
   },
@@ -154,12 +156,43 @@ TextButton(
 
 ### 命名路由
 
-### COLORS
-
-color使用的是ARGB, 前两位表示透明度
-
 ```dart
-// RED
-#ff0000 // RGB
-0xffff0000 // ARGB
+// 注册路由表
+MaterialApp(
+  routes:{
+   "new_page":(context) => NewRoute(),
+    ...
+  } ,
+  home: MyHomePage(title: 'Home Page'),
+);
+
+// 通过路由名称来打开新路由
+onPressed: () {
+  Navigator.pushNamed(context, "new_page");
+  Navigator.of(context).pushNamed("new_page", arguments: "hi"); // 传参
+},
+```
+
+路由生成钩子：全局的路由跳转前置处理逻辑
+
+如果访问的路由页需要登录，但当前未登录，则直接返回登录页路由，其它情况则正常打开路由。
+```dart
+onGenerateRoute:(RouteSettings settings){
+  return MaterialPageRoute(builder: (context){
+    String routeName = settings.name;
+  }
+);
+```
+
+## 包管理
+
+pubspec.yaml
+```dart
+dependencies:
+  english_words: ^4.0.0 // Pub仓库
+  pkg1:
+    path: ../../code/pkg1 // 依赖本地包
+  pkg2:
+    git:
+      url: git://github.com/xxx/pkg1.git // git仓库
 ```

@@ -105,3 +105,31 @@ r // reload
 
 * flutter clean
 
+## 调试
+
+1.web调试
+
+View -> Command Palette -> Dart: Open DevTools
+
+2.手机调试
+
+手机连接电脑
+
+ios文件夹 -> open in Xcode
+
+Runner>TARGETS下的Runner里的Signing & Capabilities：Team登录Apple账号
+
+build success
+
+* @import显示module not found:
+
+```bash
+cd ios
+flutter clean
+flutter pub get
+pod install
+```
+
+* “不受信任的开发者”:
+
+IPhone: 设置 -> 通用 -> VPN与设备管理：信任开发者

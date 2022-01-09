@@ -184,6 +184,52 @@ onGenerateRoute:(RouteSettings settings){
 );
 ```
 
+## 事件处理
+
+一次完整的事件分为三个阶段：手指按下、手指移动、和手指抬起。
+
+事件处理流程：
+
+1. 命中测试：当手指按下时，触发 PointerDownEvent 事件，按照深度优先遍历当前渲染（render object）树，对每一个渲染对象进行“命中测试”（hit test），如果命中测试通过，则该渲染对象会被添加到一个 HitTestResult 列表当中。
+2. 事件分发：命中测试完毕后，会遍历 HitTestResult 列表，调用每一个渲染对象的事件处理方法（handleEvent）来处理 PointerDownEvent 事件，该过程称为“事件分发”（event dispatch）。
+3. 事件清理：当手指抬（ PointerUpEvent ）起或事件取消时（PointerCancelEvent），会先对相应的事件进行分发，分发完毕后会清空 HitTestResult 列表。
+
+通过命中测试Hit Test的组件触发事件，事件会从最内部的组件被分发到组件树根的路径上的所有组件，和Web浏览器的事件冒泡机制相似， 但是Flutter中没有机制取消或停止“冒泡”过程。
+
+```dart
+Listener(
+  child: Container(...),
+  onPointerDown: (PointerDownEvent event) => ...,
+  onPointerMove: (PointerMoveEvent event) => ...,
+  onPointerUp: (PointerUpEvent event) => ...,
+)
+```
+
+IgnorePointer和AbsorbPointer，这两个组件都能阻止子树接收指针事件，不同之处在于AbsorbPointer本身会参与命中测试，而IgnorePointer本身不会参与
+
+### 手势识别
+
+```dart
+GestureDetector(
+  child: Container(...),
+  onTap: () => ..., //点击
+  onDoubleTap: () => ..., //双击
+  onLongPress: () => ..., //长按
+  onPanDown: (DragDownDetails e) => ..., //手指按下
+  onPanUpdate: (DragUpdateDetails e) => ..., //手指滑动
+  onPanEnd: (DragEndDetails e) => ... //滑动结束
+  onVerticalDragUpdate: (DragUpdateDetails details) => ..., //垂直方向拖动事件
+  onScaleUpdate: (ScaleUpdateDetails details) => ..., // 缩放
+)
+```
+```dart
+TextSpan(
+  text: "...",
+  recognizer: _tapGestureRecognizer
+    ..onTap = () => ...,
+)
+```
+
 ## 包管理
 
 pubspec.yaml

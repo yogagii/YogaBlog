@@ -1,4 +1,4 @@
-Title: Egg.js
+Title: EggJS
 Date: 2020-12-31
 Category: Backend
 Tags: egg

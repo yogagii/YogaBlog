@@ -1,4 +1,4 @@
-Title: Sails.js
+Title: SailsJS
 Date: 2020-07-19
 Category: Backend
 Tags: sails

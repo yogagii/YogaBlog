@@ -191,6 +191,18 @@ git branch -vv
 git rebase [branch-name]
 ```
 
+* token
+
+https://github.com/settings/tokens/new
+
+Note(不可重复) -> 90 days -> 勾选：repo -> Generate token -> copy token
+
+git config --global credential.helper store
+
+git push origin master
+
+-> paste token
+
 ## 部署
 
 * 打tag:

@@ -74,6 +74,7 @@ User 接口为 {
 
 原文链接：https://juejin.im/post/5c2723635188252d1d34dc7d#heading-11
 
+___
 ## 装饰器 Decorators
 
 随着 TypeScript 和 ES6 里引入了类，在一些场景下我们需要额外的特性来支持标注或修改类及其成员。 装饰器（Decorators）为我们在类的声明及成员上通过元编程语法添加标注提供了一种方式。
@@ -179,3 +180,46 @@ class Greeter {
   greet(@required name: string) {}
 }
 ```
+___
+
+## 依赖注入
+
+```ts
+class B { }
+class A {
+  public b: B;
+  constructor() {
+    this.b = new B(); // 修改B类需要修改A类
+  }
+}
+
+// main
+const a = new A();
+```
+
+__依赖注入（DI）__： 通过A的构造函数将B的实例注入
+
+```ts
+class B { }
+class A {
+  constructor(public b: B) { 
+    console.log(b);
+  }
+}
+
+// main
+const b = new B(); // 修改B类只需要修改主程序即可
+const a = new A(b); // 将B的实例注入到a中
+```
+
+解决问题
+1. 通过往构造函数中传入b来创建a，A类不再亲自创建b，而是消费它们，此时最大的好处就是B与A解除了强耦的关系。如果有一天对B进行升级，在创建B的时候需要传入一个参数，这时候不需要修改A类，只需要修改主程序即可
+2. 在new A的时候，可以传入任何类型的b。export class B1 extends B
+3. 实现数据共享。如果是通过在A里new Service的方式，是无法实现数据共享和通信的，因为不同A里的Service不是同一个实例。
+4. 测试用例
+
+__控制反转（IOC）__：类A依赖类B，但A不控制B的创建和销毁，仅使用B，那么B的控制权则交给A之外处理
+
+__IOC Container（容器）__：IOC容器负责管理对象的生命周期、依赖关系等，实现对象的依赖查找以及依赖注入（NestJS 运行时系统，Angular框架的依赖注入器）
+
+链接：https://www.jianshu.com/p/89249a3da84e

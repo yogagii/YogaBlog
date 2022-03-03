@@ -24,31 +24,31 @@ exit
 
 创建数据库
 
-```
+```sql
 CREATE DATABASE <数据库名>;
 ```
 
 查看当前的数据库
 
-```
+```sql
 show databases;
 ```
 
 删除数据库
 
-```
+```sql
 drop database <数据库名>;
 ```
 
 选择数据库
 
-```
+```sql
 use <数据库名>;
 ```
 
 创建数据表
 
-```
+```sql
 CREATE TABLE table_name (column_name column_type);
 mysql> CREATE TABLE runoob_tbl(
    -> runoob_id INT NOT NULL AUTO_INCREMENT,
@@ -62,19 +62,19 @@ mysql> CREATE TABLE runoob_tbl(
 
 显示当前数据库的表单
 
-```
+```sql
 show tables
 ```
 
 删除数据表
 
-```
+```sql
 DROP TABLE table_name;
 ```
 
 插入数据
 
-```
+```sql
 INSERT INTO table_name ( field1, field2,...fieldN )
                        VALUES
                        ( value1, value2,...valueN );
@@ -86,7 +86,7 @@ mysql> INSERT INTO runoob_tbl
 
 查询数据
 
-```
+```sql
 SELECT column_name,column_name
 FROM table_name
 [WHERE Clause]
@@ -94,29 +94,30 @@ FROM table_name
 // LIMIT 返回的记录数
 // OFFSET 开始查询的数据偏移量, 默认为0
 ```
+mssql不支持limit，mysql支持
 
 更新表
 
-```
+```sql
 ALTER TABLE `CustomViews` ADD `prompts` JSON;
 ALTER TABLE fpa.CustomViews DROP COLUMN prompts;
 ```
 更新数据
 
-```
+```sql
 UPDATE table_name SET field1=new-value1, field2=new-value2
 [WHERE Clause]
 ```
 
 DELETE 语句
 
-```
+```sql
 DELETE FROM table_name [WHERE Clause]
 ```
 
 LIKE 子句 (string has somevalue)
 
-```
+```sql
 SELECT field1, field2,...fieldN
 FROM table_name
 WHERE field1 LIKE condition1 [AND [OR]] filed2 = 'somevalue'
@@ -125,9 +126,41 @@ WHERE field1 LIKE condition1 [AND [OR]] filed2 = 'somevalue'
 mysql> SELECT * from runoob_tbl  WHERE runoob_author LIKE '%COM';
 ```
 
+LEFT JOIN 
+
+```sql
+SELECT e.project_id FROM (
+  bc_wr_user_exam as e
+  LEFT JOIN bc_r_user_task as t on t.project_id = e.project_id
+)
+```
+LEFT JOIN 左连接：两表关联，左表全部保留，右表关联不上用null表示。
+
+RIGHT JOIN 右连接：右表全部保留，左表关联不上的用null表示。
+
+INNER JOIN 内连接：两表关联，保留两表中交集的记录。
+
+左表独有：两表关联，查询左表独有的数据。
+```sql
+select * from t1 left join t2 on t1.id = t2.id where t2.id is null;
+```
+
+右表独有：两表关联，查询右表独有的数据
+
+```sql
+select * from t1 right join t2 on t1.id = t2.id where t1.id is null;
+```
+
+FULL JOIN 全连接：两表关联，查询它们的所有记录。MySQl 不支持 FULL JOIN，通过UNION来实现：
+```sql
+SELECT * FROM a LEFT JOIN b ON a.name = b.name 
+UNION
+SELECT * FROM a RIGHT JOIN b ON a.name = b.name;
+```
+
 UNION 操作符 (new set)
 
-```
+```sql
 // 排除重复
 SELECT country FROM Websites
 UNION
@@ -143,14 +176,14 @@ ORDER BY country;
 
 排序
 
-```
+```sql
 mysql> SELECT * from runoob_tbl ORDER BY submission_date ASC;
 mysql> SELECT * from runoob_tbl ORDER BY submission_date DESC;
 ```
 
 分组
 
-```
+```sql
 SELECT column_name, function(column_name)
 FROM table_name
 WHERE column_name operator value
@@ -162,7 +195,7 @@ SELECT name, SUM(singin) as singin_count FROM  employee_tbl GROUP BY name WITH R
 
 正则表达式
 
-```
+```sql
 // 查找name字段中以'st'为开头的所有数据
 SELECT name FROM person_tbl WHERE name REGEXP '^st';
 ```
@@ -171,7 +204,7 @@ SELECT name FROM person_tbl WHERE name REGEXP '^st';
 
 查询缓存：缓存相同查询语句的结果
 
-```sql
+```
 SHOW ENGINES
 ```
 

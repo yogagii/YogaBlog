@@ -11,6 +11,8 @@ Author: Yoga
 3. nestjs直接对接ts类型系统
 4. 解析数据库schema，产出swagger，对typeORM的整合的非常不错
 
+A nestjs template that contains basic functions (typeorm, task, email, unit test): 
+https://github.com/yogagii/nest_startup
 
 ## Controllers 控制器
 
@@ -261,3 +263,20 @@ handleTimeout() {
   this.logger.debug('Called once after 5 seconds');
 }
 ```
+
+## Test 测试
+
+Nest 提供Jest和SuperTest开箱即用的集成。
+
+https://github.com/yogagii/bst_data
+
+__Unit test__:
+
+* xxx.controller.spec.ts: 模拟service的方法，测试controller是否调用service方法
+* xxx.service.spec.ts: 模拟Repository方法，不连接数据库，mock假数据，验证业务逻辑
+
+__e2e测试__:
+
+* app.e2e-spec.ts: 模拟app module，连接测试数据库，验证各路由
+
+踩坑：需在beforeAll中createTestingModule，beforeEach中import AppModule会导致数据库重复连接（AlreadyHasActiveConnectionError）

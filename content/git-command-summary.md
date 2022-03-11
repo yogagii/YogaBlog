@@ -100,15 +100,7 @@ git checkout -- filename
 ```
 * 将所有untracked file删除: 
 ```
-git  clean  -f
-```
-* 查看远程仓库: 
-```
-git remote -v
-```
-* 添加远程仓库: 
-```
-git remote add <shortname> <url>
+git clean  -f
 ```
 * 从远程仓库抓取文件但是不合并: 
 ```
@@ -124,11 +116,23 @@ git push [remote-name] [branch-name]
 ```
 * 查看远程仓库: 
 ```
+git remote -v
+```
+* 查看远程仓库: 
+```
 git remote show [remote-name]
+```
+* 添加远程仓库: 
+```
+git remote add <shortname> <url>
 ```
 * 远程仓库重命名: 
 ```
 git remote rename [original-name] [new-name]
+```
+* 修改远程仓库：
+```
+git remote set-url [original-name] <url>
 ```
 * 移除远程仓库: 
 ```

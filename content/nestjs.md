@@ -211,6 +211,58 @@ async findAll() {
 app.useGlobalFilters(new HttpExceptionFilter()); // 全局范围的过滤器
 ```
 
+## Pipes 管道
+
+管道有两个类型:
+
+* 转换：管道将输入数据转换为所需的数据输出
+* 验证：对输入数据进行验证，如果验证成功继续传递; 验证失败则抛出异常;
+
+Nest 自带八个开箱即用的管道:
+
+* ValidationPipe
+* ParseIntPipe
+* ParseBoolPipe
+* ParseArrayPipe
+* ParseUUIDPipe
+* DefaultValuePipe
+* ParseEnumPipe
+* ParseFloatPipe
+
+```ts
+@Post()
+@UsePipes(ValidationPipe)
+async create(@Body() createCatDto: CreateCatDto) {
+  this.catsService.create(createCatDto);
+}
+```
+
+## Guards 守卫
+
+守卫的责任：授权 -- 根据运行时出现的某些条件（例如权限，角色，访问控制列表等）来确定给定的请求是否由路由处理程序处理。
+
+在 Express 中通常由中间件处理授权、验证身份。中间件不知道调用 next() 函数后会执行哪个处理程序。然而守卫可以访问 ExecutionContext 实例，因此确切地知道接下来要执行什么。
+
+> 守卫在每个中间件之后执行，但在任何拦截器或管道之前执行。
+
+每个守卫必须实现一个canActivate()函数。此函数应该返回一个布尔值，指示是否允许当前请求。
+
+```ts
+@Controller('cats')
+@UseGuards(RolesGuard)
+export class CatsController {
+  @Post()
+  @Roles('admin')
+  create(@Body() createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto);
+  }
+}
+```
+Nest提供了通过 @SetMetadata() 装饰器将定制元数据附加到路由处理程序的能力。
+```ts
+@SetMetadata('roles', ['admin'])
+```
+
 ## Task Scheduling 定时任务
 
 * 计时工作(cron job)

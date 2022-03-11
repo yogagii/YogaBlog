@@ -12,13 +12,15 @@ brew install mysql
 
 登录 mysql
 
-```
+```sql
 mysql -u root -p
+mysql -u root -p --ssl
+mysql -u root -p --ssl-mode-required
 ```
 
 退出 mysql
 
-```
+```sql
 exit
 ```
 
@@ -64,6 +66,12 @@ mysql> CREATE TABLE runoob_tbl(
 
 ```sql
 show tables
+```
+
+显示表结构
+
+```sql
+desc <表名>
 ```
 
 删除数据表

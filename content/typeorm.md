@@ -106,5 +106,6 @@ this.usersRepository
     hp.ename  // 踩坑：报错信息不会告诉你此处不能有，
   `,
   )
+  .limit(10)
   .getRawMany(),
 ```

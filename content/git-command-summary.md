@@ -219,6 +219,10 @@ git push --tag
 scp ~/Desktop/m/index.html root@47.100.43.xxx:~/deployf
 fpa_share_doc user$ scp ~/Desktop/userAvatar.png root@47.100.43.xxx:~/www/chatbot_hackathon/img
 ```
+Permission denied:
+```
+chmod 777 src_path
+```
 * 配置文件:
 
 cd /etc/nginx/sites-available

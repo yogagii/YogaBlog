@@ -1501,9 +1501,9 @@ li.posts {
 #post{
 	margin-right: 1.5em;
 }
-#content ul {
-    padding-left: 0;
-}
+/* #content ul {
+  padding-left: 0;
+} */
 
 .post-entry h1, .summary h1{
 	font-size: 175%;

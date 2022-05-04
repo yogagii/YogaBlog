@@ -223,3 +223,18 @@ __控制反转（IOC）__：类A依赖类B，但A不控制B的创建和销毁，
 __IOC Container（容器）__：IOC容器负责管理对象的生命周期、依赖关系等，实现对象的依赖查找以及依赖注入（NestJS 运行时系统，Angular框架的依赖注入器）
 
 链接：https://www.jianshu.com/p/89249a3da84e
+
+## Config
+
+踩坑：
+
+Consider using '--resolveJsonModule' to import module with '.json' extension.
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "resolveJsonModule": true
+  }
+}
+```

@@ -332,3 +332,74 @@ __e2e测试__:
 * app.e2e-spec.ts: 模拟app module，连接测试数据库，验证各路由
 
 踩坑：需在beforeAll中createTestingModule，beforeEach中import AppModule会导致数据库重复连接（AlreadyHasActiveConnectionError）
+
+## Event 监听事件
+
+使用 try catch 无法处理异步代码块内出现的异常
+
+```js
+// 异常捕获成功
+try {
+  throw new Error('error');
+} catch(e) {
+  console.log('异常捕获');
+}
+
+// 异常捕获失败
+try {
+  setTimeout(() => {
+    throw new Error('error');
+  })
+} catch(e) {
+  console.log('异常捕获');
+}
+```
+
+使用event方式来处理异常
+
+```bash
+npm i --save @nestjs/event-emitter
+```
+
+事件监听
+```ts
+import { Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+
+@Injectable()
+export class UpdateStatusListener {
+  constructor(private readonly mdmService: MdmService) {}
+
+  @OnEvent('updateStatus.sendFormFailed')
+  handleOrderCreatedEvent(event) {
+    console.log('sendFormFailed: ', event);
+  }
+}
+```
+
+```ts
+@Module({
+  providers: [UpdateStatusListener],
+})
+```
+
+事件触发
+```ts
+import { EventEmitter2 } from '@nestjs/event-emitter';
+@Injectable()
+export class EmailService {
+  constructor(
+    private eventEmitter: EventEmitter2,
+  ) {}
+
+  async sendEmailCode() {
+    try {
+      await this.mailerService.sendMail(sendMailOptions);
+    } catch (error) {
+      this.eventEmitter.emit('updateStatus.sendFormFailed', {
+        event_id: courseData.event_id,
+      });
+    }
+  }
+}
+```

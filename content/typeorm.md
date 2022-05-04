@@ -54,6 +54,9 @@ TypeOrmModule.forRoot({
       }
     : undefined,
   name: options?.name,
+}),
+TypeOrmModule.forRoot({
+  name: 'db2' // 当连接多个db时需要name
 })
 ```
 _踩坑：_
@@ -72,24 +75,27 @@ SSL -> CA certificate -> 选择文件
 ```ts
 // users.module.ts
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User], 'db2')],
   providers: [UsersService],
   controllers: [UsersController],
 })
 
 // users.service.ts
 constructor(
-  @InjectRepository(User)
+  @InjectRepository(User, 'db2')
   private usersRepository: Repository<User>,
 ) {}
 ```
+
+### 创建Entity
 
 装饰器 | description | extr
 | - | - | -
 @Column | 添加表列 | @Column({ length: 100 })
 @PrimaryColumn | 创建主列 | 每个实体必须至少有一个主键列
 @PrimaryGeneratedColumn | 自动生成的列 |
-
+@CreateDateColumn | 创建时间
+@UpdateDateColumn | 更新时间
 ### QueryBuilder
 
 使用 QueryBuilder 构建几乎任何复杂性的 SQL 查询
@@ -108,4 +114,81 @@ this.usersRepository
   )
   .limit(10)
   .getRawMany(),
+```
+
+### 多对多关系
+
+一个课程有多位讲师
+```ts
+// entities/event.ts
+import {
+  Column,
+  Entity,
+  PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Doctor } from './doctor';
+
+@Entity()
+export class Event {
+  @PrimaryColumn()
+  event_id: string;
+
+  @Column({ default: null }) // 默认值
+  course_name: string;
+
+  @ManyToMany(() => Doctor, (doctor) => doctor.doctor_id)
+  @JoinTable() // 指定这是关系的所有者方
+  doctors: Doctor[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+```
+
+一个讲师可以上多门课程
+```ts
+// entities/doctor.ts
+import { Event } from './event';
+
+@Entity()
+export class iqvia_doctor {
+  @PrimaryColumn()
+  doctor_id: string;
+
+  @Column()
+  name: string;
+
+  @ManyToMany(() => Event, (event) => event.event_id)
+  events: Event[];
+}
+```
+运行后，ORM 将创建Event_doctors_Doctor联结表。
+
+创建数据
+
+```ts
+doctor = new iqvia_doctor();
+doctor.doctor_id = '1';
+doctor.name = 'Doctor1';
+doctorList.push(doctor);
+await this.doctorRepository.save(doctor);
+
+event = new iqvia_event();
+event.event_id = '588873';
+event.course_name = 'Wound Clousure';
+
+event.doctors = doctorList;
+
+await this.eventRepository.save(event);
+
+const eventWithDoctor = await this.eventRepository.findOne('588873', {
+  relations: ['doctors'],
+});
 ```

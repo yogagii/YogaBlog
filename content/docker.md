@@ -4,6 +4,8 @@ Category: Analytics
 Tags: Docker
 Author: Yoga
 
+## Docker
+
 ```
 git clone https://github.com/docker/getting-started.git
 
@@ -15,6 +17,24 @@ docker run -d -p 80:80 \ —name docker-tutorial docker101tutorial
 docker tag docker101tutorial yogadock/docker101tutorial
 docker push yogadock/docker101tutorial
 
+```
+Docker 安装phpmyadmin
+
+https://hub.docker.com/_/phpmyadmin
+
+```
+docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 4000:80 phpmyadmin
+
+docker ps
+```
+
+CONTAINER ID | IMAGE | PORTS | NAMES
+| - | - | - | -
+0bfccc26fcfe | phpmyadmin | 0.0.0.0:4000 -> 80/tcp | myadmin
+
+```
+docker stop 0bfccc26fcfe
+docker rm 0bfccc26fcfe
 ```
 
 ## XENA

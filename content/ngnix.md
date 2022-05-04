@@ -17,6 +17,7 @@ cat /usr/local/nginx/conf/nginx.conf
 nginx -t
 // 重启
 service nginx restart
+nginx -s reload
 ```
 
 nginx.conf

@@ -14,6 +14,11 @@ Author: Yoga
 A nestjs template that contains basic functions (typeorm, task, email, unit test): 
 https://github.com/yogagii/nest_startup
 
+```
+$ npm i -g @nestjs/cli
+$ nest new project-name
+```
+
 ## Controllers 控制器
 
 控制器的目的是接收应用的特定请求。路由机制控制哪个控制器接收哪些请求。通常，每个控制器有多个路由，不同的路由可以执行不同的操作。

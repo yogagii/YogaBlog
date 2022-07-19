@@ -140,7 +140,7 @@ export class Event {
   @Column({ default: null }) // 默认值
   course_name: string;
 
-  @ManyToMany(() => Doctor, (doctor) => doctor.doctor_id)
+  @ManyToMany(() => Doctor, (doctor) => doctor.events)
   @JoinTable() // 指定这是关系的所有者方
   doctors: Doctor[];
 
@@ -165,7 +165,7 @@ export class iqvia_doctor {
   @Column()
   name: string;
 
-  @ManyToMany(() => Event, (event) => event.event_id)
+  @ManyToMany(() => Event, (event) => event.doctors)
   events: Event[];
 }
 ```
@@ -190,5 +190,60 @@ await this.eventRepository.save(event);
 
 const eventWithDoctor = await this.eventRepository.findOne('588873', {
   relations: ['doctors'],
+});
+```
+
+### 一对多关系
+
+一个城市有多家医院
+```ts
+// entities/city.ts
+import { Entity, PrimaryColumn, OneToMany } from 'typeorm';
+import { Hospital } from './hospital';
+
+@Entity()
+export class City {
+  @PrimaryColumn()
+  city_name: string;
+
+  @OneToMany(() => Hospital, (hospital) => hospital.city)
+  hospitals: Hospital[];
+}
+```
+
+一家医院只能在一个城市
+```ts
+// entities/hospital.ts
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { City } from './city';
+
+@Entity()
+export class Hospital {
+  @PrimaryColumn()
+  hco_code: string;
+
+  @Column()
+  hco_name: string;
+
+  @ManyToOne(() => City, (city) => city.hospitals)
+  @JoinColumn({ name: 'city_name' })
+  city: City;
+}
+```
+
+创建数据
+```ts
+const city = new iqvia_city();
+city.city_name = '枣庄';
+await this.cityRepository.save(city);
+
+const hospital = new iqvia_hospital();
+hospital.hco_code = 'MDMC1';
+hospital.hco_name = '中山医院';
+hospital.city = city;
+await this.hospitalRepository.save(hospital);
+
+const city_list = await this.cityRepository.findOne('枣庄', {
+  relations: ['hospitals'],
 });
 ```

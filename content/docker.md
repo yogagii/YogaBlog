@@ -36,6 +36,18 @@ CONTAINER ID | IMAGE | PORTS | NAMES
 docker stop 0bfccc26fcfe
 docker rm 0bfccc26fcfe
 ```
+nginx
+```
+location /php/ {
+  rewrite "^/php/(.*)$" /$1 break;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_buffering off;
+  proxy_pass http://10.216.104.80:4000;
+}
+```
 
 ## XENA
 

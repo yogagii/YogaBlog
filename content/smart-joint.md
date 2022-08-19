@@ -6,7 +6,7 @@ Author: Yoga
 
 ## 模型算法
 
-### Keras模型
+### Step1: Keras模型
 
 在Keras中有两种深度学习的模型：序列模型（Sequential）和通用模型（Model）
 
@@ -29,7 +29,7 @@ model.add(Dense(128, activation="relu"))
 model.add(Dropout(0.1))
 ```
 
-### 构造神经网络的layers函数
+### Step2: 构造神经网络的layers函数
 
 * layers.Flatten 用来将输入“压平”，即把多维的输入一维化，常用在从卷积层到全连接层的过渡。Flatten不影响batch的大小。
 * layers.Dense 构建全连接层
@@ -47,6 +47,47 @@ model.add(Dropout(0.1))
 * layers.AveragePooling2D 是构建采用平均池化方法的池化层
 * layers.Rescaling 主要是构建缩放层，进行归一化或者标准化
 
+### Step3: 编译
+
+```python
+model.compile(optimizer='adam', # 优化器
+              loss='mean_squared_error', # 损失函数
+              metrics=['mae']) # 网络评价指标
+
+```
+
+loss 损失函数：
+
+* 回归损失函数
+  * 均方差 mean_squared_error
+  * 平均绝对误差 mean_absolute_error
+  * Huber loss huber_loss
+* 分类损失函数
+  * 交叉熵损失函数 categorical_crossentropy
+  * 合页损失 hinge
+
+Metric 评价指标：
+* mae -> history: mean_absolute_error, val_mean_absolute_error
+* acc -> history: val_loss, val_acc, loss, acc
+
+### Step4: 训练
+
+```python
+history = model.fit(X_train,y_train,epochs =10,batch_size = 256,validation_split = 0.2)
+```
+输入：
+* x 输入的x值
+* y 输入的y标签值
+* batch_size 每次梯度更新的样本数即批量大小，默认为32
+* epochs=1 迭代次数
+* validation_split=0.0, 浮点数0-1之间，用作验证集的训练数据的比例
+
+输出：
+
+* history.epoch 训练轮数
+* history.history 内容是由compile参数的metrics确定
+
+### Step5: 预测
 
 ## 图像处理
 

@@ -4,7 +4,7 @@ Category: Project
 Tags: Deep Learning
 Author: Yoga
 
-## 模型算法
+## 关键点检测
 
 ### Step1: Keras模型
 
@@ -89,14 +89,32 @@ history = model.fit(X_train,y_train,epochs =10,batch_size = 256,validation_split
 
 ### Step5: 预测
 
+## 霍夫变换
+
+霍夫变换是图像处理中识别几何形状（直线，圆，椭圆）的一种方法，核心思想是把笛卡尔坐标系中的点集映射到霍夫空间（极坐标系）的一个点上
+
+```python
+img = cv2.imread('circle.jpg')
+# 将图像转换为灰度图像
+gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# 高斯滤波降噪
+gaussian_img = cv2.GaussianBlur(gray_img, (7, 7), 0)
+# 利用Canny进行边缘检测
+edges_img = cv2.Canny(gaussian_img, 80, 180, apertureSize=3)
+# 自动检测圆
+circles1 = cv2.HoughCircles(gray_img, cv2.HOUGH_GRADIENT, 1, 1000, param1=100, param2=20, minRadius=5, maxRadius=95)
+circles = circles1[0, :, :]
+circles
+```
+
 ## 图像处理
 
-读取图像
+1. 读取图像
 
 ```python
 from pylab import *
 
-img=imread('../input/knee-dataset/3_400/3_400/9000099L.png')
+img=imread('../9000099L.png')
 print(str(img.flatten().tolist())[1:-1].replace(',',''))
 ```
 imread(): 读取图像，返回值 Mat 类型 （二维数组）
@@ -107,10 +125,26 @@ tolist(): [a, b, ..., f] -> [a, ,b, c, d, e, f]
 
 str(): list转str [1:-1] 去掉首位中括号
 
-热图绘制
+```python
+import cv2
+
+img = cv2.imread('../hip_circle.jpeg')
+print(img.shape) # (1978, 1152, 3)  彩色图3通道
+```
+
+2. 热图绘制
 ```python
 plt.imshow(X_train[0].reshape(224,224),cmap='gray')
 plt.show()
+```
+
+在窗口中显示图像
+
+```python
+cv2.namedWindow("img",cv2.WINDOW_NORMAL)
+cv2.imshow('img', edges_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 ```
 
 ## 数据处理

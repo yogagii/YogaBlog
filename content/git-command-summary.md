@@ -357,6 +357,11 @@ vi config/local.js
 d G // 删除所有行
 ```
 
+* 删除5天前的文件 
+```
+find ./excel -name "*" -mtime +5 -exec rm -rfv {} \;
+```
+
 * 使用scl命令显式启用已安装的包
 ```
 scl enable rh-nodejs10 bash

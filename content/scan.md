@@ -1,4 +1,4 @@
-Title: SCAN -- Supply Chain ANalytics
+Title: ETL -- Databricks
 Date: 2022-01-20
 Category: Project
 Author: Yoga
@@ -12,53 +12,38 @@ SCAN stands for Supply Chain ANalytics. SCAN is an analytics program within Jans
 * Dashboarding & visualisation support
 * Advanced analytics
 
-### Spark
+数据来源：
 
-Spark 是使用 scala 实现的基于内存计算的大数据开源集群计算环境.提供了 java,scala, python,R 等语言的调用接口。
+* SAP (WinShuttle)
+* IMDB (api / sqlserver)
+* Manual report (Sharepoint)
+---
 
-Spark专门用于大数据量下的迭代式计算，将数据一直缓存在内存中,直到计算得到最后的结果,再将结果写入到磁盘,所以多次运算的情况下,Spark 是比较快的。
+## 建立数据连接
 
-- Spark SQL: 提供了类 SQL 的查询,返回 Spark-DataFrame 的数据结构(类似 Hive)
-- Spark Streaming: 流式计算,主要用于处理线上实时时序数据(类似 storm)
-- MLlib: 提供机器学习的各种模型和调优
-- GraphX: 提供基于图的算法,如 PageRank
+### Sharepoint -> Azure Data Lake Storage
 
-```sql
-Select id, result from exams where result > 70 order by result
+https://docs.microsoft.com/en-us/azure/data-factory/connector-sharepoint-online-list?tabs=data-factory#prerequisites
 
-spark.table("exam").select("id", "result").where("result > 70").orderBy("result")
-```
+1. 创建 app registration，storage account
+2. sharepoint 授权 app
+3. Datafactory 创建sharepoint连接器
+4. Datafactory 创建pipeline: getToken -> copy data
 
-### DataFrame
+### Azure Data Lake Storage -> Azure Databricks
 
-A DataFrame is a distributed collection of data grouped into named columns
+https://docs.microsoft.com/zh-cn/azure/storage/blobs/data-lake-storage-use-databricks-spark
 
-DataFrame是一种表格型数据结构，它含有一组有序的列，每列可以是不同的值。DataFrame的行索引是index，列索引是columns。
+1. 创建 storage account, app registration, databricks cluster
+2. 在 containers 里上传csv
+3. 在databricks 中挂载(mount) csv
 
-```python
-data = {
-    'state':['Ohio','Ohio','Ohio','Nevada','Nevada'],
-    'year':[2000,2001,2002,2001,2002],
-}
-frame = pd.DataFrame(data)
-```
+### Azure SQL Database 1 -> Azure Data Lake Storage -> Azure SQL Database 2
 
-A schema defines the column names and types of a DataFrame
+1. 创建 SQL database
+2. Datafactory 创建pipeline: copy data (db1 -> storage) -> Notebook(databricks) -> copy data (storage -> db2)
 
-DataFrame transformations are methods that return a new DataFrame and are lazily evaluated
-
-DataFrame actions are methods that trigger computation. An action is needed to trigger the execution of any DataFrame transformations
- 
- 
-```python
-df.select("id", "result")
-  .where("result > 70")
-  .orderBy("result")
-  .show()
-df.count()
-df.collect()
-df.show()
-```
+---
 
 ## Microsoft Azure Databricks
 
@@ -146,26 +131,51 @@ sql_table_name = "SIDE_DEPARTMENT_PROJECT_tableName_DEV " # naming conventions
 scan_pushDfToSQL(df = sdf_order_issues_inves, sqlTable = sql_table_name, database = "LEIDEN", modeType = "overwrite", verbose = True)
 ```
 
-## 建立数据连接
 
-### Sharepoint -> Azure Data Lake Storage
+### Spark
 
-https://docs.microsoft.com/en-us/azure/data-factory/connector-sharepoint-online-list?tabs=data-factory#prerequisites
+Spark 是使用 scala 实现的基于内存计算的大数据开源集群计算环境.提供了 java,scala, python,R 等语言的调用接口。
 
-1. 创建 app registration，storage account
-2. sharepoint 授权 app
-3. Datafactory 创建sharepoint连接器
-4. Datafactory 创建pipeline: getToken -> copy data
+Spark专门用于大数据量下的迭代式计算，将数据一直缓存在内存中,直到计算得到最后的结果,再将结果写入到磁盘,所以多次运算的情况下,Spark 是比较快的。
 
-### Azure Data Lake Storage -> Azure Databricks
+- Spark SQL: 提供了类 SQL 的查询,返回 Spark-DataFrame 的数据结构(类似 Hive)
+- Spark Streaming: 流式计算,主要用于处理线上实时时序数据(类似 storm)
+- MLlib: 提供机器学习的各种模型和调优
+- GraphX: 提供基于图的算法,如 PageRank
 
-https://docs.microsoft.com/zh-cn/azure/storage/blobs/data-lake-storage-use-databricks-spark
+```sql
+Select id, result from exams where result > 70 order by result
 
-1. 创建 storage account, app registration, databricks cluster
-2. 在 containers 里上传csv
-3. 在databricks 中挂载(mount) csv
+spark.table("exam").select("id", "result").where("result > 70").orderBy("result")
+```
 
-### Azure SQL Database 1 -> Azure Data Lake Storage -> Azure SQL Database 2
+### DataFrame
 
-1. 创建 SQL database
-2. Datafactory 创建pipeline: copy data (db1 -> storage) -> Notebook(databricks) -> copy data (storage -> db2)
+A DataFrame is a distributed collection of data grouped into named columns
+
+DataFrame是一种表格型数据结构，它含有一组有序的列，每列可以是不同的值。DataFrame的行索引是index，列索引是columns。
+
+```python
+data = {
+    'state':['Ohio','Ohio','Ohio','Nevada','Nevada'],
+    'year':[2000,2001,2002,2001,2002],
+}
+frame = pd.DataFrame(data)
+```
+
+A schema defines the column names and types of a DataFrame
+
+DataFrame transformations are methods that return a new DataFrame and are lazily evaluated
+
+DataFrame actions are methods that trigger computation. An action is needed to trigger the execution of any DataFrame transformations
+ 
+ 
+```python
+df.select("id", "result")
+  .where("result > 70")
+  .orderBy("result")
+  .show()
+df.count()
+df.collect()
+df.show()
+```

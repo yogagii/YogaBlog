@@ -40,3 +40,19 @@ ask for what you need
 ## GrapeJS
 
 export MJML 邮件中的HTML
+
+## Data Democratization 数据民主化
+
+Data democratization is the ability for information in a digital format to be accessible to Subject Matter Expert in JSC and data analysts/scientists.
+
+授予员工访问数据的权限，确保信息易于查找、检索和理解。使决策权掌握在员工手中，并为员工提供一些他们所需的信息以辅助他们优化工作。
+
+## EDW 企业数据仓库
+
+The primary function of the Enterprise Data Warehouse, is to provide a centralized data store of J&J enterprise-level data.
+
+## CDL 
+
+The Common Data Layer (CDL) is a repository that centralizes the Supply Chain Data.This common layer can support all digital solutions across the business. The CDL ingests and publishes near real-time data from supply chain systems globally. The Level 0 layer of the CDL is a direct reflection of the data as it is stored in the upstream source systems.
+
+CDL defined Databricks as the tool to use for data consumption. A secure access to CDL is given via an Azure Active Directory (AD) credential passthrough. The access is of type read-only, preventing L2 teams to write/modify any content in CDL L0 and L1. The access is direct to CDL Production environment, even during the development in downstream DEV & QA systems. 

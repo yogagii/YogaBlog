@@ -3,7 +3,7 @@ Date: 2022-01-20
 Category: Project
 Author: Yoga
 
-## SCAN
+### SCAN
 
 SCAN stands for Supply Chain ANalytics. SCAN is an analytics program within Janssen Supply Chain. Our aim is to accelerate value delivery by providing analytics as a service. 
 
@@ -11,32 +11,6 @@ SCAN stands for Supply Chain ANalytics. SCAN is an analytics program within Jans
 * Democratized data
 * Dashboarding & visualisation support
 * Advanced analytics
-
-## Data Democratization 数据民主化
-
-Data democratization is the ability for information in a digital format to be accessible to Subject Matter Expert in JSC and data analysts/scientists.
-
-Data Democratization brings data to the digital stack for each type of profile
-
-授予员工访问数据的权限，确保信息易于查找、检索和理解。使决策权掌握在员工手中，并为员工提供一些他们所需的信息以辅助他们优化工作。
-
-## EDW 企业数据仓库
-
-The primary function of the Enterprise Data Warehouse, is to provide a centralized data store of J&J enterprise-level data.
-
-## CDL 
-
-The Common Data Layer (CDL) is a repository that centralizes the Supply Chain Data.This common layer can support all digital solutions across the business. The CDL ingests and publishes near real-time data from supply chain systems globally. The Level 0 layer of the CDL is a direct reflection of the data as it is stored in the upstream source systems.
-
-CDL defined Databricks as the tool to use for data consumption. A secure access to CDL is given via an Azure Active Directory (AD) credential passthrough. The access is of type read-only, preventing L2 teams to write/modify any content in CDL L0 and L1. The access is direct to CDL Production environment, even during the development in downstream DEV & QA systems. 
-
-## Databricks
-
-databricks是使用Apache Spark™的原始创建者提供的Databricks统一分析平台。它集成了Spark环境支持Scala、python、R语言进行开发。
-
-Databricks is a powerful, Spark-based platform that enables users to process, manage, and visualize massive volumes of data. Founded by the original creators of Apache Spark, Databricks has embedded and optimized Spark as part of a larger platform designed for not only data processing, but also data science, machine learning, and business analytics. Using Databricks, users can ingest data, build data pipelines, run them in production, and automate these processes for reliability and scale. 
-
-Databricks Proof of Concept (extended to Proof of Value) was first mooted by Janssen APAC Data Science team to re-evaluate Data Science workbench tool, as pro-code alternative to existing Low Code Data Science workbench tool - Dataiku, as well as end-to-end ML Ops solution suite covering products like Feature Store and ML Flow.
 
 ### Spark
 
@@ -85,14 +59,12 @@ df.count()
 df.collect()
 df.show()
 ```
- 
-## ABAP
-
-Advanced Business Application Programming高级商务应用编程，ABAP主要用作SAP的编程。
-
----
 
 ## Microsoft Azure Databricks
+
+ETL: Extract, Transform and Load 数据仓库技术
+
+databricks是使用Apache Spark™的原始创建者提供的Databricks统一分析平台。它集成了Spark环境支持Scala、python、R语言进行开发。
 
 adb-xxx.azuredatabricks.net
 
@@ -102,7 +74,7 @@ Workspace -> Users (your own folder) -> 右键import -> .dbc file
 
 jobs -> start cluster
 
-Extract, Transform and Load
+
 ```python
 # reading the CDL blob storage using scan_read(SCAN package)
 from sca_read.loader import helper, getSysttemRelatedTables
@@ -173,3 +145,27 @@ def scan_pushDfToSQL(
 sql_table_name = "SIDE_DEPARTMENT_PROJECT_tableName_DEV " # naming conventions
 scan_pushDfToSQL(df = sdf_order_issues_inves, sqlTable = sql_table_name, database = "LEIDEN", modeType = "overwrite", verbose = True)
 ```
+
+## 建立数据连接
+
+### Sharepoint -> Azure Data Lake Storage
+
+https://docs.microsoft.com/en-us/azure/data-factory/connector-sharepoint-online-list?tabs=data-factory#prerequisites
+
+1. 创建 app registration，storage account
+2. sharepoint 授权 app
+3. Datafactory 创建sharepoint连接器
+4. Datafactory 创建pipeline: getToken -> copy data
+
+### Azure Data Lake Storage -> Azure Databricks
+
+https://docs.microsoft.com/zh-cn/azure/storage/blobs/data-lake-storage-use-databricks-spark
+
+1. 创建 storage account, app registration, databricks cluster
+2. 在 containers 里上传csv
+3. 在databricks 中挂载(mount) csv
+
+### Azure SQL Database 1 -> Azure Data Lake Storage -> Azure SQL Database 2
+
+1. 创建 SQL database
+2. Datafactory 创建pipeline: copy data (db1 -> storage) -> Notebook(databricks) -> copy data (storage -> db2)

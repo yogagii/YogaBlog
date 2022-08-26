@@ -107,6 +107,28 @@ circles = circles1[0, :, :]
 circles
 ```
 
+## 边缘检测（模糊度）
+
+Laplacian（拉普拉斯）算子是一种二阶导数算子，其具有旋转不变性，可以满足不同方向的图像边缘锐化（边缘检测）的要求。
+
+blur the picture
+```python
+blur_img = cv2.blur(gray_img, (9,9)) # 均值滤波
+median_img = cv2.medianBlur(gray_img, 9) # 中值滤波
+gaussian_img = cv2.GaussianBlur(gray_img, (9,9), 0) # 高斯滤波
+```
+
+```python
+def getImageVar( image ):
+    img2gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    imageVar = cv2.Laplacian(img2gray, cv2.CV_64F).var()
+    return imageVar # 图像越清晰越大
+
+img = cv2.imread('blur_hip.jpeg')
+getImageVar(img)
+```
+
+
 ## 图像处理
 
 1. 读取图像
@@ -134,6 +156,7 @@ print(img.shape) # (1978, 1152, 3)  彩色图3通道
 
 2. 热图绘制
 ```python
+fig=plt.figure(figsize=(4,3) # 图像大小
 plt.imshow(X_train[0].reshape(224,224),cmap='gray')
 plt.show()
 ```
@@ -146,6 +169,13 @@ cv2.imshow('img', edges_img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
+
+3. 添加文字
+
+```python
+cv2.putText(img, str(i), (123,456)), font, 2, (0,255,0), 3)
+```
+各参数依次是：图片，添加的文字，左上角坐标，字体，字体大小，颜色，字体粗细
 
 ## 数据处理
 

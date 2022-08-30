@@ -373,6 +373,12 @@ exit
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-cloudwatch-agent.rpm
 ```
 
+* 查看文件所占空间
+```
+du -sh #总和
+du -d 1 #当前目录下所有一级子目录所占空间大小
+```
+
 ## OpenSSL
 
 ```

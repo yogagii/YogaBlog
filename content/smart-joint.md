@@ -156,7 +156,7 @@ print(img.shape) # (1978, 1152, 3)  彩色图3通道
 
 2. 热图绘制
 ```python
-fig=plt.figure(figsize=(4,3) # 图像大小
+fig=plt.figure(figsize=(4,3)) # 图像大小
 plt.imshow(X_train[0].reshape(224,224),cmap='gray')
 plt.show()
 ```

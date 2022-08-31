@@ -82,4 +82,36 @@ dG
 
  软链接的文件内,不是存的数据,而是存的一个文件的全路径名,使用此链接时,会根据此路径找到目标文件，和windows里到快捷方式一样。
 
+## 基本命令
 
+* 显示当前路径
+```bash
+pwd
+```
+
+* 移动文件：mv+源文件/源目录 目标文件/目标目录 
+```bash
+mv home/v-jyu36/DigiCertGlobalRootCA.crt.pem /var/www/iqvia_data/private
+```
+
+* 删除文件或目录
+```bash
+rm -rf src_path
+```
+
+* 修改权限
+```bash
+chmod 777 src_path
+```
+
+* 删除5天前的文件 
+```bash
+find ./excel -name "*" -mtime +5 -exec rm -rfv {} \;
+```
+
+* 查看文件所占空间
+```bash
+du -sh # 总和
+du -d 1 # 当前目录下所有一级子目录所占空间大小
+df -h /var # 指定目录挂载磁盘剩余空间
+```

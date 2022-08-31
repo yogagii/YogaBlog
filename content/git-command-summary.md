@@ -357,11 +357,6 @@ vi config/local.js
 d G // 删除所有行
 ```
 
-* 删除5天前的文件 
-```
-find ./excel -name "*" -mtime +5 -exec rm -rfv {} \;
-```
-
 * 使用scl命令显式启用已安装的包
 ```
 scl enable rh-nodejs10 bash
@@ -371,12 +366,6 @@ exit
 * 下载文件
 ```
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-cloudwatch-agent.rpm
-```
-
-* 查看文件所占空间
-```
-du -sh #总和
-du -d 1 #当前目录下所有一级子目录所占空间大小
 ```
 
 ## OpenSSL

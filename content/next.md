@@ -4,7 +4,7 @@ Category: React
 Tags: Next
 Author: Yoga
 
-nextjs12.x 集成 less
+### nextjs12.x 集成 less
 
 1）安装依赖
 
@@ -32,3 +32,43 @@ module.exports = withAntdLess(nextConfig);
 // index.tsx
 import styles from "./menu.module.less";
 ```
+
+### 注册全局变量
+
+config.ts
+```ts
+const globalAny: any = global;
+
+globalAny.Theme = {
+  primaryColor: "#E88570",
+  secondaryColor: "#BE46D8",
+};
+
+export {};
+```
+
+index.d.ts
+```ts
+declare module '*.js'
+declare module '*.less'
+declare module '*.jpg'
+declare module '*.svg'
+declare const Theme: {
+  primaryColor: string;
+  secondaryColor: string;
+};
+```
+
+_app.tsx
+```tsx
+import type { AppProps } from "next/app";
+import "../config";
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+
+export default MyApp;
+```
+
+使用：Theme.primaryColor

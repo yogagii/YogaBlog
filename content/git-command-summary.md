@@ -268,6 +268,11 @@ chmod 777 ./build.sh
 
 ## netstat
 
+* 查看所有占用端口号
+```
+netstat -tunlp
+```
+
 * 查看占用端口号27999的进程
 ```
 netstat -pan | grep 27999

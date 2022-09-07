@@ -65,9 +65,11 @@ server {
     }
   }
 ```
+指向index
+
 npm run build:prod
 ```
-# 0042
+# 0042 (42 -> 39)
 location /iqvia-email {
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -76,16 +78,39 @@ location /iqvia-email {
     proxy_buffering off;
     proxy_pass http://xx.xx.xx.39;
 }
-# 0039
+# 0039 (nginx在42，资源在39)
 location /iqvia-email/ {
     alias   /var/www/iqvia_email/build/;
     index index.html;
 }
-# 0080
+
+# 0080 (80资源在本机)
 location /iqvia-email/ {
     alias   /var/www/iqvia_email/build/;
     index index.html;
     try_files $uri /iqvia-email/index.html;
+}
+```
+指向端口
+
+```
+next build
+next start -p 3008
+pm2 start npm --name carto-dashboard-3008 -- run start
+```
+```ts
+// next.config.ts
+module.exports = {
+  basePath: '/carto-dashboard',
+};
+```
+```
+location /carto-dashboard {
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_pass http://xx.xx.xx.80:3008;
 }
 ```
 前端 单页

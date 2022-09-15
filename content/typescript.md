@@ -238,3 +238,7 @@ Consider using '--resolveJsonModule' to import module with '.json' extension.
   }
 }
 ```
+
+---
+
+(type: keyof typeof colorMap) => colorMap[type]

@@ -29,6 +29,38 @@ model.add(Dense(128, activation="relu"))
 model.add(Dropout(0.1))
 ```
 
+* ResNet-50 深度残差网络
+```python
+from keras.applications import resnet
+base_model =resnet.ResNet50(include_top = False, weights = 'imagenet', input_shape = (224,224,3))
+
+headModel = base_model.output
+headModel = Flatten(name="flatten")(headModel)
+headModel = Dense(256, activation="relu")(headModel)
+headModel = Dropout(0.35)(headModel)
+headModel = Dense(48)(headModel)
+model = Model(inputs=base_model.input, outputs=headModel)
+```
+
+* SPP -- (Spatial PyramidPooling 层) 金字塔池化
+目前流行的CNN都需要固定size和scale的输入图片；所以基本上都是通过剪裁crop（不完整）和wrap（导致变形）。CNN网络对于固定输入的要求，主要在全连接的分类器层。
+
+特征提取层可以通过控制子采样比例和filter尺寸来调节，来接受各种scale和size的输入，得到固定的特征输出。
+
+```python
+model.add(SpatialPyramidPooling([1,2,4]))
+```
+
+* UNet
+
+U型网络结构，解决图像分割问题，可以从小数据集中训练
+
+只能正方形图片
+
+```python
+model = unet(input_size = (256, 256,1))
+```
+
 ### Step2: 构造神经网络的layers函数
 
 * layers.Flatten 用来将输入“压平”，即把多维的输入一维化，常用在从卷积层到全连接层的过渡。Flatten不影响batch的大小。
@@ -87,7 +119,61 @@ history = model.fit(X_train,y_train,epochs =10,batch_size = 256,validation_split
 * history.epoch 训练轮数
 * history.history 内容是由compile参数的metrics确定
 
+可视化损失函数：
+
+history.hostory:
+* loss 训练损失
+* val_loss 验证损失
+* acc 训练准确率
+* val_acc 验证准确率
+
+```python
+# Get training and test loss histories
+training_loss = history.history['loss']
+validation_loss = history.history['val_loss']
+
+# Create count of the number of epochs
+epoch_count = range(1, len(training_loss) + 1)
+
+# Visualize loss history
+plt.plot(epoch_count, training_loss, 'r-')
+plt.plot(epoch_count, validation_loss, 'b-')
+plt.legend(['Training Loss', 'Test Loss'])
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show();
+```
+
+一般来说validation loss > training loss
+
+目标：使validation loss尽可能小
+
+* validation loss >> training loss: overfitting 过拟合
+* validation loss << training loss: underfitting
+
+训练集损失下降 验证集损失下降 ——> 网络正在学习（理想状态）
+
+训练集损失下降 验证集损失不变 ——> 网络过拟合（尝试dropout、L2等手段）
+
+训练集损失不变 验证集损失下降 ——> 数据集有问题（检查数据集）
+
+训练集损失不变 验证集损失不变 ——> 网络遇到学习瓶颈（减小learning rate或batch size）
+
+训练集损失上升 验证集损失上升 ——> 网络结构设计不当、超参设置不当、数据集经过清洗等
+
+参考：https://zhuanlan.zhihu.com/p/116116585
+
+保存模型：
+
+```python
+model.save('res_model_1')
+```
+
 ### Step5: 预测
+
+```python
+pre = model.predict(test_data)
+```
 
 ## 霍夫变换
 
@@ -154,9 +240,15 @@ img = cv2.imread('../hip_circle.jpeg')
 print(img.shape) # (1978, 1152, 3)  彩色图3通道
 ```
 
-2. 热图绘制
+图像剪裁
+```python
+imgROI = img[y1:y2, x1:x2].copy()
+```
+
+2. 绘制图像
 ```python
 fig=plt.figure(figsize=(4,3)) # 图像大小
+plt.subplot(1,2,1) # 1行2列第一张
 plt.imshow(X_train[0].reshape(224,224),cmap='gray')
 plt.show()
 ```
@@ -210,5 +302,11 @@ Python基本数据类型：
 
 整型int，浮点型float，字符串str，列表list，字典dict，集合set，元组tuple，布尔值bool
 
+```python
+columns = [ "l-p1", "l-p2" ]
 
+df = pd.DataFrame({
+  col: [] for col in columns # {'l-p1': [], 'l-p2': [],}
+})
+```
 

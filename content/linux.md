@@ -65,22 +65,57 @@ dG
 ```
 /正则匹配
 ```
+---
 
-## 连接
+## 安装Anaconda
 
-1. 硬链接：ln/mount
+```bash
+df -h # 查看磁盘空间
+du -sh *
 
- 硬链接的文件是使用同一个inode结构,每一个硬链接使inode的使用计数加一,删除文件时,使用计数减一,当使用计数为零时,才真正删除文件。
+cd /home/v-jyu36/ # 不要用root安装
+wget https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh 
+chmod +x Anaconda3-2022.05-Linux-x86_64.sh
+./Anaconda3-2022.05-Linux-x86_64.sh
+rm Anaconda3-2022.05-Linux-x86_64.sh
 
- 硬连接的作用是允许一个文件拥有多个有效路径名，这样用户就可以建立硬连接到重要文件，以防止“误删”的功能。
+# 修改环境变量
+vi ~/.bashrc
+export PATH="/home/v-jyu36/anaconda3/bin:$PATH" 
+source ~/.bashrc
+which python # ~/anaconda3/bin/python 
 
- mount：用于挂载Linux系统外的文件。操作的对象是设备
- 
- Ln：操作对象是文件
+# 安装包
+pip install tensorflow
 
- 2. 软链接：ln -s
+```
+### Tmux
 
- 软链接的文件内,不是存的数据,而是存的一个文件的全路径名,使用此链接时,会根据此路径找到目标文件，和windows里到快捷方式一样。
+```python
+# 安装分屏
+sudo su -
+sudo yum install tmux 
+exit # 退出root
+
+tmux new -s <session-name> # 新建会话
+tmux split-window # 划分上下两个窗格
+tmux select-pane -U # 光标切换窗格 
+ctrl+b 方向键下 # 光标切换窗格 
+
+ipython
+%run YogaModel-ChopModel.py 
+
+free # 查看内存
+top # 观察cpu、内存使用情况
+top -p <进程id>
+
+tmux ls # 查看当前所有的 Tmux 会话
+tmux attach -t 0 # 用于重新接入某个已存在的会话
+ctrl+b d # 退出
+tmux kill-session -t 0 # 杀死某个会话
+```
+
+---
 
 ## 基本命令
 
@@ -115,3 +150,21 @@ du -sh # 总和
 du -d 1 # 当前目录下所有一级子目录所占空间大小
 df -h /var # 指定目录挂载磁盘剩余空间
 ```
+
+## 连接
+
+1. 硬链接：ln/mount
+
+ 硬链接的文件是使用同一个inode结构,每一个硬链接使inode的使用计数加一,删除文件时,使用计数减一,当使用计数为零时,才真正删除文件。
+
+ 硬连接的作用是允许一个文件拥有多个有效路径名，这样用户就可以建立硬连接到重要文件，以防止“误删”的功能。
+
+ mount：用于挂载Linux系统外的文件。操作的对象是设备
+ 
+ Ln：操作对象是文件
+
+ 2. 软链接：ln -s
+
+ 软链接的文件内,不是存的数据,而是存的一个文件的全路径名,使用此链接时,会根据此路径找到目标文件，和windows里到快捷方式一样。
+
+

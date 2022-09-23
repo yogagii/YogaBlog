@@ -98,7 +98,7 @@ sudo yum install tmux
 exit # 退出root
 
 tmux new -s <session-name> # 新建会话
-tmux split-window # 划分上下两个窗格
+tmux split-window # 划分上下两个窗格 ctrl+b "
 tmux select-pane -U # 光标切换窗格 
 ctrl+b 方向键下 # 光标切换窗格 
 
@@ -108,6 +108,7 @@ ipython
 free # 查看内存
 top # 观察cpu、内存使用情况
 top -p <进程id>
+htop # ubuntu: apt install htop
 
 tmux ls # 查看当前所有的 Tmux 会话
 tmux attach -t 0 # 用于重新接入某个已存在的会话

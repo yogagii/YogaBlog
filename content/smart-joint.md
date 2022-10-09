@@ -43,6 +43,7 @@ model = Model(inputs=base_model.input, outputs=headModel)
 ```
 
 * SPP -- (Spatial PyramidPooling 层) 金字塔池化
+
 目前流行的CNN都需要固定size和scale的输入图片；所以基本上都是通过剪裁crop（不完整）和wrap（导致变形）。CNN网络对于固定输入的要求，主要在全连接的分类器层。
 
 特征提取层可以通过控制子采样比例和filter尺寸来调节，来接受各种scale和size的输入，得到固定的特征输出。

@@ -99,8 +99,10 @@ exit # 退出root
 
 tmux new -s <session-name> # 新建会话
 tmux split-window # 划分上下两个窗格 ctrl+b "
+tmux split-window -h # 划分左右两个窗格 ctrl+b %
 tmux select-pane -U # 光标切换窗格 
 ctrl+b 方向键下 # 光标切换窗格 
+ctrl+b x # 关闭当前窗格 
 
 ipython
 %run YogaModel-ChopModel.py 

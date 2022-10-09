@@ -255,6 +255,7 @@ ln -s /etc/nginx/sites-available/hr_hackathon.jujadc.com /etc/nginx/sites-enable
 // 测试
 nginx -t
 // 重启
+nginx
 service nginx restart
 ```
 * 改变文件权限:

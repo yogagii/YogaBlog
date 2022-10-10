@@ -30,6 +30,14 @@ const savePic = () => {
   };
 ```
 
+踩坑：字体大小与原dom不符
+
+```css
+.imgContainer {
+  font-variant: normal;
+}
+```
+
 ## 拖拽
 
 ```javascript

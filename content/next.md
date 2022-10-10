@@ -72,3 +72,24 @@ export default MyApp;
 ```
 
 使用：Theme.primaryColor
+
+### window
+
+next.js是服务器渲染，运行在node上的，并不是浏览器上的；
+
+所以使用生命周期componentDidMount，在页面渲染到浏览器后，才能找到window
+
+```ts
+const [isDeskTop, setDeskTop] = useState(true);
+
+useEffect(() => {
+  setDeskTop(!(window?.innerWidth <= 576));
+}, []);
+```
+
+引入外部模块
+
+```ts
+const jsPDF = (await import('./jspdf.debug')).default;
+var pdf = new jsPDF("", "pt", "a4");
+```

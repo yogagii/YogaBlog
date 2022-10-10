@@ -30,13 +30,15 @@ const savePic = () => {
   };
 ```
 
-踩坑：字体大小与原dom不符
+- 踩坑：字体大小与原dom不符
 
 ```css
 .imgContainer {
   font-variant: normal;
 }
 ```
+
+- 踩坑：overflow: scroll 被隐藏的部分会黑，需要让导出的div完整渲染在页面，靠浏览器的滚动条上下滚动
 
 ## 拖拽
 

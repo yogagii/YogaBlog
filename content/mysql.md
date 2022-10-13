@@ -48,6 +48,12 @@ drop database <数据库名>;
 use <数据库名>;
 ```
 
+导入表sql
+
+```sql
+source /Users/yoga/code/xxx.sql
+```
+
 创建数据表
 
 ```sql

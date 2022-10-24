@@ -317,7 +317,7 @@ pm2 restart wechat_auth
 ```
 pm2 log wxAuthorize
 pm2 log --out --lines 100
-pm2 log 2 —err --lines 100
+pm2 log 2 —-err --lines 100
 pm2 log --err --lines 100 | grep Logoff
 ```
 * 重新加载指定应用:
@@ -330,6 +330,11 @@ pm2 reload app --log-date-format 'DD-MM HH:mm:ss.SSS'
 ```
 pm2 info app
 pm2 env 0
+```
+
+* 保存进程列表以在服务器重新启动后自动重启
+```
+pm2 save
 ```
 
 ## less

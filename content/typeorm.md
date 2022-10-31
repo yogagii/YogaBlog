@@ -108,12 +108,22 @@ this.usersRepository
     `
     user.id,
     user.real_name,
+    user.create_time
     hp.ecode,
     hp.ename  // 踩坑：报错信息不会告诉你此处不能有，
   `,
   )
+  .where('user.id IN (:...userIdList)', { userIdList })
+  .andWhere('user.create_time >= :START_DATE', { START_DATE })
   .limit(10)
   .getRawMany(),
+
+// debug
+const sql = this.usersRepository
+  .createQueryBuilder('user')
+  ...
+  .getQuery();
+console.log(sql);
 ```
 
 ### 多对多关系

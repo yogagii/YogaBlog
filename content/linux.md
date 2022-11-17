@@ -126,6 +126,16 @@ rm -rf src_path
 chmod 777 src_path
 ```
 
+* 显示问价大小
+```bash
+ls -lh
+```
+
+* 显示文件数量
+```bash
+ls ./excel -l|grep "^-"| wc -l 
+```
+
 * 删除5天前的文件 
 ```bash
 find ./excel -name "*" -mtime +5 -exec rm -rfv {} \;

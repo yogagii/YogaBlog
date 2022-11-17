@@ -267,28 +267,6 @@ chmod 777 ./build.sh
 ./build.sh
 ```
 
-## netstat
-
-* 查看所有占用端口号
-```
-netstat -tunlp
-```
-
-* 查看占用端口号27999的进程
-```
-netstat -pan | grep 27999
-// tcp6  0  0  :::27999  :::*  LISTEN  15460/node
-```
-* 查看指定进程详情
-```
-ps -aux | grep 15460
-// root 15460  0.0  0.2 867324 42508 pts/5 Sl+ 10:14 0:00 node index
-```
-* 杀死指定进程
-```
-kill 15460
-```
-
 ## PM2进程管理工具
 
 * 启动index.js（node index）并起名:

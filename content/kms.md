@@ -1,6 +1,6 @@
 Title: AWS KMS
 Date: 2021-08-17
-Category: Backend
+Category: Cloud
 Tags: AWS
 Author: Yoga
 

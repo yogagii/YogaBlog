@@ -1,6 +1,6 @@
 Title: Amazon CloudWatch
 Date: 2021-09-03
-Category: Backend
+Category: Cloud
 Tags: AWS
 Author: Yoga
 

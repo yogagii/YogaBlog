@@ -33,7 +33,7 @@ THEME = 'pelican-themes/Responsive-Pelican'
 # Blogroll
 LINKS = (('Github', 'https://github.com/yogagii'),('UI/UX/Frontend/Game Design', 'https://preview-static.clewm.net/cli/view-doc/view.html?url=https%3A%2F%2Fncstatic.clewm.net%2Frsrc%2F2021%2F0510%2F20%2F013c587ff42ef5f36ccb923c9d7a3765.pdf'),('Industrial Design Portfolio', 'https://preview-static.clewm.net/cli/view-doc/view.html?url=https%3A%2F%2Fncstatic.clewm.net%2Frsrc%2F2021%2F0510%2F19%2F64852862e888e4db944b06eea147d035.pdf'))
 
-MENUITEMS = (('Javascript', 'category/javascript.html'),('React', 'category/react.html'),('IOS', 'category/ios.html'),('Frontend', 'category/frontend.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'),('Project', 'category/project.html'),('Backend', 'category/backend.html'),('Angular', 'category/angular.html'))
+MENUITEMS = (('Javascript', 'category/javascript.html'),('React', 'category/react.html'),('IOS', 'category/ios.html'),('Frontend', 'category/frontend.html'),('Analytics', 'category/analytics.html'),('Programming', 'category/programming.html'),('Project', 'category/project.html'),('Backend', 'category/backend.html'),('Angular', 'category/angular.html'),('Cloud', 'category/cloud.html'))
 
 # Social widget
 # SOCIAL = (('You can add links in your config file', '#'),)

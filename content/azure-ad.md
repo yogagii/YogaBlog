@@ -1,6 +1,6 @@
 Title: Microsoft Azure Adminstrator
 Date: 2022-04-13
-Category: Backend
+Category: Cloud
 Tags: Azure
 Author: Yoga
 

@@ -1,6 +1,6 @@
 Title: Blue-Green Deployment
 Date: 2021-09-03
-Category: Programming
+Category: Cloud
 Tags: AWS
 Author: Yoga
 

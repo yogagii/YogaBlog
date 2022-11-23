@@ -18,7 +18,9 @@ Nginx就是性能非常好的反向代理服务器，用来做负载均衡。
 
 设置开机启动：chkconfig nginx on
 
-service nginx start
+Linux上开机自动启动Nginx: 在/etc/rc.local文件中加一行 nginx
+
+启动：nginx 或 service nginx start
 
 踩坑：nginx: [error] invalid PID number “” in “/run/nginx.pid”
 

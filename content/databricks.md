@@ -144,6 +144,15 @@ CleanColumn="WhN, TO_DATE(GRDate,'yyyy/MM/dd') GRDate, ToDouble(PutawayStock) Pu
 spark.sql(f"INSERT INTO {CSTGTable}({TableColumn}) SELECT {CleanColumn}, now() from {LandingTable}");
 ```
 
+### AWS S3
+
+```python
+sc._jsc.hadoopConfiguration().set("fs.s3n.awsAccessKeyId", "xxx")
+sc._jsc.hadoopConfiguration().set("fs.s3n.awsSecretAccessKey","xxx")
+
+display(dbutils.fs.ls("s3://<bucketname>/<folder>/"))
+```
+
 ---
 
 ```python

@@ -51,3 +51,58 @@ list1.sort( key=None, reverse=False) # 排序
 list1.clear() # 清空
 list1.copy() # 复制
 ```
+
+## String 字符串
+
+```python
+str1 = 'Hello World'
+
+str1[0] # H
+str1[-1] # d
+str1[1:4] # ell [1, 4)
+```
+
+* 更新字符串
+```python
+str1[:6] + 'Runoob!'
+```
+
+* 转义字符
+```python
+print("line1 \
+  line2") # \续行符 line1 line2
+print("Hello \b World!") # \b 退格 Hello World!
+print("\n") # \n 换行	
+print (r'\n') # 原始字符串
+
+para_str = """python三引号允许一个字符串跨多行，
+字符串中可以包含换行符、制表符以及其他特殊字符。
+"""
+```
+
+* 字符串格式化
+
+符号 | desc |
+|-|-|
+%c | 格式化字符及其ASCII码 |
+%s | 格式化字符串 |
+%d | 格式化整数 |
+%u | 格式化无符号整型 |
+
+```python
+print ("我叫 %s 今年 %d 岁!" % ('Yoga', 10)) # 我叫 Yoga 今年 10 岁!
+
+print('Hello %s' % name)
+print(f'Hello {name}') # f-string 字面量格式化字符串 python3.6
+```
+
+* 查找
+```python
+'H' in str1 # True
+'H' not in str1 # False
+```
+
+* 操作
+```python
+capitalize() # 首字母大写
+```

@@ -218,6 +218,38 @@ SELECT name, SUM(singin) as singin_count FROM  employee_tbl GROUP BY name WITH R
 SELECT name FROM person_tbl WHERE name REGEXP '^st';
 ```
 
+展开数组
+
+```sql
+SELECT EXPLODE(DATA) data FROM table_name
+```
+
+自定义变量
+```sql
+set @key=value
+set @key:=value
+select @key:=value
+```
+
+自定义函数
+```sql
+Create function 函数名(参数)
+Returns 返回值数据类型
+as
+begin
+SQL 语句(必须有return变量或值)
+End
+```
+
+子查询部分(subquery factoring)：将需要频繁执行的SQL片段加个别名放到全局中
+```sql
+with A as (
+  select * from user
+)
+
+select * from A, customer where customer.userid = user.id
+```
+
 2020.9.10
 
 查询缓存：缓存相同查询语句的结果

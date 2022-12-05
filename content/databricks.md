@@ -39,6 +39,29 @@ dbutils.fs.cp(SapPath+FileName, TempPath)
 ```
 踩坑：若要跟新表结构，需将存表的文件夹删除
 
+### 文件读取
+
+* CSV/TXT
+```python
+df_DateLake=spark.read.format("csv").option("header","true").option("encoding","utf-8").load("abfss://container@blob.xxx.cn/folder/filename.csv");
+display(df_DateLake)
+```
+
+* Excel
+```python
+df_DateLake=spark.read.format("com.crealytics.spark.excel").option("header","true").load("abfss://container@blob.xxx.cn/folder/filename.xlsx");
+```
+
+* JSON
+```sql
+select * from json.`abfss://container@blob.xxx.cn/folder/filename`
+```
+
+* Parquet
+```sql
+select * from parquet.`abfss://container@blob.xxx.cn/folder/filename`
+```
+
 ### Delta Table
 
 __DDL__
@@ -52,6 +75,12 @@ create table STG.TableName
 `InsertTime` timestamp)
 USING delta 
 LOCATION "abfss://container@blob.xxx.cn/folder/STG/TableName";
+```
+设置湖地址
+```sql
+set Address=abfss://container@blob.xxx.cn;
+...
+LOCATION "${hiveconf:Address}/folder/CSTG/TableName";
 ```
 
 __DML__
@@ -142,6 +171,37 @@ TableColumn='WhN, GRDate, PutawayStock'
 CleanColumn="WhN, TO_DATE(GRDate,'yyyy/MM/dd') GRDate, ToDouble(PutawayStock) PutawayStock"
 
 spark.sql(f"INSERT INTO {CSTGTable}({TableColumn}) SELECT {CleanColumn}, now() from {LandingTable}");
+```
+
+### Data Lake Storage Gen2
+
+SAS Token 共享访问签名是指向一个或多个存储资源的已签名 URI。 该 URI 包括的令牌包含一组特殊查询参数。 该令牌指示客户端可以如何访问资源。 
+
+```python
+def connectToDatalake(blob, token):
+    spark.conf.set("fs.azure.account.auth.type.%s.dfs.core.chinacloudapi.cn"%(blob), "SAS")
+    spark.conf.set("fs.azure.sas.token.provider.type.%s.dfs.core.chinacloudapi.cn"%(blob), "org.apache.hadoop.fs.azurebfs.sas.FixedSASTokenProvider")
+    spark.conf.set("fs.azure.sas.fixed.token.%s.dfs.core.chinacloudapi.cn"%(blob), token)
+    
+def importExcelConfig(blob, token):
+    spark._jsc.hadoopConfiguration().set("fs.azure.account.auth.type.%s.dfs.core.chinacloudapi.cn"%(blob), "SAS")
+    spark._jsc.hadoopConfiguration().set("fs.azure.sas.token.provider.type.%s.dfs.core.chinacloudapi.cn"%(blob), "org.apache.hadoop.fs.azurebfs.sas.FixedSASTokenProvider")
+    spark._jsc.hadoopConfiguration().set("fs.azure.sas.fixed.token.%s.dfs.core.chinacloudapi.cn"%(blob), token)
+```
+
+使用 Azure Active Directory (Azure AD) 应用程序服务主体在 Azure 存储帐户中装载数据以进行身份验证。
+
+```python
+configs = {"fs.azure.account.auth.type": "OAuth",
+          "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+          "fs.azure.account.oauth2.client.id": "<application-id>",
+          "fs.azure.account.oauth2.client.secret": "<service-credential-key-name>",
+          "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/<directory-id>/oauth2/token"}
+
+dbutils.fs.mount(
+  source = "abfss://<container-name>@<storage-account-name>.dfs.core.windows.net/",
+  mount_point = "/mnt/<mount-name>",
+  extra_configs = configs)
 ```
 
 ### AWS S3

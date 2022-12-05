@@ -100,9 +100,58 @@ print(f'Hello {name}') # f-string 字面量格式化字符串 python3.6
 ```python
 'H' in str1 # True
 'H' not in str1 # False
+
+str1.count(sub, beg= 0,end=len(string)) # sub在 str1 出现的次数
+str1.find(sub, beg=0, end=len(string)) # 返回索引值或-1
+str1.rfind(sub, beg=0, end=len(string)) # 从右开始找
+str1.index(sub, beg=0, end=len(string)) # sub不存在会报异常
+str1.rindex(sub, beg=0, end=len(string)) # 从右开始找
+```
+
+* 替换
+```python
+str2 = str1.replace(old, new, max) # old 换成 new，替换不超过 max 次, 返回一个新的字符串，
+
+trantab = str.maketrans("aeiou", "12345")   # 字符串映射表
+str1 = "this is string example....wow!!!"
+str1.translate(trantab) # 翻译
 ```
 
 * 操作
 ```python
-capitalize() # 首字母大写
+len(str1) # 长度
+max(str1) # W
+min(str1) # e
+```
+
+* 方法
+
+```python
+str1.capitalize() # 首字母大写
+str1.islower() # 小写
+str1.isupper() # 大写
+str1.lower() # 转小写
+str1.upper() # 转大写
+str1.wapcase() # 大小写互转
+str1.title() # 所有单词首字母大写
+
+str1.isalnum() # 字母或数字
+str1.	isalpha() # 字母或中文
+str1.isdigit() # 数字 123
+str1.isnumeric() # 数字字符 "123"
+str1.isdecimal() # 十进制字符
+str1.isspace() # 空白
+str1.endwith(sub)
+str1.startwith(sub)
+
+str1.split(str="", num=string.count(str))
+str1.join(seq) # 拼接 H-E-L-L-O
+
+str1.strip(sub) # 截掉 空格 或 sub
+str1.rstrip(sub) # 截掉 右空格 或 sub
+str1.rstrip(sub) # 截掉 右空格 或 sub
+
+str1.encode(encoding='UTF-8',errors='strict') # 编码
+bytes.decode(encoding="utf-8", errors="strict") # 解码
+str1.expandtabs(tabsize=8) # tab 转空格 
 ```

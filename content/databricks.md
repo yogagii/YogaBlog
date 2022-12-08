@@ -59,7 +59,7 @@ select * from json.`abfss://container@blob.xxx.cn/folder/filename`
 
 * Parquet
 ```sql
-select * from parquet.`abfss://container@blob.xxx.cn/folder/filename`
+select * from delta.`abfss://container@blob.xxx.cn/folder/filename`
 ```
 
 ### Delta Table

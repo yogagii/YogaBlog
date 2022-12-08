@@ -46,6 +46,21 @@ Sink:
 
 踩坑: s3中不能有.DS_Store, ~$MATERIAL_MASTER.xlsx这种隐藏文件
 
+### Azure Data Lake Storage -> SQL Server
+
+Source: 
+* Linked service: Parquet
+* File Path type: Wildcard file path
+(Wildcard paths: <container>/<filepath>/*.snappy.parquet)
+* Recursively: true
+
+Sink:
+* Linked service: Azure SQL Database
+
+踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.Common.Shared.HybridDeliveryException,Message=Parquet file contained column 'txn', which is of a non-primitive, unsupported type.,Source=Microsoft.DataTransfer.Richfile.ParquetTransferPlugin,'
+
+加上 *.snappy.parquet 而不是 *.parquet，_delta_log/里包含checkpoint.parquet files
+
 ---
 
 ## IPRO

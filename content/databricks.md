@@ -31,6 +31,7 @@ dbutils.notebook.run("/_POC_QA_SC_DataCenter/Dayu-connect-to-datalake_Func", 60,
 
 ### 文件操作
 
+* dbutils
 ```python
 dbutils.fs.ls("abfss://container@blob.xxx.cn/folder/")
 dbutils.fs.rm("abfss://container@blob.xxx.cn/folder/filename", True)
@@ -39,22 +40,84 @@ dbutils.fs.cp(SapPath+FileName, TempPath)
 ```
 踩坑：若要跟新表结构，需将存表的文件夹删除
 
-### 文件读取
+* 获取文件名
+```python
+df = spark.read \
+  .format("text") \
+  .load("abfss://container@blob.xxx.cn/folder/filename_*.txt") \
+  .select("*", "_metadata")
+display(df)
+```
 
-* CSV/TXT
+* os
+```python
+import os
+
+os.listdir("/")
+```
+
+```
+%sh ls /
+```
+
+* azure-storage-file-datalake
+
+```
+pip install azure-storage-file-datalake
+```
+```python
+import os, uuid, sys
+from azure.storage.filedatalake import DataLakeServiceClient
+from azure.core._match_conditions import MatchConditions
+from azure.storage.filedatalake._models import ContentSettings
+
+def initialize_storage_account():
+    try:  
+        global service_client
+        service_client = DataLakeServiceClient(account_url=account_url, credential=account_key)
+    except Exception as e:
+        print(e)
+
+def list_directory_contents(container="raw", folder="example_folder"):
+    try:
+        file_system_client = service_client.get_file_system_client(file_system=container)
+        paths = file_system_client.get_paths(path=folder)
+        for path in paths:
+            print(path.name + '\n')
+    except Exception as e:
+     print(e)
+```
+
+
+### 文件读写
+
+* CSV
 ```python
 df_DateLake=spark.read.format("csv").option("header","true").option("encoding","utf-8").load("abfss://container@blob.xxx.cn/folder/filename.csv");
 display(df_DateLake)
 ```
 
+* TXT
+```python
+df_DateLake=spark.read.format("text").load("abfss://container@blob.xxx.cn/folder/filename.txt");
+
+df_DateLake.coalesce(1).write.format("text").save("s3://<bucket>/<folder>/filename")
+```
+踩坑：coalesce只会确保产生一个文件，任会生成以filename命名的文件夹，文件夹下有以part加数字命名的txt文件(以及_SUCCESS, _committed, _started文件)
+
 * Excel
 ```python
 df_DateLake=spark.read.format("com.crealytics.spark.excel").option("header","true").load("abfss://container@blob.xxx.cn/folder/filename.xlsx");
 ```
+csv是通过spark读的，excel是spark底层hadoop读的，libraries里安装com.crealytics:spark-excel
 
 * JSON
 ```sql
 select * from json.`abfss://container@blob.xxx.cn/folder/filename`
+```
+
+```python
+df_DateLake=spark.read.format("json").load("abfss://container@blob.xxx.cn/folder/filename.json");
 ```
 
 * Parquet
@@ -65,7 +128,14 @@ select * from delta.`abfss://container@blob.xxx.cn/folder/filename`
 ### Delta Table
 
 __DDL__
+* 创建SCHEMA
 
+```sql
+CREATE SCHEMA example_schema
+LOCATION 'dbfs:/mnt/azrzdbicinmtdpadlsqa/{container}/{example_schema}'
+```
+
+* 创建TABLE
 ```sql
 drop table if exists STG.TableName;
 create table STG.TableName 
@@ -76,11 +146,21 @@ create table STG.TableName
 USING delta 
 LOCATION "abfss://container@blob.xxx.cn/folder/STG/TableName";
 ```
+
 设置湖地址
 ```sql
 set Address=abfss://container@blob.xxx.cn;
 ...
 LOCATION "${hiveconf:Address}/folder/CSTG/TableName";
+```
+
+已创建SCHEMA后不需要Location
+```sql
+-- 加上comment会更好
+CREATE TABLE IF NOT EXISTS example_schema.example_table
+(
+ col1 STRING COMMENT 'col1_comment'
+)
 ```
 
 __DML__
@@ -175,7 +255,7 @@ spark.sql(f"INSERT INTO {CSTGTable}({TableColumn}) SELECT {CleanColumn}, now() f
 
 ### Data Lake Storage Gen2
 
-SAS Token 共享访问签名是指向一个或多个存储资源的已签名 URI。 该 URI 包括的令牌包含一组特殊查询参数。 该令牌指示客户端可以如何访问资源。 
+SAS Token: 共享访问签名是指向一个或多个存储资源的已签名 URI。 该 URI 包括的令牌包含一组特殊查询参数。 该令牌指示客户端可以如何访问资源。 
 
 ```python
 def connectToDatalake(blob, token):
@@ -189,7 +269,7 @@ def importExcelConfig(blob, token):
     spark._jsc.hadoopConfiguration().set("fs.azure.sas.fixed.token.%s.dfs.core.chinacloudapi.cn"%(blob), token)
 ```
 
-使用 Azure Active Directory (Azure AD) 应用程序服务主体在 Azure 存储帐户中装载数据以进行身份验证。
+MI: 使用 Azure Active Directory (Azure AD) 应用程序服务主体在 Azure 存储帐户中装载数据以进行身份验证。
 
 ```python
 configs = {"fs.azure.account.auth.type": "OAuth",

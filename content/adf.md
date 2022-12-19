@@ -33,6 +33,24 @@ SAS URL: https://xxx.blob.core.chinacloudapi.cn/containername
 
 SAS token: sv=2020-02-10&st=2022-10-11###
 
+### 3.Azure Data Lake Storage Gen2
+
+Authentication type: System Assigned Managed Identy
+
+赋予的是创建者的个人权限
+
+Authentication type: Service Principal
+
+URL: https://<accountname>.dfs.core.chinacloudapi.cn
+
+Tenant: <Tenant ID>
+
+Service principal ID: <Client ID>
+
+Service principal key: ###
+
+To file path: <container>
+
 ## Pipelines
 
 ### AWS S3 -> Azure Data Lake Storage

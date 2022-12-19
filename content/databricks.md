@@ -269,7 +269,7 @@ def importExcelConfig(blob, token):
     spark._jsc.hadoopConfiguration().set("fs.azure.sas.fixed.token.%s.dfs.core.chinacloudapi.cn"%(blob), token)
 ```
 
-MI: 使用 Azure Active Directory (Azure AD) 应用程序服务主体在 Azure 存储帐户中装载数据以进行身份验证。
+OAuth: 使用 Azure Active Directory (Azure AD) 应用程序服务主体在 Azure 存储帐户中装载数据以进行身份验证。
 
 ```python
 configs = {"fs.azure.account.auth.type": "OAuth",

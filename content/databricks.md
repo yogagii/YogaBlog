@@ -74,11 +74,12 @@ from azure.storage.filedatalake._models import ContentSettings
 def initialize_storage_account():
     try:  
         global service_client
-        service_client = DataLakeServiceClient(account_url=account_url, credential=account_key)
+        credential = ClientSecretCredential(tenant_id, client_id, client_secret)
+        service_client = DataLakeServiceClient(account_url=account_url, credential=credential)
     except Exception as e:
         print(e)
 
-def list_directory_contents(container="raw", folder="example_folder"):
+def list_directory(container="raw", folder="example_folder"):
     try:
         file_system_client = service_client.get_file_system_client(file_system=container)
         paths = file_system_client.get_paths(path=folder)
@@ -86,6 +87,18 @@ def list_directory_contents(container="raw", folder="example_folder"):
             print(path.name + '\n')
     except Exception as e:
      print(e)
+
+def create_directory(container="raw", folder="example_folder"):
+    file_system_client = service_client.get_file_system_client(file_system=container)
+    res = file_system_client.create_directory(folder)
+
+def delete_file(container="raw", file="example_folder/example.xlsx"):
+    file_system_client = service_client.get_file_system_client(file_system=container)
+    res = file_system_client.delete_file(file)
+
+def delete_directory(container="raw", folder="example_folder"):
+    file_system_client = service_client.get_file_system_client(file_system=container)
+    res = file_system_client.delete_directory(folder)
 ```
 
 
@@ -293,6 +306,94 @@ sc._jsc.hadoopConfiguration().set("fs.s3n.awsSecretAccessKey","xxx")
 display(dbutils.fs.ls("s3://<bucketname>/<folder>/"))
 ```
 
+ADF不支持用S3作为Sink，只能通过Databricks将数据写入S3
+
+```python
+pip install boto3
+```
+
+```python
+import boto3
+from boto3.session import Session
+from botocore.exceptions import ClientError
+
+session = Session(access_key, secret_key)
+s3_client = session.client('s3')
+
+def list_object(bucketName):
+    file_list = []
+    response = s3_client.list_objects_v2(Bucket=bucketName)
+    file_desc = response['Contents']
+    for f in file_desc:
+        print('file_name: {}, file_size: {}'.format(f['Key'], f['Size']))
+        file_list.append(f['Key'])
+    return file_list
+
+def write_file(file_name, bucket, content):
+    try:
+        response = s3_client.put_object(Body=content, Key=file_name, Bucket=bucket)
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
+```
+
+### SQL SERVER
+
+* JDBC
+
+读取数据库
+
+```python
+jdbcHostname = 'xxx'
+jdbcPort = '1433'
+jdbcDatabase = 'xxx'
+properties = {
+"user" : 'xxx',
+"password" : 'xxx' }
+url = "jdbc:sqlserver://{0}:{1};database={2}".format(jdbcHostname,jdbcPort,jdbcDatabase)
+display(spark.read.jdbc(url=url,table='xxx',properties = properties))
+```
+```python
+config_table = (spark.read
+  .format("jdbc")
+  .option("url", url)
+  .option("dbtable", 'xxx')
+  .option("user", properties['user'])
+  .option("password", properties['password'])
+  .load()
+)
+display(config_table)
+```
+写入数据库
+```python
+from pyspark.sql.types import *
+
+schema = StructType([
+  StructField("TableName", StringType(), nullable = False),
+  StructField("SQLFlag", IntegerType(), nullable = False),
+])
+
+configList = [
+    ['DIM_Calendar', 1],
+]
+
+config_df = spark.createDataFrame(configList, schema)
+config_df.show()
+```
+```sql
+SET jdbcURL=`xxx`
+
+CREATE OR REPLACE TABLE <Schema_Name>.<Table_Name>
+  USING JDBC
+OPTIONS (
+  url "${hiveconf:jdbcURL}",
+  dbtable 'xxx',
+  user 'xxx',
+  password 'xxx'
+) AS
+SELECT * FROM df_spark
+```
 ---
 
 ```python

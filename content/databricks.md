@@ -336,6 +336,55 @@ def write_file(file_name, bucket, content):
         logging.error(e)
         return False
     return True
+
+def delete_file(file_name, bucket):
+    try:
+        response = s3_client.delete_object(Key=file_name, Bucket=bucket)
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
+```
+
+```python
+from io import BytesIO
+import csv
+
+def copy_txt(sourcefile, filename, target_bucket):
+    df_txt = spark.read.format("text").load(sourcefile)
+    csv_buffer = BytesIO()
+    data = df_txt.toPandas()
+    # 解决txt文件每一行有引号
+    data.to_csv(csv_buffer, index = False, header=False, sep='\t', quoting=False, quotechar=' ')
+    content = csv_buffer.getvalue()
+    write_file(filename, target_bucket, content)
+
+def copy_excel(sourcefile, filename, target_bucket):
+    # header必传项, maxRowsInMemory解决文件过大>10mb
+    df_excel = spark.read.format("com.crealytics.spark.excel").option("header","true").option("maxRowsInMemory", 2000).load(sourcefile)
+    csv_buffer = BytesIO()
+    data = df_excel.toPandas()
+    # excel文件得保留header
+    data.to_excel(csv_buffer, index = False)
+    content = csv_buffer.getvalue()
+    write_file(filename, target_bucket, content)
+    
+def copy_csv(sourcefile, filename, target_bucket):
+    # GBK解决中文乱码
+    df_csv = spark.read.format("csv").option("encoding","GBK").load(sourcefile)
+    csv_buffer = BytesIO()
+    data = df_csv.toPandas()
+    # CSV不需要header
+    data.to_csv(csv_buffer, index = False, header=False)
+    content = csv_buffer.getvalue()
+    write_file(filename, target_bucket, content)
+
+def create_csv(sourcedf, filename, target_bucket):
+    csv_buffer = BytesIO()
+    data = sourcedf.toPandas()
+    data.to_csv(csv_buffer, index = False)
+    content = csv_buffer.getvalue()
+    write_file(filename, target_bucket, content)
 ```
 
 ### SQL SERVER

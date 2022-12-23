@@ -101,28 +101,47 @@ def delete_directory(container="raw", folder="example_folder"):
     res = file_system_client.delete_directory(folder)
 ```
 
-
 ### 文件读写
 
 * CSV
 ```python
-df_DateLake=spark.read.format("csv").option("header","true").option("encoding","utf-8").load("abfss://container@blob.xxx.cn/folder/filename.csv");
-display(df_DateLake)
+df_csv=spark.read.format("csv").option("encoding","GBK").load("abfss://container@blob.xxx.cn/folder/filename.csv");
+display(df_csv)
+# GBK解决中文乱码
+```
+```python
+# CSV不需要header
+df_csv.to_csv(<target_file>, index = False, header=False)
 ```
 
 * TXT
 ```python
-df_DateLake=spark.read.format("text").load("abfss://container@blob.xxx.cn/folder/filename.txt");
+df_txt=spark.read.format("text").load(sourcefile);
+```
 
-df_DateLake.coalesce(1).write.format("text").save("s3://<bucket>/<folder>/filename")
+```python
+df_txt.coalesce(1).write.format("text").save("s3://<bucket>/<folder>/filename")
 ```
 踩坑：coalesce只会确保产生一个文件，任会生成以filename命名的文件夹，文件夹下有以part加数字命名的txt文件(以及_SUCCESS, _committed, _started文件)
 
+```python
+# 解决txt文件每一行有引号
+df_txt.to_csv(<target_file>, index = False, header=False, sep='\t', quoting=False, quotechar=' ')
+```
+
 * Excel
 ```python
-df_DateLake=spark.read.format("com.crealytics.spark.excel").option("header","true").load("abfss://container@blob.xxx.cn/folder/filename.xlsx");
+# header必传项, maxRowsInMemory解决文件过大>10mb
+df_excel=spark.read.format("com.crealytics.spark.excel").option("header","true").option("maxRowsInMemory", 2000).load(sourcefile);
 ```
 csv是通过spark读的，excel是spark底层hadoop读的，libraries里安装com.crealytics:spark-excel
+
+```python
+pip install openpyxl
+
+# excel文件得保留header
+df_excel.to_excel(<target_file>, index = False)
+```
 
 * JSON
 ```sql
@@ -344,40 +363,21 @@ def delete_file(file_name, bucket):
         logging.error(e)
         return False
     return True
+
+def copy_file(file_name, bucket, source_file):
+    try:
+        response = s3_client.copy_object(Key=file_name, Bucket=bucket, CopySource={
+            'Bucket': bucket,
+            'Key': source_file
+        })
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
 ```
 
 ```python
 from io import BytesIO
-import csv
-
-def copy_txt(sourcefile, filename, target_bucket):
-    df_txt = spark.read.format("text").load(sourcefile)
-    csv_buffer = BytesIO()
-    data = df_txt.toPandas()
-    # 解决txt文件每一行有引号
-    data.to_csv(csv_buffer, index = False, header=False, sep='\t', quoting=False, quotechar=' ')
-    content = csv_buffer.getvalue()
-    write_file(filename, target_bucket, content)
-
-def copy_excel(sourcefile, filename, target_bucket):
-    # header必传项, maxRowsInMemory解决文件过大>10mb
-    df_excel = spark.read.format("com.crealytics.spark.excel").option("header","true").option("maxRowsInMemory", 2000).load(sourcefile)
-    csv_buffer = BytesIO()
-    data = df_excel.toPandas()
-    # excel文件得保留header
-    data.to_excel(csv_buffer, index = False)
-    content = csv_buffer.getvalue()
-    write_file(filename, target_bucket, content)
-    
-def copy_csv(sourcefile, filename, target_bucket):
-    # GBK解决中文乱码
-    df_csv = spark.read.format("csv").option("encoding","GBK").load(sourcefile)
-    csv_buffer = BytesIO()
-    data = df_csv.toPandas()
-    # CSV不需要header
-    data.to_csv(csv_buffer, index = False, header=False)
-    content = csv_buffer.getvalue()
-    write_file(filename, target_bucket, content)
 
 def create_csv(sourcedf, filename, target_bucket):
     csv_buffer = BytesIO()

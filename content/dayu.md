@@ -52,7 +52,7 @@ and sharing internally & externally.
     * ADS: 数据应用层，按需汇总成报表所需结果，可适当采用大宽表
         * dm_: 聚合为摸个主题的宽表
 
-> 雪花模型：连接多，冗余低，性能低 <br/> 星型模型：连接少，冗余高，性能高
+> 雪花模型：连接多，冗余低，性能低 <br/>星型模型：连接少，冗余高，性能高
 ## Data Modeling
 
 * DCL (Data Control Language): 数据控制语句，用于控制访问级别，grant / deny

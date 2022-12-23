@@ -92,12 +92,12 @@ model.compile(optimizer='adam', # 优化器
 loss 损失函数：
 
 * 回归损失函数
-  * 均方差 mean_squared_error
-  * 平均绝对误差 mean_absolute_error
-  * Huber loss huber_loss
+    * 均方差 mean_squared_error
+    * 平均绝对误差 mean_absolute_error
+    * Huber loss huber_loss
 * 分类损失函数
-  * 交叉熵损失函数 categorical_crossentropy
-  * 合页损失 hinge
+    * 交叉熵损失函数 categorical_crossentropy
+    * 合页损失 hinge
 
 Metric 评价指标：
 * mae -> history: mean_absolute_error, val_mean_absolute_error

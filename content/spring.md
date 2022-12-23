@@ -72,28 +72,28 @@ Spring Boot是Spring框架的扩展，它消除了设置Spring应用程序所需
 ### 基础结构
 
 * src
-  * main
-    * java 程序开发以及主程序入口
-    * resources 配置文件
-  * test
-    * java 测试程序
+    * main
+        * java 程序开发以及主程序入口
+        * resources 配置文件
+    * test
+        * java 测试程序
 
 ### 根目录结构
 
 * com.example.myproject
-  * Application.java 框架配置
-  * controller 页面访问控制
-    * CustomerController.java
-  * service 业务类代码
-    * CustomerService.java
-  * model 实体（Entity）
-    * Customer.java
-  * dao (Data Acess Object) 数据访问对象（Repository）
-    * CustomerRepository.java
-  * config
-    * SwaggerConfig.java
-  * dto (Data Transfer Objec) 数据传输对象 
-  * vo (View Object) 视图对象
+    * Application.java 框架配置
+    * controller 页面访问控制
+        * CustomerController.java
+    * service 业务类代码
+        * CustomerService.java
+    * model 实体（Entity）
+        * Customer.java
+    * dao (Data Acess Object) 数据访问对象（Repository）
+        * CustomerRepository.java
+    * config
+        * SwaggerConfig.java
+    * dto (Data Transfer Objec) 数据传输对象 
+    * vo (View Object) 视图对象
 
 ## Controller
 

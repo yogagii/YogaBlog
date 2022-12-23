@@ -19,10 +19,10 @@ Objectives:
 and sharing internally & externally.
 * Data protection: Meet the requirement from legal/quality/Cyber security of data protection
 * FAIR principle
-  * Build up data catalog to make sure data can be findable, and easier to understand
-  * Data can be accessible by user,
-  * build up integration function to make sure data Interoperable by other applications.
-  * Store, combine and clean data to make the data reusable by user and other applications. 
+    * Build up data catalog to make sure data can be findable, and easier to understand
+    * Data can be accessible by user,
+    * build up integration function to make sure data Interoperable by other applications.
+    * Store, combine and clean data to make the data reusable by user and other applications. 
 
 
 数据来源：
@@ -43,22 +43,22 @@ and sharing internally & externally.
 
 * Curated Zone: 数据逻辑处理
 
-  * DWD: 数据细节层，采用雪花模型，维度表没有冗余
-    * dw_: 事实表
-    * dim_: 维度表(主数据)
+    * DWD: 数据细节层，采用雪花模型，维度表没有冗余
+        * dw_: 事实表
+        * dim_: 维度表(主数据)
 
-  * DWS: 数据服务层，星型模型，维度表可有冗余，对通用业务逻辑进行统一处理，按年度、季度进行预汇总
+    * DWS: 数据服务层，星型模型，维度表可有冗余，对通用业务逻辑进行统一处理，按年度、季度进行预汇总
 
-  * ADS: 数据应用层，按需汇总成报表所需结果，可适当采用大宽表
-    * dm_: 聚合为摸个主题的宽表
+    * ADS: 数据应用层，按需汇总成报表所需结果，可适当采用大宽表
+        * dm_: 聚合为摸个主题的宽表
 
 > 雪花模型：连接多，冗余低，性能低 <br/> 星型模型：连接少，冗余高，性能高
 ## Data Modeling
 
 * DCL (Data Control Language): 数据控制语句，用于控制访问级别，grant / deny
 * DDL (Data Definition Languages): 建表语句 create / drop / alter
-  * SCHEMA: raw/archive/prepared 以数据源命名，curated 以主题域命名
-  * TABLE
+    * SCHEMA: raw/archive/prepared 以数据源命名，curated 以主题域命名
+    * TABLE
 * DML (Data Manipulation Language): 数据处理语句，添加、删除、更新和查询数据库记录 insert / delete / update / select
 
 ## Data Factory

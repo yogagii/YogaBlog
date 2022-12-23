@@ -7,11 +7,11 @@ Author: Zack, Yoga
 ## Frontend Structure
 
 * _scm_jenkins
-  * install.groovy
-  * jenkins.yaml
-  * s3Upload.groovy
-  * unitTest.groovy
-  * version-calculation.groovy
+    * install.groovy
+    * jenkins.yaml
+    * s3Upload.groovy
+    * unitTest.groovy
+    * version-calculation.groovy
 * public
 * src
 * node_modules

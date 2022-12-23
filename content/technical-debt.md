@@ -21,13 +21,13 @@ There are in general two types of technical debt that we are concerned:
 
 ## Consequences of Technical Debt
 
-* Pros:
-  * We are able to yield short term benefits such as release.
-  * Gain competitive advantage by shortening time-to-market.
-  * Gain user feedback faster to test out features. 
+Pros:
+* We are able to yield short term benefits such as release.
+* Gain competitive advantage by shortening time-to-market.
+* Gain user feedback faster to test out features. 
 * Cons:
-  * Sacrificing future speed due to debt built up in the application. 
-  * Left unchecked, we might arrive at Technical Bankruptcy, which happens when even simple changes of code or extensions become unmanageable. 
+* Sacrificing future speed due to debt built up in the application. 
+* Left unchecked, we might arrive at Technical Bankruptcy, which happens when even simple changes of code or extensions become unmanageable. 
 
 ## How to measure Technical Debt
 ### What is our Technical Debt Budget

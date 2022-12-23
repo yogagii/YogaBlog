@@ -19,7 +19,7 @@ git config --global user.name "yourname"
 git config --global user.email "youremail@emai.com"
 ```
 ```
-git config remote.origin.url "https://user@sourcecode.juj.com/scm/asx-xxxx/fpa_frontend.git"
+git config remote.origin.url "https://user@sourcecode.xxx.com/scm/asx-xxxx/fpa_frontend.git"
 ```
 * 你可以使用以下指令检查你的配置: 
 ```
@@ -232,7 +232,7 @@ vim 网址
 ```
 // build
 server {
-    server_name hr_hackathon.jujadc.com;
+    server_name hr_hackathon.xxx.com;
     root /usr/share/nginx/fpa_share_doc/dist;
     location / {
       try_files $uri $uri/ /index.html;
@@ -240,7 +240,7 @@ server {
   }
 // 单页
 server {
-  server_name project_organization.jujadc.com;
+  server_name project_organization.xxx.com;
   root /root/www/project_organization;
   index dateBar.html;
 }
@@ -248,7 +248,7 @@ server {
 
 * 软连接:
 ```
-ln -s /etc/nginx/sites-available/hr_hackathon.jujadc.com /etc/nginx/sites-enabled
+ln -s /etc/nginx/sites-available/hr_hackathon.xxx.com /etc/nginx/sites-enabled
 ```
 * Nginx:
 ```
@@ -360,7 +360,7 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-
 ## OpenSSL
 
 ```
-openssl s_client -connect wddfx.juj.com:443 // https默认443
+openssl s_client -connect wddfx.xxx.com:443 // https默认443
 nslookup 10.47.227.xxx // 诊断网络问题
 ```
 

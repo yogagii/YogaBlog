@@ -60,7 +60,7 @@ location /iqvia/ {
 前端 build
 ```
 server {
-    server_name hr_hackathon.jujadc.com;
+    server_name hr_hackathon.xxx.com;
     root /usr/share/nginx/fpa_share_doc/dist;
     location / {
       try_files $uri $uri/ /index.html;
@@ -118,7 +118,7 @@ location /carto-dashboard {
 前端 单页
 ```
 server {
-  server_name project_organization.jujadc.com;
+  server_name project_organization.xxx.com;
   root /root/www/project_organization;
   index dateBar.html;
 }

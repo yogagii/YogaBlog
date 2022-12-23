@@ -35,7 +35,7 @@ const tokenReq = {
 }
 
 const tokenRes = await axios.post(
-  'https://login.microsoftonline.com/juj.onmicrosoft.com/oauth2/v2.0/token',
+  'https://login.microsoftonline.com/xxx.onmicrosoft.com/oauth2/v2.0/token',
   qs.stringify(tokenReq),
   {
     headers: {
@@ -121,7 +121,7 @@ module.exports = async function isLoggedIn(req, res, next) {
       client_secret: sails.config.custom.azureAD.clientSecret,
     }
     const tokenRes = await axios.post(
-      'https://login.microsoftonline.com/juj.onmicrosoft.com/oauth2/v2.0/token',
+      'https://login.microsoftonline.com/xxx.onmicrosoft.com/oauth2/v2.0/token',
       qs.stringify(tokenReq),
       {
         headers: {
@@ -143,7 +143,7 @@ module.exports = async function isLoggedIn(req, res, next) {
 
 API | params | response  
 - | - | -
-GET https://graph.microsoft.com/v1.0/sites/juj.sharepoint.com:/teams/#siteName# | siteName: string | "sites": [ { "@odata.type": "microsoft.graph.site"} ]
+GET https://graph.microsoft.com/v1.0/sites/xxx.sharepoint.com:/teams/#siteName# | siteName: string | "sites": [ { "@odata.type": "microsoft.graph.site"} ]
 
 ### Get document lists
 
@@ -179,7 +179,7 @@ additional item:
 
 Property name | Type | Description | Value
 - | - | - | -
-pageUrl | string | URL that display item in browser | https://juj.sharepoint.com/:w:/r/teams/#siteName#/_layouts/15/Doc.aspx?sourcedoc=%7B${item.eTag.slice(1, 37)}%7D&file=${encodeURI(item.fields.LinkFilename)}&action=default&mobileredirect=true
+pageUrl | string | URL that display item in browser | https://xxx.sharepoint.com/:w:/r/teams/#siteName#/_layouts/15/Doc.aspx?sourcedoc=%7B${item.eTag.slice(1, 37)}%7D&file=${encodeURI(item.fields.LinkFilename)}&action=default&mobileredirect=true
 
 
 

@@ -277,8 +277,8 @@ CREATE OR REPLACE FUNCTION ToDouble(value STRING) RETURNS DOUBLE RETURN double(r
 ```
 
 ```python
-LandingTable = 'STG.JNJ_Inventory_CN0'
-CSTGTable = 'CSTG.JNJ_Inventory_CN0'
+LandingTable = 'STG.Inventory_CN'
+CSTGTable = 'CSTG.Inventory_CN'
 TableColumn='WhN, GRDate, PutawayStock'
 CleanColumn="WhN, TO_DATE(GRDate,'yyyy/MM/dd') GRDate, ToDouble(PutawayStock) PutawayStock"
 

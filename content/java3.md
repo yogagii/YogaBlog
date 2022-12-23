@@ -258,7 +258,7 @@ Math.random()
 在定义class的时候，我们需要在第一行声明这个class属于哪个包，来解决类名冲突
 
 ```java
-package com.jnj.jcrd;
+package com.xxx.jcrd;
 
 public class JcrdApplication {
   public static void main(String[] args) {

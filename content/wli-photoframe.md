@@ -8,7 +8,7 @@ Author: Yoga
 
 H5页面上用户上传图片，自动添加相框及宣言，用户保存到本地
 
-http://wli_photoframe.jujadc.com/
+http://wli_photoframe.xxx.com/
 
 <img src="img/Women.png" width="300px" />
 

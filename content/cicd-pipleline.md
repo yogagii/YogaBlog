@@ -30,7 +30,7 @@ Author: Zack, Yoga
 
 This file is required to trigger pipeline build for CI/CD .
 ```yaml
-- url: https://jenkins.eat.juj.com/project-name/
+- url: https://jenkins.eat.xxx.com/project-name/
   buildFrom:
     - master
     - develop
@@ -132,7 +132,7 @@ common:
   pipelineType: node
   debug: true
   npm:
-    dockerImage: 'juj.artifactrepo.juj.com/jpm/node:14'
+    dockerImage: 'xxx.artifactrepo.xxx.com/jpm/node:14'
   artifactory:
     target: tafn-npm
   customSetup:
@@ -249,7 +249,7 @@ This file creates the pipeline instance by taking multiple arguments like manife
 ```python
 #!/bin/groovy
 @Library('jpm_shared_lib@1.x') _
-import org.juj.pipelines.*
+import org.xxx.pipelines.*
 def args = [:]
 args.debug = true
 args.manifestSourcesFile = 'manifest-sources.yaml'
@@ -271,7 +271,7 @@ This is the files responsible for uploading your artifact to S3 in AWS. This fil
 ```groovy
 def run(jobManifest) {
   def jobVars = jobManifest.getJobVars()
-  ensure.insideDockerContainer('juj.artifactrepo.juj.com/jpm/awscli') {
+  ensure.insideDockerContainer('xxx.artifactrepo.xxx.com/jpm/awscli') {
     dir('project') {
       pPrint.info("Started inside Dir")
       deleteDir()
@@ -316,7 +316,7 @@ This is where all the prerequisite builds happen.
 ```groovy
 def run(jobManifest) {
   def jobVars = jobManifest.getJobVars()
-  ensure.insideDockerContainer('juj.artifactrepo.juj.com/jpm/node:14') {
+  ensure.insideDockerContainer('xxx.artifactrepo.xxx.com/jpm/node:14') {
     dir('project') {
       def jpmEnvironment = jobVars?.jpmEnvironment
       def branchEnv = "dev"

@@ -161,8 +161,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 法一：
 ```xml
 <!--  main/resources/mapper/UserMapper.xml -->
-<mapper namespace="com.jnj.jcrd.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.jnj.jcrd.model.User" >
+<mapper namespace="com.xxx.jcrd.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.xxx.jcrd.model.User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="wwid" property="wwid" jdbcType="VARCHAR" />
     <result column="first_name" property="firstName" jdbcType="NVARCHAR" />
@@ -176,9 +176,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 ```
 ```java
 // main/java/.../dao/UserMapper.java
-package com.jnj.jcrd.dao;
+package com.xxx.jcrd.dao;
 
-import com.jnj.jcrd.model.User;
+import com.xxx.jcrd.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

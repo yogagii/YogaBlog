@@ -51,7 +51,7 @@ Service principal key: ###
 
 To file path: <container>
 
-## Pipelines
+## Activities - Move
 
 ### AWS S3 -> Azure Data Lake Storage
 
@@ -78,6 +78,12 @@ Sink:
 踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.Common.Shared.HybridDeliveryException,Message=Parquet file contained column 'txn', which is of a non-primitive, unsupported type.,Source=Microsoft.DataTransfer.Richfile.ParquetTransferPlugin,'
 
 加上 *.snappy.parquet 而不是 *.parquet，_delta_log/里包含checkpoint.parquet files
+
+## Activities - Iteration
+
+### ForEach
+
+在sql server中创建config table，遍历所有表执行worker
 
 ---
 

@@ -6,6 +6,34 @@ Author: Yoga
 
 ## Authentication
 
+> JWT TOKEN = JWT头.有效载荷.签名
+
+* JWT头：一个描述JWT元数据的JSON对象
+```json
+{
+  "alg": "HS256", // 签名使用的算法，默认为HMAC SHA256
+  "typ": "JWT" // 令牌的类型
+}
+```
+
+* 有效载荷：JWT的主体内容部分，也是一个JSON对象，包含需要传递的数据，指定七个默认字段，默认未加密的，任何人都可以解读其内容。
+
+```
+{
+  iss：发行人
+  exp：到期时间
+  sub：主题
+  aud：用户
+  nbf：在此之前不可用
+  iat：发布时间
+  jti：JWT ID用于标识该JWT
+}
+```
+
+* 签名：对上面两部分数据签名，通过指定的算法生成哈希，以确保数据不会被篡改。指定一个密码（secret）保存在服务器中，不能向用户公开。
+
+HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),secret)
+
 **Authentication 身份验证**
 
 https://yogagii.github.io/nestjs.html
@@ -32,7 +60,7 @@ None
 * Body
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ.eyJzdWIiOiJOem9FNWIyKytWQlZUSGQ4cDZucWh3PT0iLCJp YXQiOjE2NDczMjczNjMsImV4cCI6MTY0NzMyNzk2M3.EgMeoPCaQob9mzo5Fv8ubu4MiMgO-YrpH- quKGQJvT"
+  "access_token": "xxxxxx.xxxx.xxxx"
 }
 ```
 **Data 数据接口**

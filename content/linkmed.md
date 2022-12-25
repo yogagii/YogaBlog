@@ -34,9 +34,9 @@ Author: Yoga
 
 HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),secret)
 
-**Authentication 身份验证**
-
 https://yogagii.github.io/nestjs.html
+
+**Authentication 身份验证**
 
 [POST] /auth
 

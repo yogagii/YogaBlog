@@ -62,6 +62,26 @@ U型网络结构，解决图像分割问题，可以从小数据集中训练
 model = unet(input_size = (256, 256,1))
 ```
 
+* UniPost
+
+罗切斯特大学，人体姿势估计模型，以ResNet为主干
+
+分层的概率图：24个点+背景层=共25层
+
+**用重参数技巧优化Soft-Argmax：**
+
+直接对坐标值进行监督，模型还能预测概率图，性能强过单纯用全连接层回归坐标值，适用于小尺寸、低算力。
+
+**LabelSmoothing：**
+
+标注是有误差的，人工标注的结果应该是围绕着真实位置，以某种概率进行分布的（正态分布的形状）。Soft-Argmax其实相当于对人工标注进行了一次软化，让我们的人工标注不那么强硬和自信，从学习one-hot变成了学习一种概率分布。
+
+**自适应的权重：**
+
+一个“好”的概率分布形状，应当是“单峰且尖锐的”，换句话说，概率分布最高值点应当正好在GroundTruth附近。而“不好”的概率分布形状各异，根据这个形状我们就可以判断模型对于自己输出的“自信程度”，GFLv2由此学习出一个自适应的权重来指导模型的分类表征，是非常高效且合理的。
+
+https://zhuanlan.zhihu.com/p/468208003
+
 ### Step2: 构造神经网络的layers函数
 
 * layers.Flatten 用来将输入“压平”，即把多维的输入一维化，常用在从卷积层到全连接层的过渡。Flatten不影响batch的大小。
@@ -214,11 +234,33 @@ def getImageVar( image ):
 img = cv2.imread('blur_hip.jpeg')
 getImageVar(img)
 ```
+## 假体匹配：最优解
 
+```python
+from scipy.optimize import Bounds, minimize, NonlinearConstraint
+bounds = Bounds([range])
 
+def constraint1(x):
+    return ...
+nonlinear_constraint1 = NonlinearConstraint(constraint1, [range])
+
+def constraint2(x):
+    return ...   
+nonlinear_constraint2 = NonlinearConstraint(constraint2, [range])
+
+def objective(x):
+    return ...
+
+res = minimize(objective, [range], constraints=[nonlinear_constraint1, nonlinear_constraint2], options={'verbose': 1}, bounds=bounds)
+```
+GroundTruth 人工标记点带入，与专家手工结果比较 
+
+AI的目标是为了使预测向groundTruth靠近，允许+-2个size的误差，人工标记的结果是天花板，理论上应该与专家手工结果一致
 ## 图像处理
 
 1. 读取图像
+
+在数学规划模型中，minimize提供的方法能够解决无/有（线性、非线性）约束的多个决策变量目标函数的最优化问题
 
 ```python
 from pylab import *

@@ -1,6 +1,6 @@
 Title: Adaptive Card
 Date: 2021-06-05
-Category: Backend
+Category: Cloud
 Tags: Microsoft
 Author: Yoga
 
@@ -181,3 +181,5 @@ email/template/data.json
   "course_name": "暂无课程名称",
 }
 ```
+
+![adaptivecard](img/adaptivecard.jpg)

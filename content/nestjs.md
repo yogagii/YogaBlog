@@ -408,3 +408,75 @@ export class EmailService {
   }
 }
 ```
+
+## Authentication 身份验证
+
+Passport是 node.js 身份验证库，Passport 执行步骤：
+
+1. 验证用户的credentials (username/password, JSON Web Token (JWT), or identity token
+2. 给经过身份验证的状态签发token（JWT），或创建一个 Express 会话
+3. 将经过身份验证的用户的信息附加到请求对象以便进一步使用
+
+```js
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { CipherService } from '../common/cipher';
+import { jwtConstants } from './constants';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly jwtService: JwtService,
+    private cipherService: CipherService,
+  ) {}
+
+  async validateUser(username: string, pass: string): Promise<any> {
+    if (
+      username === process.env.ADMIN_USERNAME &&
+      pass === process.env.ADMIN_PASSWORD
+    ) {
+      return { username, pass };
+    }
+    return null;
+  }
+
+  async login(user: any) {
+    console.log('login: ', user);
+    const payload = {
+      sub: this.cipherService.encryptAES128ECB(
+        'xxx',
+        jwtConstants.cipherKey,
+      ),
+    };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+}
+
+```
+
+Node.js提供了一个内置的crypto模块可用于加密和解密字符串
+
+```js
+import { Injectable } from '@nestjs/common';
+import { createCipheriv, createDecipheriv } from 'crypto';
+
+@Injectable()
+export class CipherService {
+  encryptAES128ECB(data: string, key: string) {
+    const cipher = createCipheriv('aes-128-ecb', key, null);
+    cipher.setAutoPadding(true);
+    const encrypted = cipher.update(data, 'utf8', 'base64');
+    return encrypted + cipher.final('base64');
+  }
+
+  decryptAES128ECB(data: string, key: string) {
+    const cipher = createDecipheriv('aes-128-ecb', key, null);
+    cipher.setAutoPadding(true);
+    const receivedPlaintext = cipher.update(data, 'base64', 'utf8');
+    return receivedPlaintext + cipher.final('utf8');
+  }
+}
+
+```

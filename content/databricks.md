@@ -377,6 +377,16 @@ def copy_file(file_name, bucket, source_file):
 ```
 
 ```python
+def copy_folder(bucket, sourcefolder, targetfolder, deleteSource=True):
+    file_list = list_object(bucket, sourcefolder)
+    for obj in file_list:
+        filename = targetfolder+obj[len(sourcefolder):]
+        copy_file(filename, bucket, obj)
+        if deleteSource and len(obj) - len(sourcefolder) > 1:
+            delete_file(obj, bucket)
+```
+
+```python
 from io import BytesIO
 
 def create_csv(sourcedf, filename, target_bucket):

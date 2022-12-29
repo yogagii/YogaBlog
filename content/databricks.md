@@ -440,6 +440,8 @@ configList = [
 config_df = spark.createDataFrame(configList, schema)
 config_df.show()
 ```
+_踩坑：StructField无法创建自增字段_
+
 ```sql
 SET jdbcURL=`xxx`
 

@@ -271,7 +271,7 @@ def insertTxT_Pandas(FileName, LandingTableName, TableColumn,RenameColumn,header
 
 ### SQL
 
-自定义函数
+* 自定义函数
 ```sql
 CREATE OR REPLACE FUNCTION ToDouble(value STRING) RETURNS DOUBLE RETURN double(replace(replace(replace(replace(trim(value),'-',''),'"',''),',',''),'/',''))
 ```
@@ -283,6 +283,19 @@ TableColumn='WhN, GRDate, PutawayStock'
 CleanColumn="WhN, TO_DATE(GRDate,'yyyy/MM/dd') GRDate, ToDouble(PutawayStock) PutawayStock"
 
 spark.sql(f"INSERT INTO {CSTGTable}({TableColumn}) SELECT {CleanColumn}, now() from {LandingTable}");
+```
+
+* MERGE INTO
+
+```sql
+with {tablename} as (SELECT EXPLODE(data) data FROM json.`{jsonAddress}{Pre_Tablename}{tablename}`)
+
+merge into <schema>.Test a
+using {tablename} b on (a.id=b.id)  
+when matched then update 
+  set name = b.name
+when not matched then insert 
+  (id, name) values (b.id, b.name);
 ```
 
 ### Data Lake Storage Gen2

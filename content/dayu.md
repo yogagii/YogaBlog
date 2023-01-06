@@ -77,7 +77,7 @@ create procedure dayu_ActivityStart
 @BatchRunId varchar(200), @PipelineCode varchar(200), @RunId varchar(200), @ActivityCode varchar(200)
 as
 insert into [dbo].[ADF_ActivityLogs] (BatchRunId, RunId, PipelineCode, ActivityCode, StartTime) 
-VALUES (@BatchRunId, @RunId, @PipelineCode, @ActivityCode, getdate())
+VALUES (@BatchRunId, @RunId, @PipelineCode, @ActivityCode, DATEADD(HOUR, 8, getUTCdate()))
 
 exec dayu_ActivityStart 'test01', 'ActivityName', 'test03', 'DIM_Table'
 
@@ -85,7 +85,7 @@ create procedure dayu_ActivityLog
 @BatchRunId varchar(200), @RunId varchar(200), @Result varchar(200), @ActivityOutput varchar(max)
 as
 update [dbo].[ADF_ActivityLogs] 
-set EndTime = getdate(), ActivityStatus = @Result, ActivityOutput = @ActivityOutput
+set EndTime = DATEADD(HOUR, 8, getUTCdate()), ActivityStatus = @Result, ActivityOutput = @ActivityOutput
 where BatchRunId = @BatchRunId and RunId = @RunId
 
 exec dayu_ActivityLog 'test01','test03', 'Success', 'exec Success'

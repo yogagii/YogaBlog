@@ -29,6 +29,14 @@ dbutils.notebook.run("/_POC_QA_SC_DataCenter/Dayu-connect-to-datalake_Func", 60,
 * 优势：可传参，可调用多个笔记本
 * 缺点：启动新作业，变量不存在
 
+### Output
+
+```python
+dbutils.notebook.exit(data)
+```
+
+ADF 读取output：@activity('Notebook').output
+
 ### 文件操作
 
 * dbutils

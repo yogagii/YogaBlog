@@ -58,6 +58,7 @@ To file path: <container>
 Source: 
 * Linked service: DelimitedText
 * File Path: <bucketname>/RowZone/MANU 踩坑：多层路径写在一起，自己用/分开
+* Recursively: 勾选的话当文件夹为空会报错
 
 Sink:
 * Linked service: DelimitedText

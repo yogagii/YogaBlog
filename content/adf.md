@@ -51,7 +51,12 @@ Service principal key: ###
 
 To file path: <container>
 
-## Activities - Move
+---
+
+## Activities 
+
+## Move & transform 
+### >>> Copy data
 
 ### AWS S3 -> Azure Data Lake Storage
 
@@ -76,15 +81,49 @@ Source:
 Sink:
 * Linked service: Azure SQL Database
 
-踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.Common.Shared.HybridDeliveryException,Message=Parquet file contained column 'txn', which is of a non-primitive, unsupported type.,Source=Microsoft.DataTransfer.Richfile.ParquetTransferPlugin,'
+_踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.Common.Shared.HybridDeliveryException,Message=Parquet file contained column 'txn', which is of a non-primitive, unsupported type.,Source=Microsoft.DataTransfer.Richfile.ParquetTransferPlugin,'_
 
 加上 *.snappy.parquet 而不是 *.parquet，_delta_log/里包含checkpoint.parquet files
 
-## Activities - Iteration
+### Rest Resource -> 
 
-### ForEach
+Source:
+* Linked Service: REST
+* Dataset properties: v_url = concat(variables('v_url'), item(), concat('?agentId=',pipeline().parameters.v_agentId,'&agentName=',pipeline().parameters.v_agentName),'&stockDate=',formatDateTime(adddays(addhours(utcnow(),8),-1),'yyyy-MM-dd'))
+
+_踩坑：默认UTC时间，需addhours(utcnow(),8)转成北京时间_
+
+## General
+
+### >>> Web
+Get Token
+* URL: https://xxx/oauth2/token
+* Method: POST
+* Body: grant_type=client_credentials&client_id=xxx&client_secret=xxx
+* Headers: Content-Type application/x-www-form-urlencoded
+
+### >>> Lookup
+
+* Source dataset: Azure SQL Database
+* Dataset properties: SQLTableName = <Table_Name>
+* Use query: Query
+* Query: @concat('SELECT * FROM <Table_Name> where JobFlag=',pipeline().parameters.v_jobflag)
+
+### >>> Stored procedure
+
+提前在sql server创建好存储过程
+
+* Linked Service: Azure SQL Database
+* Stored procedure name: <Procedure_Name>
+* Stored procedure parameters
+
+## Iteration & conditionals
+
+### >>> ForEach
 
 在sql server中创建config table，遍历所有表执行worker
+
+* Items: @activity('LookupConfigTable').output.value
 
 ---
 

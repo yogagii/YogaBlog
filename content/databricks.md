@@ -119,8 +119,9 @@ display(df_csv)
 ```
 ```python
 # CSV不需要header
-df_csv.to_csv(<target_file>, index = False, header=False)
+df_csv.to_csv(<target_file>, index = False, header=False, encoding = 'utf_8_sig')
 ```
+_踩坑：encoding为GBK时，excel里将"创作语言和校对"设置英文首选，会出现中文乱码全是？情况_
 
 * TXT
 ```python
@@ -413,7 +414,7 @@ from io import BytesIO
 def create_csv(sourcedf, filename, target_bucket):
     csv_buffer = BytesIO()
     data = sourcedf.toPandas()
-    data.to_csv(csv_buffer, index = False)
+    data.to_csv(csv_buffer, index = False, encoding = 'utf_8_sig')
     content = csv_buffer.getvalue()
     write_file(filename, target_bucket, content)
 ```

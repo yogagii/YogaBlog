@@ -1,7 +1,7 @@
 Title: MySQL
 Date: 2020-07-25
 Category: Backend
-Tags: mysql, database
+Tags: sql, database
 Author: Yoga
 
 安装 mysql

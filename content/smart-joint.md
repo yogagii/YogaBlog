@@ -93,7 +93,8 @@ loss 损失函数：
 
 * 回归损失函数
     * 均方差 mean_squared_error
-    * 平均绝对误差 mean_absolute_error
+    * 均方根误差 Root Mean Squared Error (rmse)
+    * 平均绝对误差 mean_absolute_error (mae)
     * Huber loss huber_loss
 * 分类损失函数
     * 交叉熵损失函数 categorical_crossentropy
@@ -175,6 +176,16 @@ model.save('res_model_1')
 ```python
 pre = model.predict(test_data)
 ```
+
+数据分为：
+* 训练集 80%
+* 测试集 20%
+* 验证集 (带小球) -> 计算像素误差率
+
+标志点配准误差 FRE: 配准后相应基准点之间的均方根距离
+
+> sqrt(((x1-x2)/a)^2 + ((y1-y2)/b)^2)
+
 
 ## 霍夫变换
 

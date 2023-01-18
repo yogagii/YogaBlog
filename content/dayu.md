@@ -63,9 +63,35 @@ and sharing internally & externally.
 
 ## Data Factory
 
-作业编排
+### 作业编排
 
 * 第一层 GrandParent：最高级别，触发业务流程，按业务分组
 * 第二层 Parent：次高级别，支持和管理子活动的并行执行
 * 第三层 Child：配合Parent的功能层，获取在父级别需要执行的对象，然后进行执行任务，若存在依赖检查依赖状态
 * 第四层 Worker：实现具体抽取、转换、加载的任务层，该层根据实际的需要进行设计和开发，并用作并行调度
+
+### 日志输出
+
+```sql
+create procedure dayu_ActivityStart 
+@BatchRunId varchar(200), @PipelineCode varchar(200), @RunId varchar(200), @ActivityCode varchar(200)
+as
+insert into [dbo].[ADF_ActivityLogs] with (UPDLOCK) (BatchRunId, RunId, PipelineCode, ActivityCode, StartTime) 
+VALUES (@BatchRunId, @RunId, @PipelineCode, @ActivityCode, DATEADD(HOUR, 8, getUTCdate()))
+
+exec dayu_ActivityStart 'test01', 'ActivityName', 'test03', 'DIM_Table'
+
+create procedure dayu_ActivityLog 
+@BatchRunId varchar(200), @RunId varchar(200), @Result varchar(200), @ActivityOutput varchar(max)
+as
+update [dbo].[ADF_ActivityLogs] with (UPDLOCK)
+set EndTime = DATEADD(HOUR, 8, getUTCdate()), ActivityStatus = @Result, ActivityOutput = @ActivityOutput
+where BatchRunId = @BatchRunId and RunId = @RunId
+
+exec dayu_ActivityLog 'test01','test03', 'Success', 'exec Success'
+```
+
+ActivityOutput(Success): @string(activity('xxx').output)
+
+ActivityOutput(Failed): @activity('xxx').output.errors[0].Message
+

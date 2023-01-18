@@ -94,7 +94,8 @@ loss 损失函数：
 
 * 回归损失函数
     * 均方差 mean_squared_error
-    * 平均绝对误差 mean_absolute_error
+    * 均方根误差 Root Mean Squared Error (rmse)
+    * 平均绝对误差 mean_absolute_error (mae)
     * Huber loss huber_loss
 * 分类损失函数
     * 交叉熵损失函数 categorical_crossentropy
@@ -177,6 +178,15 @@ model.save('res_model_1')
 pre = model.predict(test_data)
 ```
 
+数据分为：
+* 训练集 80%
+* 测试集 20%
+* 验证集 (带小球) -> 计算像素误差率
+
+标志点配准误差 FRE: 配准后相应基准点之间的均方根距离
+
+> sqrt(((x1-x2)/a)^2 + ((y1-y2)/b)^2)
+
 ## Pytorch
 
 * UniPost
@@ -198,7 +208,6 @@ pre = model.predict(test_data)
 一个“好”的概率分布形状，应当是“单峰且尖锐的”，换句话说，概率分布最高值点应当正好在GroundTruth附近。而“不好”的概率分布形状各异，根据这个形状我们就可以判断模型对于自己输出的“自信程度”，GFLv2由此学习出一个自适应的权重来指导模型的分类表征，是非常高效且合理的。
 
 https://zhuanlan.zhihu.com/p/468208003
-
 
 ## 霍夫变换
 

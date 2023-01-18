@@ -29,6 +29,14 @@ dbutils.notebook.run("/_POC_QA_SC_DataCenter/Dayu-connect-to-datalake_Func", 60,
 * 优势：可传参，可调用多个笔记本
 * 缺点：启动新作业，变量不存在
 
+### Output
+
+```python
+dbutils.notebook.exit(data)
+```
+
+ADF 读取output：@activity('Notebook').output
+
 ### 文件操作
 
 * dbutils
@@ -111,8 +119,9 @@ display(df_csv)
 ```
 ```python
 # CSV不需要header
-df_csv.to_csv(<target_file>, index = False, header=False)
+df_csv.to_csv(<target_file>, index = False, header=False, encoding = 'utf_8_sig')
 ```
+_踩坑：encoding为GBK时，excel里将"创作语言和校对"设置英文首选，会出现中文乱码全是？情况_
 
 * TXT
 ```python
@@ -271,7 +280,7 @@ def insertTxT_Pandas(FileName, LandingTableName, TableColumn,RenameColumn,header
 
 ### SQL
 
-自定义函数
+* 自定义函数
 ```sql
 CREATE OR REPLACE FUNCTION ToDouble(value STRING) RETURNS DOUBLE RETURN double(replace(replace(replace(replace(trim(value),'-',''),'"',''),',',''),'/',''))
 ```
@@ -283,6 +292,19 @@ TableColumn='WhN, GRDate, PutawayStock'
 CleanColumn="WhN, TO_DATE(GRDate,'yyyy/MM/dd') GRDate, ToDouble(PutawayStock) PutawayStock"
 
 spark.sql(f"INSERT INTO {CSTGTable}({TableColumn}) SELECT {CleanColumn}, now() from {LandingTable}");
+```
+
+* MERGE INTO
+
+```sql
+with {tablename} as (SELECT EXPLODE(data) data FROM json.`{jsonAddress}{Pre_Tablename}{tablename}`)
+
+merge into <schema>.Test a
+using {tablename} b on (a.id=b.id)  
+when matched then update 
+  set name = b.name
+when not matched then insert 
+  (id, name) values (b.id, b.name);
 ```
 
 ### Data Lake Storage Gen2
@@ -377,12 +399,22 @@ def copy_file(file_name, bucket, source_file):
 ```
 
 ```python
+def copy_folder(bucket, sourcefolder, targetfolder, deleteSource=True):
+    file_list = list_object(bucket, sourcefolder)
+    for obj in file_list:
+        filename = targetfolder+obj[len(sourcefolder):]
+        copy_file(filename, bucket, obj)
+        if deleteSource and len(obj) - len(sourcefolder) > 1:
+            delete_file(obj, bucket)
+```
+
+```python
 from io import BytesIO
 
 def create_csv(sourcedf, filename, target_bucket):
     csv_buffer = BytesIO()
     data = sourcedf.toPandas()
-    data.to_csv(csv_buffer, index = False)
+    data.to_csv(csv_buffer, index = False, encoding = 'utf_8_sig')
     content = csv_buffer.getvalue()
     write_file(filename, target_bucket, content)
 ```
@@ -430,6 +462,8 @@ configList = [
 config_df = spark.createDataFrame(configList, schema)
 config_df.show()
 ```
+_踩坑：StructField无法创建自增字段_
+
 ```sql
 SET jdbcURL=`xxx`
 

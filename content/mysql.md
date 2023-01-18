@@ -1,7 +1,7 @@
 Title: MySQL
 Date: 2020-07-25
 Category: Backend
-Tags: mysql, database
+Tags: sql, database
 Author: Yoga
 
 安装 mysql
@@ -249,6 +249,101 @@ with A as (
 
 select * from A, customer where customer.userid = user.id
 ```
+
+### 存储过程(Stored Procedure)：一组为了完成特定功能的SQL 语句
+
+* 当对数据库进行复杂操作时，可将此复杂操作用存储过程封装起来与数据库提供的事务处理结合一起使用
+* 存储过程只在创造时进行编译，以后每次执行存储过程都不需再重新编译，而一般SQL语句每执行一次就编译一次,所以使用存储过程可提高数据库执行速度，效率要比T-SQL语句高
+* 存储过程有助于减少应用程序和数据库服务器之间的流量，因为应用程序不必发送多个冗长的 SQL 语句，而只用发送存储过程的名称和参数
+
+```sql
+-- 创建过程 --
+mysql> DELIMITER //
+mysql> create procedure mypro(in a int, in b int, out sum int)
+     > begin
+     > set sum = a + b; -- 这个封号不能漏 --
+     > end //
+
+-- 调用过程 -- call 用来调用过程，@s 是用来接收过程输出参数的变量。
+call mypro(1,2,@s);
+-- 输出结果 --
+select @s;
+```
+踩坑：服务器处理 SQL 语句默认是以分号作为语句结束标志的。然而在创建存储过程时，存储过程体可能包含有多条 SQL 语句，服务器在处理时会以遇到的第一个分号作为整个程序的结束符。通常使用 DELIMITER 命令将结束命令修改为其他字符，创建完成后再改回来。
+```sql
+mysql > DELIMITER ;
+```
+
+流程控制语句
+
+* if
+* case
+* while
+* repeat
+* loop
+```sql
+create procedure mypro2(in num int)
+begin
+if num<0 then -- 条件开始
+select '负数';
+elseif num=0 then
+select '不是正数也不是负数';
+else
+select '正数';
+end if;-- 条件结束
+end;
+
+-- 调用过程
+call mypro2(-1);
+```
+存储过程管理
+```sql
+-- 显示存储过程
+SHOW PROCEDURE STATUS;
+-- 显示特定数据库的存储过程，代码如下所示
+SHOW PROCEDURE status where db = 'schooldb';
+-- ：显示特定模式的存储过程，要求显示名称中包含“my”的存储过程，代码如下所示
+SHOW PROCEDURE status where name like '%my%';
+-- 显示存储过程源码
+SHOW CREATE PROCEDURE mypro1;
+-- 删除存储过程
+drop PROCEDURE mypro1;
+```
+
+原文链接：https://blog.csdn.net/scj0725/article/details/114625180
+
+Procedure | Function
+| - | -
+作为PL/SQL语句执行 | 作为一个表达式执行
+在 COMMAND 命令窗口中，使用 EXECUTE 命令执行过程 | 借用 select 语句来执行
+不可在 DDL 和 SELECT 语句中调用过程 | 可在 DDL 和 SELECT 语句中调用函数
+在头部不能包含RETURN语句 | 在头部必须包含RETURN语句
+可以通过output参数返回值，可返回多个值 | 必须返回一个single值
+可以有一个不包括值的返回语句 | 必须至少包含一个RETURN语句
+
+### 锁 SQL Server
+
+```sql
+WITH NOLOCK -- 无锁, 只能用于select，可能读取到未完成事务
+
+WITH HOLDLOCK -- 保持锁
+
+WITH UPDLOCK -- 更新锁
+
+WITH TABLOCKX -- 强制使用独占表级锁，这个锁在事务期间阻止任何其他事务使用这个表
+```
+
+INSERT、 UPDATE 或DELETE 命令时，SQL Server 会自动使用独占锁。
+
+更新锁(UPDLOCK)优点：
+
+* 允许读取数据（不阻塞其它事务）并在以后更新数据，同时确保自从上次读取数据后数据没有被更改。
+* 当我们用UPDLOCK来读取记录时可以对取到的记录加上更新锁，从而加上锁的记录在其它的线程中是不能更改的只能等本线程的事务结束后才能更改
+
+```sql
+SELECT Qty FROM myTable WITH (UPDLOCK) WHERE Id in (1,2,3)
+```
+---
 
 2020.9.10
 

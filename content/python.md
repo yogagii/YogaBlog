@@ -52,6 +52,22 @@ list1.clear() # 清空
 list1.copy() # 复制
 ```
 
+* filter
+```python
+def testFilter(x):
+  return x%2  #x是否能被2整除
+
+print(list(filter(testFilter,range(1,10)))) # [1, 3, 5, 7, 9]
+```
+
+* map
+```python
+def testMap(x):
+  return x+1
+
+print(list(map(testMap,range(1,5)))) # [2, 3, 4, 5]
+```
+
 ## String 字符串
 
 ```python
@@ -136,7 +152,7 @@ str1.wapcase() # 大小写互转
 str1.title() # 所有单词首字母大写
 
 str1.isalnum() # 字母或数字
-str1.	isalpha() # 字母或中文
+str1.isalpha() # 字母或中文
 str1.isdigit() # 数字 123
 str1.isnumeric() # 数字字符 "123"
 str1.isdecimal() # 十进制字符

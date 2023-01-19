@@ -1,4 +1,4 @@
-Title: Azure Machine Learning
+Title: Azure Machine Learning Studio
 Date: 2023-01-19
 Category: Cloud
 Author: Yoga
@@ -12,11 +12,16 @@ Tags: Azure, ML
 * Set of SDKs and cloud services to scale, monitor, and deploy ML
 models.
 
-![aml](img/aml1.png)
+Three ways to machine learning projects in studio:
+* AzureMachineLearningdesigner 
+* AutomatedMachineLearningUI 
+* Notebooks
 
 ---
 
 ## Designer
+
+![aml](img/aml1.png)
 
 ### Select Columns in Datasets 在数据集中选择列
 

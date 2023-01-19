@@ -1,35 +1,10 @@
 Title: Azure Machine Learning
-Date: 2023-01-18
+Date: 2023-01-19
 Category: Cloud
 Author: Yoga
 Tags: Azure, ML
 
-### Data
-
-* Observations (数据行)
-* Features (数据列)
-* Training data set 训练集 80%
-* Testing data set 测试集 20%
-* Validation data set 验证集
-
-### Machine Learning 分类
-
-按照模型训练方式：
-* Supervised learning 监督学习: 从输入 -> 输出 学习统计规律 （分类，回归）
-* Unsupervised learning 无监督学习：没有标注数据（聚类，降维/主成分分析，异常检测）
-* Semi-Supervised learning 半监督学习（生成模型）
-* Reinforcement learning 强化学习：累积奖励的最大化（AlphaGo）
-* Deep learning 深度学习（生成对抗网络）
-
-### Azure ML Learning Algorithms
-
-* Regression 回归 （预测）
-* Classification 分类
-* Clustering 聚类
-* Anomaly Detection 异常检测
-* Reinforcement Learning 强化学习
-
-### Azure ML Studio
+## Azure ML Studio
 
 * Web portal in Azure Machine Learning
 * Low-code and no-code options for project authoring
@@ -39,286 +14,162 @@ models.
 
 ![aml](img/aml1.png)
 
-## Regression 回归
+---
 
-continuous numerical predicition 数值预测：气温，销量，房价
+## Designer
 
-算法 | 特点
-| - | - |
-Linear Regression 线性回归 | 训练时间短、线性模型
-Bayesian Linear Regression 贝叶斯线性回归 | 线性模型，训练数据量较少
-Poisson Regression 泊松回归 |  预测事件次数
-Fast Forest Quantile Regression 快速森林分位数回归 | 预测分布
-Neural Network Regression 神经网络回归 | 精准度高、训练时间较长
-Decision Forest Regression 决策森林回归 | 精准度高、训练时间短
-Boosted Decision Tree Regression 提升决策树回归 | 精确度高、训练时间短、内存占用较大
+### Select Columns in Datasets 在数据集中选择列
 
-评估指标 Metrics | desc
-| - | - |
-平均绝对误差 (MAE) | 预测值与真实值之间的平均绝对误差
-均方根误差 (RMSE) | 模型在预测中会产生多大的误差，对于较大的误差权重较高
-决定系数 (R2) | 0<=R2<=1，1说明模型无错误
+* select columns: Column names / Column types
 
-## Classification 分类
+### Split Data 拆分数据
 
-通过已有数据集（训练集）的学习，得到一个目标函数f（模型），把每个属性集x映射到目标属性y（类），且y必须是离散的（若y为连续的，则属于回归算法）。
+* Fraction of rows in the first dataset: 0.5-0.75
+* Random seed 随机数生成器的种子
 
-Binary Classification 二分类 / Multi-Class Classification 多分类
+每颗种子能够生长为一组固定顺序的随机数序列，其通常和random.random()搭配使用以生成一个随机数。如果使用相同的x值，则每次生成的随即数序列都相同；对于同一x值，若多次执行random.seed(x)，将按照固定的序列顺序从头开始生成随机数。
 
-算法 | 特点
-| - | - |
-Logistic Regression 逻辑回归 | 训练时间短、线性模型
-Support Vector Machines (SVM) 支持向量机 | 线性模型，under 100 features
-Decision Forest 决策森林 | 精准度高，训练时间短
-Boosted Decision Trees 提升决策树 | 精准度高，训练时间短
-Neural Networks 神经网络 | 精准度高、训练时间较长
+### Join Data 联接数据
 
-混淆矩阵 | Actual Positives | Actual Negatives
-| - | - | - |
-Predicted Postives | TP | FP
-Predicted Negatives | FN | TN
+* Match case: True 大小写
+* Join type: Inner join
+* Keep right key columns in joined table: False
 
-Performance Metrics 性能评估 | Desc | Formula | 场景
-| - | - | - | - |
-Accuracy 准确率 | 所有样本中预测正确的样本占比 | (TP+TN)/(TP+TN+FP+FN) | 数据类别不均衡时不靠谱
-Precision 精准率/查准率 | 在所有被预测为正的样本中实际为正的样本的概率 | TP/(TP+FP) | 预测升的股票里真的升了有多少
-Recall/Sensitivity 召回率/查全率 | 在实际为正的样本中被预测为正样本的概率 | TP/(TP+FN) | 真的患病的病人中里预测正确的人
+### Preprocess Text 文本预处理
 
-## Time Series Analysis 时间序列分析
+* Text column to clean: 需要处理的字段
+* Remove special characters: True 去除名字中*
 
-一个时间序列 (表示为 Y = a + bX) 是一个在时间上具有相同间隔值的有序序列
+### Edit Metadata 编辑元数据
 
-目标：
-1. 历史数据识别和建模 Identify patterns in the past
-2. 预测未来的值 Forecast future values
+* Data type: 更改数据集的值和数据类型 String -> Integer/Double
+* Categorical: 将布尔值或数字列视为分类值。
+* Fields: 将列标记为特征或标签。
+* New column names: 重命名列
 
-Component | Desc
-| - | - |
-Level | Average value
-Trend 趋势 | 指在时间序列中的长期移动，上升/降低的趋势
-Seasonality 季节性变动 | 周期性波动（短期）
-Cyclical component 周期性变动 | 不是固定的波动（长期 > 1年）
-Random Noise 随机变动 | 噪声
+### Apply SQL Transformation 应用 SQL 转换
 
-四种变动与指标数值最终变动的关系:
-
-* 加法模型 Additive
-
-f(t)=Trend+Cycles+Seasonality+Noise
-
-* 乘法模型 Multiplicative
-
-f(t)=Trend*Cycles*Seasonality*Noise
-
-如果随着时间的推移，序列的季节波动越来越大，则反映各种变动之间的关系发生变化，建议使用乘积模型；反之，如果时间序列图的波动保持恒定，则可以使用叠加模型。
-
-Stationarity 平稳时间序列： 一个时间序列，如果均值没有系统的变化（无趋势）、方差没有系统变化，且严格消除了周期性变化，就称之是平稳的。
-
-> To apply a time series model, it is important for the Time series to be stationary. This means that the mean and variance should constant over time. </br>
-Use the Rolling statistics and the Dickey-Fuller test to check the stationarity
-
-检测是否平稳
-```python
-from statsmodels.tsa.stattools import adfuller
-def test_stationarity(timeseries):
-    #Determing rolling statistics
-    rolmean = timeseries.rolling(window=12).mean()
-    rolstd = timeseries.rolling(window=12).std()
+* SQL query script:
+```sql
+update t1 set Player = PreprocessedPlayer;
+select * from t1 where Rank<>"Rk";
 ```
 
-Use a log transformation to do a data transformation in the hope to reduce trend and make our data stationary.
+### Clip Values 剪切值
 
-转为平稳序列
-```python
-# use rolling average to removed the trend
-moving_avg = ts_log.rolling(window=12).mean()
-ts_log_moving_avg_diff = ts_log - moving_avg
-ts_log_moving_avg_diff.dropna(inplace=True)
-test_stationarity(ts_log_moving_avg_diff)
-```
+排除异常值后，预览数据Visualizations更符合正则分布
 
-```python
-# remove both the trend and seasonality
-from statsmodels.tsa.seasonal import seasonal_decompose
-decomposition = seasonal_decompose(ts_log)
+* Set of thresholds: ClipPeaksAndSubpeaks 同时指定上下限值
+* Threshold: Constant
+* Constant value for upper threshold 阈值上限（仅当选择了 ClipPeaks 时显示）
+* Constant value for lower threshold 阈值下限（仅当选择了 ClipSubPeaks 时显示）
+* Subsitute value for peaks 峰值替换值, 替换大于上限的值
+* Subsitute value for subpeaks 子峰值替换值，替换小于下限的值
+* Overwrite flag: Ture 覆盖原始列
+* Add indicator columns: False 生成一个新列来指示是否向该行中的数据应用了指定的剪切操作
 
-trend = decomposition.trend
-seasonal = decomposition.seasonal
-residual = decomposition.resid
+### Remove Duplicate Rows 删除重复行
 
-ts_log_decompose = residual
-ts_log_decompose.dropna(inplace=True)
-test_stationarity(ts_log_decompose)
-```
+* Key column selection filter expression: two rows are considered duplicates of each other only if they have the same values in these columns.
+* Retain first duplicate row: True
 
-Autocorrelation 自相关：函数和自己的相似性
+### Clean Missing Data 清理缺失数据
 
-Autocorrelation Function (ACF) 自相关函数：关于自变量延迟(lag)的一个函数，描述了时间序列中不同时间间隔之间的值的相关性
+* Cleaning mode: Remove entire row / Replace with mean
 
-时间序列的模型解析法：
+### Normalize Data 规范化数据
 
-* Auto-Regressive model (AR) 自回归模型：利用前期数值与后期数值的相关关系（自相关），建立包含前期数值和后期数值的回归方程，白噪声为时间序列数值的随机波动，这些随机波动的总和会等于0
-* Moving Average model (MA) 滑动平均模型：某个时间点的指标数值等于白噪声序列的加权和
-* Auto-Regressive Moving Average model (ARMA) 自回归滑动平均模型：自回归过程负责量化当前数据与前期数据之间的关系，移动平均过程负责解决随机变动项的求解问题
-* Auto-Regressive Integrated Moving Average model (ARIMA) 差分自回归移动平均模型
-> p--代表预测模型中采用的时序数据本身的滞后数(lags) ,AR/Auto-Regressive项 </br>
-d--代表时序数据需要进行几阶差分化，才是稳定的(differencing)，Integrated项 </br>
-q--代表预测模型中采用的预测误差的滞后数(lags)，MA/Moving Average项
-* Exponential Smoothing Model：前4项用于分析平稳时间序列，ARIMA通过差分可以用于处理非平稳时间序列
+* Transformation method: ZScore 总体标准偏差 / MinMax [0, 1] / Logistic / LogNormal 对数范围 / TanH
+* Use 0 for constant columns when checked: True
 
-http://t.zoukankan.com/xinbaby829-p-7905873.html
+### Train Model 训练模型
 
-To know the values for p and q, we can use the Auto correlation Function (ACF) technique and the Partial auto correlation (PACF) technique.
+左侧输入未训练的模型，右侧输入训练数据集。
 
-```python
-# ACF and PACF plots:
-from statsmodels.tsa.stattools import acf, pacf
+* Label column：标签列
+### Score Model 评分模型
 
-lag_acf = acf(ts_log_diff, nlags=20)
-lag_pacf = pacf(ts_log_diff, nlags=20, method='ols')
+* 对于分类模型，分数模型输出类的预测值，以及预测值的概率。
+* 对于回归模型，评分模型仅生成预测数值。
 
-# ARIMA
-from statsmodels.tsa.arima_model import ARIMA
+评分的一个常见用途是在预测 Web 服务中返回输出
+### Evaluate Model 评估模型
 
-model = ARIMA(ts_log, order=(1, 1, 0))  
-results = model.fit(disp=-1)  
-pred = results.get_prediction(start=pd.to_datetime('1974-01-01'), dynamic=False)
-```
+“评估模型”返回的指标 Metrics 取决于评估的模型类型：
 
-## Clustering 聚类
+* 分类模型：Accuracy, Precision, Recall, F1 score, AUC
+* 回归模型: MAE, RMSE, RAE, RSE, R2
+* 聚类分析模型: Average/Maximal Distance to Other/Cluster Center, Number of Points, Combined Evaluation
 
-聚类是一种无监督学习。聚类不需要标签，只要我们自己选择一个指标（如样本之间的距离）把数据集分割成不同的类或者簇，使类内元素的相似性尽可能的大，类间元素的相似性尽可能小，通过这样来对相似的数据进行归簇，从而达到聚类的效果。
+右侧添加另一个Score Model，可以在相同数据上轻松比较两个不同模型的结果。 两个输入算法应为同一算法类型。 也可以使用不同的参数对相同数据运行两次，然后比较两次运行的评分。
 
-K-means 聚类算法：
+### Web Service Input/Output
 
-1. 随机选取K个中心点
-2. 遍历数据集里面的每个点，看距离哪个中心点最近就分为哪一类，遍历完一共K类
-3. 把属于一类的点取平均值，得到的平均值作为新的中心点
-4. 然后不断重复步骤2，3，直到达到结束条件（当中心点不再变动或变动很小，当达到最大迭代次数）为止。
+在job中生成Real-time inference pipeline
 
-缺点：
-* k值未知，需要人为设定
-* 对于初始化中心点特别敏感，不同的初始化，结果可能不一样
-* 容易受到噪声的影响，可能收敛于局部最小值，同时数据量大时收敛速度较慢
-* 不太适合离散的数据，样本类别不均衡的数据的聚类
-* 要求这些簇的模型必须是圆形
+* Web Service Input 作为 Score Model
+的输入，Web Service Output 连接 Score Model
+的输出
 
-Model Performance：
-* PCA Graph (Principal component analysis 主成分分析）
-* 混淆矩阵 (labels are known)
+Deploy 后出现在 "endpoints" section，等待deployment state 变为"healthy"，"Test" 里点 "test"
 
-Metrics:
-* Number of Points
-* Average Distance to Cluster Center
-* Average Distance to Other Center
-* Maximal Distance to Cluster Center
+### Model
+
+* Linear Regression 线性回归
+* Neural Network Regression 神经网络回归
+* Boosted Decistion Tree Regression 提升决策树回归
+* Decision Forest Regression 决策林回归
+* Poisson Regression 泊松回归
+* Two-Class Decision Forest 双类决策林
+* Two-Class Boosted Decision Tree module 双类提升决策树
+
+## Datasets
+
+Create dataset From local files
+
+* Data type: Tabular 表格
+* Data source: From local files
+* Storage type: Azure Blob Storage
+* File format: Delimited 带分隔符文件
+* Delimiter: Comma
+* Encoding: UTF-8
+* Column headers: All files have same headers
 
 ---
 
-## Variables
+## Notebooks
 
-Variables are attributes/characteristics of an object
+Import all the required libraries and formatting.
 
-Two methods to describe a variable:
-* Summary/descriptive statistics
-    * Quantitatively describe features of a data set 数量
-    * Mean 平均数，median 中位数，mode 众数，min，max，variance方差，standard deviation标准差，Quartiles 四分位数，unique values 唯一值，missing values 缺失值 
-* Visualization
-    * Qualitatively describe features of data sets
-    * Histograms 直方图, box plots, scatter plot.
- 
-### Bi-variate Analysis 双变量分析
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pylab as pylab
+%matplotlib inline
+from matplotlib.pylab import rcParams
+rcParams['figure.figsize'] = 20, 6
+import warnings
+import itertools
+warnings.filterwarnings("ignore")
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib
+```
 
-双变量分析，是为了找出两个变量之间的关系。
+Load data to Workspace
 
-变量可以有多种组合分析:
-* Two continuous variables 连续型之间
-* Two categories variables分类型之间
-* One continuous variable and one categories variable 分类变量和连续变量。
+```python
+from azureml.core import Workspace
+ws = Workspace.get(name="myworkspace", subscription_id='<subscription_id>', resource_group='myresourcegroup')
+ds = ws.datasets['data_name']
+df = ds.to_pandas_dataframe()
+```
 
-## 数据清理 Data Cleaning
+Show data
 
-### Unwanted Rows
-
-* Duplicate rows
-* Irrelevant rows
-
-### Missing values 缺失值
-
-Types:
-
-* Missing completely at random (MCAR) 完全随机缺失：缺失数据发生的概率与任何值无关
-* Missing at random (MAR) 随机缺失：缺失数据发生的概率与其他变量有关，与本身无关（体重缺失与性别有关）
-* Missing Not at Random (MNAR) 非随机缺失：缺失数据发生的概率与本身有关（学历缺失往往是学历最低的群体）
-
-Treat:
-
-* Deletion 丢弃观察值/丢弃特征
-* Imputation 填充缺失数据（mean, median, mode, prediction models）
-
-
-### Outliers 异常值
-
-检测单变量异常值(univariate outlier）：
-
-* Box Plots and histogrames
-* IQR
-
-Peak Values: N > Q3 + (1.5xIQR)
-SubPeak Values: N < Q1 - (1.5xIQR)
-
-Component in AML：Clip Values
-
-Replace clipped Values with the
-
-* specified threshold value
-* Mean
-* Median
-* Missing / empty value
-
-## Feature Engineering 特征工程
-
-> 原始数据 -> 特征 -> 建模 -> 知识
-
-特征工程处在原始数据和特征之间。将数据转换为能更好的表示业务逻辑的特征，从而提高机器学习的性能。
-
-特征：是原始数据的数值表达方式，是机器学习算法模型可以直接使用的表达方式。
-
-* One-Hot-Encoding 独热编码：将具有k个可能取值的分类特征编码为k-1个特征（都等于零表示最后一个可能取值）AML默认使用One-Hot-Encoding
-
-* Binning 特征分箱：将数据集中单个连续输入特征变换为一个分类特征，用于表示数据点所在的箱子 bins = [1,3,6,9,12] labels=['Winter', 'Spring', 'Summer', 'Fail']
-
-* Logarithmic Scale 特征缩放：数据标准化，将很大范围的数据限定在指定范围内，使数据分布变的更加的平滑 （min-max缩放/归一化/对数变换np.log10）
-
-* Feature Hashing 特征哈希：将一个数据点转换成一个向量，将所有的原始数据转换成指定范围内的散列值（NLP）
-
-## Model Improvement Principles
-
-泛化能力就是说已经得到的拟合函数对于新来的样本的适应性
-
-泛化能力 | 表现 | 偏差 | 方差
-| - | - | - | - |
-Overfit models 过拟合 | 在训练数据上表现良好，在未知数据上表现差 | low bias | high variance
-Underfit models 欠拟合 | 在训练数据和未知数据上表现都很差 | high bias | low variance
-
-对Bias和Variance进行平衡（tradeoff）
-> Model with the right fit has a balance between bias and variance
-
-### Model Improvement Methods
-
-* Feature Selection 选择合适的参数维度
-* Regularization 正则化，减少某些特征的影响
-    * L1 Regularization 减小不重要的特征系数
-    * L2 Regularization 收缩参数
-* Parameter Sweeping
-    * Sweep entire grid 对所有可能的参数值组合进行迭代的网格搜索
-    * Random sweep 对一系列参数值进行随机搜索
-* Cross Validation 交叉验证：将原始数据进行分组（训练集/测试集），Divides data into multiple folds, Measures performance metrics in each fold
-
-
-## Data Science Life Cycle
-
-Define Business Objectives -> Import Data -> Initial Data Analysis -> Clean Data -> Create Model -> Optimize Model -> Evaluate Model -> Deploy Model
-        
-
-
+```python
+df.head(5)
+df['Column'].min() # min
+df['Column'].max() # max
+df['Month'] = pd.to_datetime(df['Month']) # 日期格式转换
+```

@@ -1,278 +1,130 @@
-Title: Azure Machine Learning Service
-Date: 2023-01-20
+Title: Azure Machine Learning Studio - Designer
+Date: 2023-01-19
 Category: Cloud
 Author: Yoga
 Tags: Azure, ML
 
-## Azure Machine Learning Service
-Azure Machine Learning Service: Combination of Azure cloud services and Python SDK.
+## Component
 
-Create environment -> Prepare data -> Build models -> Train models -> Test models -> Manage models -> Track experiments -> Deploy models
+### Select Columns in Datasets 在数据集中选择列
 
-### Compute Target
+* select columns: Column names / Column types
 
-Attached to your Azure Machine Learning Workspace. Can be used to run pipelines and host deployed models as real-time endpoints or pipeline endpoints.
+### Split Data 拆分数据
 
-* Azure Machine Learning Compute: Training
-* Azure Kubernetes Service: Deployment
+* Fraction of rows in the first dataset: 0.5-0.75
+* Random seed 随机数生成器的种子
 
-Compute Target | Automated ML | AML Pipelines | AML Designer
-| - | - | - | - |
-Local Computer | Yes |  | 
-AML compute cluster | Yes | Yes | Yes
-AML compute instance | Yes (through SDK) | Yes
-Remote VM | Yes (SDK local mode only) | Yes
-Azure Databricks | Yes | Yes
+每颗种子能够生长为一组固定顺序的随机数序列，其通常和random.random()搭配使用以生成一个随机数。如果使用相同的x值，则每次生成的随即数序列都相同；对于同一x值，若多次执行random.seed(x)，将按照固定的序列顺序从头开始生成随机数。
 
-### 优势
+### Join Data 联接数据
 
-* 支持开源算法：Scikit-learn, TensorFlow, CNTK, PyTorch
-* Automated 数据处理，Automated 算法选择，Automated 超参数选择
-* Pipeline：串联step（数据准备/模型训练测试/模型部署），rerunnning指定step，不同step不同执行环境，创建可复用模板
-* Integration VS Code
-* 部署模型 in ONNX format
+* Match case: True 大小写
+* Join type: Inner join
+* Keep right key columns in joined table: False
 
-### Build, Train and Deploy a Model步骤：
-1. create Azure subscription -> resouce group -> workspace
-2. import data -> prepare and clean data
-3. train model -> test and tune model -> register model
-4. compute target -> scoring file -> environment config file -> inference config 
-5. deploy model -> test model (web service)
+### Preprocess Text 文本预处理
 
----
+* Text column to clean: 需要处理的字段
+* Remove special characters: True 去除名字中*
 
-## Workspace
+### Edit Metadata 编辑元数据
 
-创建 Workspace：
-* Workspace name
-* Azure subscription ID
-* Resource group name
-* Location
+* Data type: 更改数据集的值和数据类型 String -> Integer/Double
+* Categorical: 将布尔值或数字列视为分类值。
+* Fields: 将列标记为特征或标签。
+* New column names: 重命名列
 
-每个Workspace配备：
-* Key Vault
-* Container Registry
-* Storage Account
-* Application Insights
- 
-Load Workspace
-```python
-from azureml.core.workspace import Workspace
-ws.write_config() # save workspace config file
-ws = Workspace.from_config() # load an existing workspace
+### Apply SQL Transformation 应用 SQL 转换
+
+* SQL query script:
+```sql
+update t1 set Player = PreprocessedPlayer;
+select * from t1 where Rank<>"Rk";
 ```
 
----
+### Clip Values 剪切值
 
-## Build and Train a Model
+排除异常值后，预览数据Visualizations更符合正则分布
 
-### Prepare and Clean Data
+* Set of thresholds: ClipPeaksAndSubpeaks 同时指定上下限值
+* Threshold: Constant
+* Constant value for upper threshold 阈值上限（仅当选择了 ClipPeaks 时显示）
+* Constant value for lower threshold 阈值下限（仅当选择了 ClipSubPeaks 时显示）
+* Subsitute value for peaks 峰值替换值, 替换大于上限的值
+* Subsitute value for subpeaks 子峰值替换值，替换小于下限的值
+* Overwrite flag: Ture 覆盖原始列
+* Add indicator columns: False 生成一个新列来指示是否向该行中的数据应用了指定的剪切操作
 
-Transformation functions:
-* drop
-* dropna
-* rename
-* concat
-* transpose
-* replace
-* fillna
-* sum 
+### Remove Duplicate Rows 删除重复行
 
-### Train Model
+* Key column selection filter expression: two rows are considered duplicates of each other only if they have the same values in these columns.
+* Retain first duplicate row: True
 
-split data
-```python
-from sklearn.model_selection import train_test_split
-```
+### Clean Missing Data 清理缺失数据
 
-Steps to use Automated ML:
-1. Determine problem type
-2. Classification,Regression,TimeSeriesforecasting
-3. Decide between using Python SDK or the studio web experience
-4. Determine the source and format of training data
-5. Configure compute target for model training
-6. Local computer, Azure ML Computes, Azure Databricks, remote VMs
-7. Configure AutoML parameters
-8. Submit the run
-9. Examine the outcome
+* Cleaning mode: Remove entire row / Replace with mean
 
-### Save Model
+### Normalize Data 规范化数据
 
-Model 保存为 pickle 文件（.pkl）
-* Can be loaded later for predictions
-* Is the serialized version of the model.
-* Provides an efficient way to save model and transfer over the network. 
-* Can be loaded and un-serialized using the load() method.
-* Can be used to load the model for further actions.
+* Transformation method: ZScore 总体标准偏差 / MinMax [0, 1] / Logistic / LogNormal 对数范围 / TanH
+* Use 0 for constant columns when checked: True
 
-### Register Model
+### Train Model 训练模型
 
-Model registeration allows you to store and version the model. A registered model can be downloaded and deployed.
+左侧输入未训练的模型，右侧输入训练数据集。
 
----
+* Label column：标签列
+### Score Model 评分模型
 
-## Deploy a Trained Model
+* 对于分类模型，分数模型输出类的预测值，以及预测值的概率。
+* 对于回归模型，评分模型仅生成预测数值。
 
-### Scoring File
+评分的一个常见用途是在预测 Web 服务中返回输出
+### Evaluate Model 评估模型
 
-two functions in score.py:
-* init() 加载模型
-* run(input_data) 预测数据
-```python
-# score.py
-from sklearn.externals import joblib
-from sklearn.linear_model import <algorithm_name> from azureml.core.model import Model
-def init():
-  global model
-  model_path = Model.get_model_path ('<pkl_file_name>')
-  model = joblib.load(model_path)
-def run(raw_data):
-  data = json.loads(raw_data)['data']
-  data = numpy.array(data)
-  result = model.predict(data)
-  return result.tolist()
-```
+“评估模型”返回的指标 Metrics 取决于评估的模型类型：
 
-### Environment Configuration File
-* Used to specify model dependencies.
-* Defines the conda environment for the model.
-* Used to make sure all model dependencies are included in the container image. 
-* Also called a conda-dependency file.
-* Has yml extension.
+* 分类模型：Accuracy, Precision, Recall, F1 score, AUC
+* 回归模型: MAE, RMSE, RAE, RSE, R2
+* 聚类分析模型: Average/Maximal Distance to Other/Cluster Center, Number of Points, Combined Evaluation
 
-```python
-from azureml.core.conda_dependencies import CondaDependencies
-env1 = CondaDependencies.create(conda_packages=['scikit-learn'])
-with open("<yml_file_name>","w") as f: f.write(env1.serialize_to_string())
-```
- 
-### inference configuration
+右侧添加另一个Score Model，可以在相同数据上轻松比较两个不同模型的结果。 两个输入算法应为同一算法类型。 也可以使用不同的参数对相同数据运行两次，然后比较两次运行的评分。
 
-describes how to set up the web-service containing your model.
+### Web Service Input/Output
 
-```python
-from azureml.core.model import InferenceConfig
-inference_config = InferenceConfig(runtime= "python", entry_script="score.py",
-conda_file="<yml_file_name>")
-```
+在job中生成Real-time inference pipeline
 
-### Deploy to Compute Target 
+* Web Service Input 作为 Score Model
+的输入，Web Service Output 连接 Score Model
+的输出
 
-```python
-service = model.deploy( workspace=ws, name='<service_name>', deployment_config=aciconfig, models=[model],
-inference_config = inference_config )
-```
+Deploy 后出现在 "endpoints" section，等待deployment state 变为"healthy"，"Test" 里点 "test"
 
-### Consume Deployed Model
+Batch inference piplie 批量预测管道，对大型数据集持续评分
 
-Deploying as web service creates a REST API
+https://learn.microsoft.com/en-us/azure/machine-learning/how-to-run-batch-predictions-designer
 
-```python
-import json
-test_input = json.dumps({'data':[[i1, i2, ...]]}) prediction = service.run(input_data = test_input) Print(prediction)
-```
+### Model
 
----
+* Linear Regression 线性回归
+* Neural Network Regression 神经网络回归
+* Boosted Decistion Tree Regression 提升决策树回归
+* Decision Forest Regression 决策林回归
+* Poisson Regression 泊松回归
+* Two-Class Decision Forest 双类决策林
+* Two-Class Boosted Decision Tree module 双类提升决策树
 
-## Monitor AML
+## Datasets
 
-Azure monitor is a full stack monitoring service in Azure.
+Create dataset From local files
 
----
+* Data type: Tabular 表格
+* Data source: From local files
+* Storage type: Azure Blob Storage
+* File format: Delimited 带分隔符文件
+* Delimiter: Comma
+* Encoding: UTF-8
+* Column headers: All files have same headers
 
-## AML Pipelines
-
-1.Install AML SDK -> create workspace
-
-2.Set up data store 
-```python
-MyDefault_Store = ws.get_default_datastore
-```
-
-3.Upload data to storage
-
-4.Create Data Reference object
-```python
-from azureml.data.data_reference import DataReference
-stored_data = DataReference(
-  datastore = MyDefault_Store,
-  data_reference_name = "FlightDelay_dataset", path_on_datastore = ("FlightDelay/part-00000")
-)
-```
-
-5.run configuration (pip package dependencies / SDK version)
-
-6.Create PipelineData object
-```python
-from azureml.pipeline.core import PipelineData
-normalized_data = PipelineData(
-  name = "normalized_flight_delay_data",
-  data_store = default_store
-)
-```
-7.Construct pipeline steps
-```python
-DataCleaningStep = PythonScriptStep(
-  name="Clean Data", 
-  script_name="cleanse_datasets.py",
-  arguments=[<script_inputs>], 
-  inputs=[<DataReference_or_PipelineData>], 
-  outputs=[cleansed_data], compute_target=MyAml_Compute_Target, runconfig=MyAml_Run_Config, source_directory=<path_to_Python_script>, 
-  allow_reuse=True
-)
-```
-
-8.Build pipeline
-```python
-from azureml.pipeline.core import Pipeline
-PPLines_Steps = [CleaningStep, NormalizingStep]
-MyPipeline = Pipeline(workspace = ws, steps = PPLines_Steps)
-```
-
-9.Submit pipeline
-```python
-from azureml.core import Experiment
-PPLine_Run = Experiment(ws, "exp_name").submit(MyPipeline,regenerate_outputs = True)
-```
-
-10.View progress
-```python
-from azureml.widgets import RunDetails
-RunDetails(PPLine_Run).show()
-PPLine_Run.wait_for_completion()
-```
----
-
-## MLOps
-
-> Train Model -> Package Model -> Validate Model -> Deploy Model -> Monitor Model -> Retrain Model
-
-7 Principles of MLOps
-* Version control code, data, and experimentation outputs
-* Use multiple environment
-* Manage infrastructure and configurations-as-code
-* Track and manage machine learning experiments
-* Test code, validate data integrity, model quality
-* Machine learning continuous integration and delivery
-*  Monitor services, models, and data
-
-MLOPs solution Architecture
-![aml](img/aml2.png)
-
----
-
-## Azure Event Grid
-
-AML events:
-
-* Run completion
-* Model registration
-* Model deployment
-* Data drift detection
-* Run status change
-
-Use cases:
-
-* Send emails on run completion
-* Use an azure function after a model is registered
-* Trigger an ML pipeline when drift is detected
+![aml](img/aml1.png)

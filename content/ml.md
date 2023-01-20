@@ -310,5 +310,9 @@ Underfit models 欠拟合 | 在训练数据和未知数据上表现都很差 | h
 
 Define Business Objectives -> Import Data -> Initial Data Analysis -> Clean Data -> Create Model -> Optimize Model -> Evaluate Model -> Deploy Model
         
+---
 
+机器学习模型中一般有两类参数：
 
+* 模型参数（Parameter）：模型本身的参数，需要从数据中学习和估计得到，比如，线性回归直线的加权系数（斜率）及其偏差项（截距）都是模型参数。
+* 超参数（Hyperparameter）：机器学习算法中的调优参数（tuning parameters），需要人为设定，比如，正则化系数λ，决策树模型中树的深度。

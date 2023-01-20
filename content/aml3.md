@@ -1,4 +1,4 @@
-Title: Azure Machine Learning Studio - Nootbooks
+Title: Azure Machine Learning Studio - Notebooks
 Date: 2023-01-19
 Category: Cloud
 Author: Yoga

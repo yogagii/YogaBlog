@@ -99,11 +99,19 @@ select * from t1 where Rank<>"Rk";
 的输入，Web Service Output 连接 Score Model
 的输出
 
-Deploy 后出现在 "endpoints" section，等待deployment state 变为"healthy"，"Test" 里点 "test"
-
 Batch inference piplie 批量预测管道，对大型数据集持续评分
 
 https://learn.microsoft.com/en-us/azure/machine-learning/how-to-run-batch-predictions-designer
+
+
+Deploy 后出现在 "endpoints" section，等待deployment state 变为"healthy"，"Test" 里点 "test"
+
+Postman:
+
+* Headers: 
+    * Content-Type: application/json
+    * Authorization: Bearer <api_key>
+* Body (raw): { "inputs": { "input1": [...] } }
 
 ### Model
 

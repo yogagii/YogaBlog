@@ -79,7 +79,11 @@ Source:
 * Recursively: true
 
 Sink:
-* Linked service: Azure SQL Database
+* Linked service: Azure SQL Database (Table: @dataset().SQLTableName)
+* Write behavior: Insert
+* Bulk insert table lock: Yes
+* Table option: Auto create table
+* Pre-copy script: @{concat('drop table if exists ',item().TableName)} 更新失败不会回滚
 
 _踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.Common.Shared.HybridDeliveryException,Message=Parquet file contained column 'txn', which is of a non-primitive, unsupported type.,Source=Microsoft.DataTransfer.Richfile.ParquetTransferPlugin,'_
 

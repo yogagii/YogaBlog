@@ -113,6 +113,16 @@ Get Token
 * Use query: Query
 * Query: @concat('SELECT * FROM <Table_Name> where JobFlag=',pipeline().parameters.v_jobflag)
 
+获取SQL Server系统表sysobjects
+
+sysobjects 表：在数据库内创建的每个对象（约束、默认值、日志、规则、存储过程等）在表中占一行。
+
+* 获取系统表 Use query: select * from Sys.objects 
+* 获取存储过程 Use query: select a.name,a.[type],b.[definition] from sys.all_objects a,sys.sql_modules b
+where a.is_ms_shipped=0 and a.object_id = b.object_id and a.[type] in ('P','V','AF')
+order by a.[name] asc
+* First row only: False (默认勾选)
+
 ### >>> Stored procedure
 
 提前在sql server创建好存储过程

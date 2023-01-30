@@ -17,7 +17,7 @@ Workspace -> Users (your own folder) -> 右键import -> .dbc file
 
 jobs -> start cluster
 
-### 调用notebook
+## 调用notebook
 
 ```python
 %run /_POC_QA_SC_DataCenter/Dayu-connect-to-datalake
@@ -29,7 +29,7 @@ dbutils.notebook.run("/_POC_QA_SC_DataCenter/Dayu-connect-to-datalake_Func", 60,
 * 优势：可传参，可调用多个笔记本
 * 缺点：启动新作业，变量不存在
 
-### Output
+## Output
 
 ```python
 dbutils.notebook.exit(data)
@@ -37,7 +37,7 @@ dbutils.notebook.exit(data)
 
 ADF 读取output：@activity('Notebook').output
 
-### 文件操作
+## 文件操作
 
 * dbutils
 ```python
@@ -109,7 +109,7 @@ def delete_directory(container="raw", folder="example_folder"):
     res = file_system_client.delete_directory(folder)
 ```
 
-### 文件读写
+## 文件读写
 
 * CSV
 ```python
@@ -166,7 +166,43 @@ df_DateLake=spark.read.format("json").load("abfss://container@blob.xxx.cn/folder
 select * from delta.`abfss://container@blob.xxx.cn/folder/filename`
 ```
 
-### Delta Table
+## Delta Table
+
+Delta Lake 是经过优化的存储层，它使用基于文件的事务日志扩展了 Parquet 数据文件，可以处理 ACID 事务和可缩放的元数据。Delta Lake 是 Azure Databricks 上所有操作的默认存储格式。 除非另行指定，否则 Azure Databricks 上的所有表都是 Delta 表。
+
+> ACID: 原子性、一致性、隔离性、持久性
+
+Delta Lake 特性：
+* 支持ACID事务
+* 可扩展的元数据处理
+* 统一的流、批处理API接口
+* 更新、删除数据，实时读写（读是读当前的最新快照）
+* 数据版本控制，根据需要查看历史数据快照，可回滚数据
+* 自动处理schema变化，可修改表结构
+
+可以使用 DESCRIBE DETAIL 检索有关 Delta 表的详细信息
+```sql
+DESCRIBE DETAIL eventsTable
+```
+
+delta表的schema中，字段名的小写不能相同，delta lake区分大小写，但保存时不敏感，而parquet保存时是大小写敏感的
+
+delta表是一个目录，表的根目录除了表数据外，有一个_delta_log目录，用来存放事务日志；事务日志记录了从最初的delta表开始的所有commit事件，每个commit形成一个json文件，文件名是严格递增的，文件名就是版本号。每10个json合并成一个parquet格式的checkpoint文件，记录之前所有的commit。spark读的时候会自动跳到最新的checkpoint，然后再读之后的json；
+
+当多个用户同时写数据时，都是生成一个新版本的数据文件，用互斥锁来决定顺序，拿到锁的，按顺序生成下一个版本的数据文件，然后释放锁，后来的在之前数据的基础上执行他的commit，生成一个新版本的数据。
+
+truncate table不会释放存储空间：Delta Lake 删除操作后，旧数据文件不会被完全删除，仍保留在磁盘上，但在 Delta Lake 事务日志中记录为“tombstoned”（不再是活动表的一部分）。可以通过time travel回到表的早期版本，如果要删除超过某个时间段的文件，可以使用 VACUUM 以递归方式清空与 Spark 表关联的目录，并删除超过保留期阈值的未提交文件。 默认阈值为 7 天。
+
+```sql
+VACUUM table_name [RETAIN num HOURS] [DRY RUN]
+```
+
+缺点：
+* 更新操作很重，更新一条数据和更新一批数据的成本可能是一样的，所以不适合一条条的更新数据
+* 更新数据的方式是新增文件，会造成文件数量过多，需要清理历史版本的数据
+* 乐观锁的并发能力较差，更适合写少读多的场景
+
+_踩坑：用 ADF 将.parquet文件存储到sql server时，delta table格式会保留下全部数据文件浪费sql server空间，将需要转存sql server的表（dm和dim，需要update的表不行）改为 USING parquet，需保证字段格式严格按照ddl中定义的格式._
 
 __DDL__
 * 创建SCHEMA
@@ -278,7 +314,7 @@ def insertTxT_Pandas(FileName, LandingTableName, TableColumn,RenameColumn,header
     spark.sql(f"insert into {LandingTableName}({TableColumn}) select {columns}, now() InsertTime from df_spark;");
 ```
 
-### SQL
+## SQL
 
 * 自定义函数
 ```sql
@@ -307,7 +343,7 @@ when not matched then insert
   (id, name) values (b.id, b.name);
 ```
 
-### Data Lake Storage Gen2
+## Data Lake Storage Gen2
 
 SAS Token: 共享访问签名是指向一个或多个存储资源的已签名 URI。 该 URI 包括的令牌包含一组特殊查询参数。 该令牌指示客户端可以如何访问资源。 
 
@@ -338,7 +374,7 @@ dbutils.fs.mount(
   extra_configs = configs)
 ```
 
-### AWS S3
+## AWS S3
 
 ```python
 sc._jsc.hadoopConfiguration().set("fs.s3n.awsAccessKeyId", "xxx")
@@ -419,7 +455,7 @@ def create_csv(sourcedf, filename, target_bucket):
     write_file(filename, target_bucket, content)
 ```
 
-### SQL SERVER
+## SQL SERVER
 
 * JDBC
 

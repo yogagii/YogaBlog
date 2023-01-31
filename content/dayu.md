@@ -95,3 +95,12 @@ ActivityOutput(Success): @string(activity('xxx').output)
 
 ActivityOutput(Failed): @activity('xxx').output.errors[0].Message
 
+## SQL Server
+
+将 DIM/DM 层数据导入 SQL Server 供 Power BI 消费可降低成本。
+
+A low cost option would be to create an Azure Synapse Analytics workspace and use a serverless SQL pool to query the delta content. A serverless pool exposes itself as an Azure SQL DB. Since this is a serverless instance there is no provisioning costs. You'd only pay for the consumption (e.g. the actual query).
+
+若要直接读取 Delta table 需要 Set Up the API Server，会使用到 databricks 的cluster 计算资源，成本更高。
+
+https://www.cdata.com/kb/tech/databricks-odata-nodejs.rst

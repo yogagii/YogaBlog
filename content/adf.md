@@ -142,6 +142,82 @@ order by a.[name] asc
 
 * Items: @activity('LookupConfigTable').output.value
 
+## Databricks
+
+### >>> Notebook
+
+* Notebook path
+* Base parameters: 设置传入参数 "argument1": "value"
+
+```python
+dbutils.widgets.get("argument1") # value
+```
+
+---
+
+## 向 Microsoft Teams 发送通知
+
+https://learn.microsoft.com/zh-cn/azure/data-factory/how-to-send-notifications-to-teams?tabs=data-factory
+
+### Incoming Webhook
+
+Microsoft Teams -> Apps -> Incoming Webhook -> Add a team -> Set up a connector -> 保存 Webhook URL 
+
+### >>> Set variable
+
+* Name: MsgCard
+* Value: 
+
+```json
+{
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "themeColor": "0076D7",
+    "summary": "ADF Pipeline Fail Alert message​​​​",
+    "sections": [
+        {
+            "activityTitle": "@{concat('【',pipeline().parameters.Status,'】【',pipeline().globalParameters.Environment,'】 ',pipeline().parameters.GrandpaName,' has executed ',pipeline().parameters.Status)}​​​​",
+            "facts": [
+                {
+                    "name": "Environment:",
+                    "value": "@{pipeline().globalParameters.Environment}"
+                },
+                {
+                    "name": "Data Factory name:",
+                    "value": "@{pipeline().DataFactory}"
+                },
+                {
+                    "name": "Grandpa name:",
+                    "value": "@{pipeline().parameters.GrandpaName}"
+                },					
+                {
+                    "name": "Batch RunID:",
+                    "value": "@{pipeline().parameters.BatchRunID}"
+                }
+            ],
+            "markdown": true
+        }
+    ],
+    "potentialAction": [
+        {
+            "@type": "OpenUri",
+            "name": "View pipeline run",
+            "targets": [
+                {
+                    "os": "default",
+                    "uri": "@{concat('https://adf.azure.cn/monitoring/pipelineruns/',pipeline().parameters.BatchRunID,'?factory=/subscriptions/',pipeline().globalParameters.ADFSubscription,'/resourceGroups/',pipeline().globalParameters.ADFResourceGroup,'/providers/Microsoft.DataFactory/factories/',pipeline().DataFactory)}"
+                }
+            ]
+        }
+    ]
+}
+```
+### >>> Web
+
+* URL: @pipeline().globalParameters.TeamsWebhookUrl
+* Method: POST
+* Body: @json(variables('MsgCard'))
+
 ---
 
 ## IPRO

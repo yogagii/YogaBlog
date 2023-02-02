@@ -240,6 +240,15 @@ CREATE TABLE IF NOT EXISTS example_schema.example_table
 )
 ```
 
+* 克隆TABLE
+
+> SHALLOW CLONE: 浅表克隆不会将数据文件复制到克隆目标。 表元数据等效于源。 创建这些克隆的成本较低。
+</br>DEEP CLONE: 深层克隆还会将源表数据复制到克隆目标。它还会克隆流元数据。
+
+```sql
+CREATE OR REPLACE TABLE <SCHEMA>.<TABLENAME> DEEP CLONE <SCHEMA>.<TABLENAME>;
+```
+
 __DML__
 
 * Insert Table: CSV/EXCEL
@@ -513,6 +522,21 @@ OPTIONS (
 ) AS
 SELECT * FROM df_spark
 ```
+
+---
+## Cluster 集群
+
+Cluster type:
+
+* All-purpose cluster: can be shared by multiple users and are best for performing ad-hoc analysis, data exploration, or development. 
+
+* Job cluster:  Job clusters terminate when your job ends, reducing resource usage and cost. Once you’ve completed implementing your processing and are ready to operationalize your code, switch to running it on a job cluster.
+
+_踩坑：ADF 调用notebook 报错：Failure starting repl. Try detaching and re-attaching the notebook. 此类问题一般发生的原因为Driver node size不足/处于繁忙状态来不及处理请求。_
+
+1. 在ADF activity侧加上了自动重试功能。
+2. 建议对于生产job任务采用Job cluster，而不是all purpose cluster。 Job cluster有更好的资源隔离，即用即删，成本也更便宜。
+
 ---
 
 ```python

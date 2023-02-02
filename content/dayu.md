@@ -53,6 +53,21 @@ and sharing internally & externally.
         * dm_: 聚合为摸个主题的宽表
 
 > 雪花模型：连接多，冗余低，性能低 <br/>星型模型：连接少，冗余高，性能高
+
+## Azure Blob Storage
+
+Azure storage offers different access tiers:
+
+* Hot tier: 适用于存储经常访问或修改的数据的联机层。存储成本最高，但访问成本最低。
+* Cool tier: 适用于存储不经常访问或修改的数据的联机层。至少存储 30 天。存储成本较低，访问成本较高。
+* Archive tier: 适用于存储极少访问且延迟要求不严格的数据的脱机层。应至少存储 180 天。
+
+Lifecycle management policy:
+
+Azure 存储生命周期管理可提供基于规则的策略，用于将 blob 数据转移到最适合的访问层，或在数据生命周期结束时使数据过期。
+
+Storage account -> Lifecycle management -> Add a rule
+
 ## Data Modeling
 
 * DCL (Data Control Language): 数据控制语句，用于控制访问级别，grant / deny

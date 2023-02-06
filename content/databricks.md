@@ -628,6 +628,22 @@ Select id, result from exams where result > 70 order by result
 spark.table("exam").select("id", "result").where("result > 70").orderBy("result")
 ```
 
+SparkSQL中的三种Join:
+
+* Broadcast Join 小表对大表
+* Shuffle Hash Join
+* Sort Merge Join 大表对大表
+
+踩坑：There is not enough memory to build the hash map
+
+_If the estimated size of one of the DataFrames is less than the autoBroadcastJoinThreshold, Spark may use BroadcastHashJoin to perform the join. If the available nodes do not have enough resources to accommodate the broadcast DataFrame, your job fails due to an out of memory error._
+
+In Databricks Runtime 7.0 and above, set the join type to SortMergeJoin with join hints enabled.
+```python
+# disable broadcast
+spark.conf.set("spark.sql.autoBroadcastJoinThreshold", -1)
+```
+
 ### DataFrame
 
 A DataFrame is a distributed collection of data grouped into named columns

@@ -287,6 +287,23 @@ def insertTable(FileName, LandingTableName, TableColumn, ExcelTitle, SaveDay=30,
     
 ```
 
+__OPTIMIZE__
+
+优化 Delta Lake 数据的布局，优化数据子集或按列归置数据。
+
+```sql
+OPTIMIZE table_name [WHERE predicate]
+  [ZORDER BY (col_name1 [, ...] ) ]
+```
+
+启用自动优化
+
+```sql
+-- 所有新表
+set spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite = true;
+set spark.databricks.delta.properties.defaults.autoOptimize.autoCompact = true;
+```
+
 * Insert Table: TXT
 
 法一：
@@ -350,6 +367,30 @@ when matched then update
   set name = b.name
 when not matched then insert 
   (id, name) values (b.id, b.name);
+```
+
+* Range join optimization 范围联接优化
+
+适用范围：
+1. 在区间范围内
+2. 数据类型：numeric，date (days)，timestamp (second)
+3. INNER JOIN / LEFT OUTER JOIN / RIGHT OUTER JOIN
+4. Have a bin size tuning parameter 箱大小: 建议将箱大小设置为值间隔的典型预期长度
+
+```sql
+--- Point in interval range join
+SELECT *
+FROM points JOIN ranges ON points.p BETWEEN ranges.start and ranges.end;
+
+--- Interval overlap range join
+SELECT *
+FROM r1 JOIN r2 ON r1.start < r2.end AND r2.start < r1.end;
+```
+Enable range join using a range join hint
+
+```sql
+SELECT /*+ RANGE_JOIN(ranges, 10) */ *
+FROM points JOIN ranges ON points.p >= ranges.start AND points.p < ranges.end;
 ```
 
 ## Data Lake Storage Gen2

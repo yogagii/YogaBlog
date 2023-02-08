@@ -76,7 +76,7 @@ GROUP BY
   MaterialCode
 ```
 
-## CASE
+### CASE 条件
 
 ```sql
 SELECT
@@ -86,4 +86,20 @@ SELECT
   END PriceCNY,
 FROM
   ListPrice
+```
+
+### date 日期
+
+```sql
+--- utc +8小时
+select date_format(dateadd(hour,8,current_timestamp()),'y') -- 2023
+select date_format(dateadd(hour,8,current_timestamp()),'yMM') -- 202302
+
+select DATEADD(month,-24,CURRENT_DATE()) -- 2年前的今天
+```
+
+### 字符串操作
+
+```sql
+select substring(string('02月'),1,2) -- substring 字符串截取
 ```

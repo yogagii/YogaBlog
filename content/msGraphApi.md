@@ -1,6 +1,6 @@
 Title: MS Graph API
 Date: 2021-6-4
-Category: Backend
+Category: Cloud
 Tags: Microsoft
 Author: Yoga
 
@@ -150,7 +150,7 @@ GET https://graph.microsoft.com/v1.0/sites/xxx.sharepoint.com:/teams/#siteName# 
 Get the collection of lists for a site.
 
 API | params | response  
-- | - | -
+| - | - | -
 GET https://graph.microsoft.com/v1.0/sites/#site-id#/lists | docSiteId: string | "lists": [ { "@odata.type": "microsoft.graph.list" }]
 
 ### Get document from each list
@@ -158,14 +158,14 @@ GET https://graph.microsoft.com/v1.0/sites/#site-id#/lists | docSiteId: string |
 Returns the metadata for an item in a list.
 
 API | params | response  
-- | - | -
+| - | - | -
 GET https://graph.microsoft.com/v1.0/sites/#site-id#/lists/#list-id#/items/ | docSiteId: string, list.id: string, expand: fields(select) | "items": [ { "@odata.type": "microsoft.graph.baseItem" }]
 
 
 microsoft.graph.baseItem:
 
 Property name | Type | Description
-- | - | -
+| - | - | -
 id | string | The unique identifier of the item. Read-only.
 createdBy | identitySet | Identity of the creator of this item. Read-only.
 createdDateTime | DateTimeOffset | The date and time the item was created. Read-only.
@@ -178,7 +178,7 @@ webUrl | string (url) | URL that displays the item in the browser. Read-only.
 additional item:
 
 Property name | Type | Description | Value
-- | - | - | -
+| - | - | - | -
 pageUrl | string | URL that display item in browser | https://xxx.sharepoint.com/:w:/r/teams/#siteName#/_layouts/15/Doc.aspx?sourcedoc=%7B${item.eTag.slice(1, 37)}%7D&file=${encodeURI(item.fields.LinkFilename)}&action=default&mobileredirect=true
 
 

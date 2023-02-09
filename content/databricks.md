@@ -576,7 +576,7 @@ Cluster type:
 _踩坑：ADF 调用notebook 报错：Failure starting repl. Try detaching and re-attaching the notebook. 此类问题一般发生的原因为Driver node size不足/处于繁忙状态来不及处理请求。_
 
 1. 在ADF activity侧加上了自动重试功能。
-2. 建议对于生产job任务采用Job cluster，而不是all purpose cluster。 Job cluster有更好的资源隔离，即用即删，成本也更便宜。
+2. 建议对于生产job任务采用Job cluster，而不是all purpose cluster。 Job cluster有更好的资源隔离，即用即删，成本也更便宜。但是job cluster背后要足量ip，ip不足会导致job直接挂掉无法修复，一般是有1024网段的databricks采用。
 
 ---
 

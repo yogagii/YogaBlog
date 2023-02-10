@@ -41,15 +41,27 @@ Authentication type: System Assigned Managed Identy
 
 Authentication type: Service Principal
 
-URL: https://<accountname>.dfs.core.chinacloudapi.cn
+URL: https://[accountname].dfs.core.chinacloudapi.cn
 
-Tenant: <Tenant ID>
+Tenant: [Tenant ID]
 
-Service principal ID: <Client ID>
+Service principal ID: [Client ID]
 
 Service principal key: ###
 
-To file path: <container>
+To file path: [container]
+
+### 4.Sharepoint
+
+_踩坑：ADF不能连接跨 tenant 的 Sharepoint，Global 的 Sharepoint 和 IC 的 ADF 肯定不通_
+
+解决方式：
+
+1. 申请VM，在VM上安装Azure Storage Explorer, 用Filetransfer直接入湖
+2. 将手工数据放在S3，用ADF copydata 从S3入湖
+3. 将手动数据放在Sharepoint, 用ADF 调 Sharepoint API 入湖 (Graph API: Not Granted)
+
+Sharepoint API 见 https://yogagii.github.io/ms-graph-api.html
 
 ---
 
@@ -62,7 +74,7 @@ To file path: <container>
 
 Source: 
 * Linked service: DelimitedText
-* File Path: <bucketname>/RowZone/MANU 踩坑：多层路径写在一起，自己用/分开
+* File Path: [bucketname]/RowZone/MANU 踩坑：多层路径写在一起，自己用/分开
 * Recursively: 勾选的话当文件夹为空会报错
 
 Sink:
@@ -75,7 +87,7 @@ Sink:
 Source: 
 * Linked service: Parquet
 * File Path type: Wildcard file path
-(Wildcard paths: <container>/<filepath>/*.snappy.parquet)
+(Wildcard paths: [container]/[filepath]/*.snappy.parquet)
 * Recursively: true
 
 Sink:
@@ -109,9 +121,9 @@ Get Token
 ### >>> Lookup
 
 * Source dataset: Azure SQL Database
-* Dataset properties: SQLTableName = <Table_Name>
+* Dataset properties: SQLTableName = [Table_Name]
 * Use query: Query
-* Query: @concat('SELECT * FROM <Table_Name> where JobFlag=',pipeline().parameters.v_jobflag)
+* Query: @concat('SELECT * FROM [Table_Name] where JobFlag=',pipeline().parameters.v_jobflag)
 
 获取SQL Server系统表sysobjects
 
@@ -131,7 +143,7 @@ order by a.[name] asc
 提前在sql server创建好存储过程
 
 * Linked Service: Azure SQL Database
-* Stored procedure name: <Procedure_Name>
+* Stored procedure name: [Procedure_Name]
 * Stored procedure parameters
 
 ## Iteration & conditionals

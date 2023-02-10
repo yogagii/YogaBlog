@@ -251,7 +251,7 @@ CREATE OR REPLACE TABLE <SCHEMA>.<TABLENAME> DEEP CLONE <SCHEMA>.<TABLENAME>;
 
 __DML__
 
-* Insert Table: CSV/EXCEL
+* Insert Table: CSV/EXCEL (RAW -> STG)
 
 ```python
 %python
@@ -285,6 +285,31 @@ def insertTable(FileName, LandingTableName, TableColumn, ExcelTitle, SaveDay=30,
         else:
             spark.sql(f"insert into STG.TableWriteLog select '{LandingTableName}',current_date(),now(),null;");
     
+```
+
+* 增量
+
+```sql
+INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
+SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
+```
+
+* 容错性增量
+
+```sql
+DELETE FROM <CSTG_SCHEMA><TABLE> A WHERE EXISTS (SELECT key FROM <STG_SCHEMA><TABLE> B WHERE A.key=B.key and B.InsertTime>Current_Date());
+
+INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
+SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
+```
+
+* 全量
+
+```sql
+TRUNCATE TABLE <CSTG_SCHEMA><TABLE>;
+
+INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
+SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
 ```
 
 __OPTIMIZE__

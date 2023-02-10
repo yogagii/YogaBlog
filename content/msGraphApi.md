@@ -181,5 +181,52 @@ Property name | Type | Description | Value
 | - | - | - | -
 pageUrl | string | URL that display item in browser | https://xxx.sharepoint.com/:w:/r/teams/#siteName#/_layouts/15/Doc.aspx?sourcedoc=%7B${item.eTag.slice(1, 37)}%7D&file=${encodeURI(item.fields.LinkFilename)}&action=default&mobileredirect=true
 
+---
 
+## Sharepoint API
+
+Step1. 在 portal.azure.com 新建app (App registrations) 并生成client secret
+
+Step2. 在 teams 里 create a team, Apps -> Sharepoint -> Copy link
+
+Step3. Grant permission to your app go to https://[YourSharePointCollectionURL]/_layouts/15/appinv.aspx
+
+![sharepoint api](img/sharepointapi1.png)
+
+### Authentication Token
+
+__POST__ https://accounts.accesscontrol.windows.net/{{tenantId}}/tokens/OAuth/2/
+
+Headers: Content-Type = application/x-www-form-urlencoded
+
+Body:
+
+Key | Value
+| - | -
+client_id | {{clientId}}@{{tenantId}}
+resource | 00000003-0000-0ff1-ce00-000000000000/jnj.sharepoint.com@{{tenantId}}
+client_secret | {{secret_value}}
+grant_type | client_credentials
+
+### Get List by title
+
+__GET__ https://[YourSharePointCollectionURL]/_api/web/lists/GetByTitle('[list name]')/items
+
+Headers: Authorization = Bearer {{token}}
+
+### Get Files by folder
+
+__GET__ https://[YourSharePointCollectionURL]/_api/web/GetFolderByServerRelativeUrl('Shared Documents/General')/Files
+
+Headers: Authorization = Bearer {{token}}
+
+### Get List by title
+
+__GET__ https://[YourSharePointCollectionURL]/_api/web/GetFileByServerRelativeUrl('/teams/{{sitename}}/Shared Documents/General/{{filename}}')/$value
+
+Headers: Authorization = Bearer {{token}}
+
+https://www.c-sharpcorner.com/article/how-to-test-sharepoint-online-rest-apis-using-postman-tool/
+
+https://learn.microsoft.com/zh-cn/sharepoint/dev/sp-add-ins/complete-basic-operations-using-sharepoint-rest-endpoints
 

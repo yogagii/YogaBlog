@@ -20,6 +20,8 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
       transport: {
         host: 'mx.xxx.xxx.com', // 需要在服务器上申请防火墙
         port: 25,
+        ignoreTLS: true, // 踩坑：TLSSocket.SMTPConnection._onSocketTimeout
+        secure: false,
       },
       preview: true,
       defaults: {

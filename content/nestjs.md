@@ -321,6 +321,22 @@ handleTimeout() {
 }
 ```
 
+## 跨域
+
+```ts
+// main.ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    cors: process.env.ENABLE_CORS === 'true',
+  });
+  app.enableCors({
+    origin: ['http://localhost:3008'],
+  });
+  await app.listen(3007);
+}
+bootstrap();
+```
+
 ## Test 测试
 
 Nest 提供Jest和SuperTest开箱即用的集成。

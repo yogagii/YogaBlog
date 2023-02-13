@@ -52,6 +52,26 @@ return (
 )
 ```
 
+```js
+// service.js
+let timeout;
+function usingDebounce(func, delay) {
+  return new Promise((resolve, reject) => {
+    clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(this, arguments).then(res => {
+          resolve(res);
+        })
+      }, delay)
+   })
+}
+
+export async function fetchEventDetail() {
+  return usingDebounce(() => axios(`${process.env.REACT_APP_API}/mdm/eventDetail/${window.location.search.slice(4)}`), 500)
+  // return axios(`${process.env.REACT_APP_API}/mdm/eventDetail/${window.location.search.slice(4)}`);
+}
+```
+
 ## 函数节流
 
 > 节流：将多次执行变为每隔一段时间执行

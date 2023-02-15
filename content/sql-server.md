@@ -4,6 +4,26 @@ Category: Backend
 Tags: sql
 Author: Yoga
 
+### 系统表 sysobjects
+
+* 获取系统表 sysobjects: 在数据库内创建的每个对象（约束、默认值、日志、规则、存储过程等）在表中占一行。
+```sql
+select * from sys.objects 
+```
+
+* 获取表结构 syscolumns: 每个表和视图中的每列在表中占一行，存储过程中的每个参数在表中也占一行。
+
+```sql
+select * from sys.columns --- 用object_id过滤
+```
+* 获取存储过程: 
+
+```sql
+select a.name,a.[type],b.[definition] from sys.all_objects a,sys.sql_modules b
+where a.is_ms_shipped=0 and a.object_id = b.object_id and a.[type] in ('P','V','AF')
+order by a.[name] asc
+```
+
 ### 锁
 
 ```sql
@@ -102,4 +122,12 @@ select DATEADD(month,-24,CURRENT_DATE()) -- 2年前的今天
 
 ```sql
 select substring(string('02月'),1,2) -- substring 字符串截取
+```
+
+### 运算符
+
+<>不等于，不包含null的情况
+```sql
+-- ActivityStatus = 'Success' | 'Failed' | null
+select * from ActivityLogs where ActivityStatus <> 'Success' or ActivityStatus is null
 ```

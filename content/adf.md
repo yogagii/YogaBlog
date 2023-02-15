@@ -124,19 +124,11 @@ Get Token
 * Dataset properties: SQLTableName = [Table_Name]
 * Use query: Query
 * Query: @concat('SELECT * FROM [Table_Name] where JobFlag=',pipeline().parameters.v_jobflag)
-
-获取SQL Server系统表sysobjects
-
-sysobjects：在数据库内创建的每个对象（约束、默认值、日志、规则、存储过程等）在表中占一行。
-
-syscolumns：每个表和视图中的每列在表中占一行，存储过程中的每个参数在表中也占一行。
-
-* 获取系统表 Use query: select * from sys.objects 
-* 获取表结构 Use query: select * from sys.columns (用object_id过滤)
-* 获取存储过程 Use query: select a.name,a.[type],b.[definition] from sys.all_objects a,sys.sql_modules b
-where a.is_ms_shipped=0 and a.object_id = b.object_id and a.[type] in ('P','V','AF')
-order by a.[name] asc
 * First row only: False (默认勾选)
+
+当query中原本就有'时需要两个'
+
+@concat('select Batchrunid, ActivityCode=(stuff((select '','' + ActivityCode from ActivityLogs where Batchrunid=a.Batchrunid and ActivityStatus=''Failed'' for xml path('''') ),1,1,'''')) from ActivityLogs a WHERE a.BatchRunId=''',pipeline().parameters.BatchRunID,''' group by Batchrunid')
 
 ### >>> Stored procedure
 

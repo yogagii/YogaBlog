@@ -171,3 +171,16 @@ str1.encode(encoding='UTF-8',errors='strict') # 编码
 bytes.decode(encoding="utf-8", errors="strict") # 解码
 str1.expandtabs(tabsize=8) # tab 转空格 
 ```
+
+## Date 日期
+
+```python
+import datetime
+
+utc=datetime.datetime.utcnow() # UTC = datetime.datetime.today()
+utc8=datetime.datetime.today()+datetime.timedelta(hours=8) # UTC8 北京时间
+today=utc8.strftime("%Y-%m-%d") # 2023-02-16
+yesterday=utc8 - datetime.timedelta(days=1) # 昨天
+lastMonday=(utc8 - datetime.timedelta(days = utc8.weekday() + 7)).strftime("%Y-%m-%d") # 上周一
+begindate=datetime.datetime.strptime("2022-01-01","%Y-%m-%d") # 指定一天
+```

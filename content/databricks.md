@@ -238,6 +238,8 @@ CREATE TABLE IF NOT EXISTS example_schema.example_table
 (
  col1 STRING COMMENT 'col1_comment'
 )
+using delta
+PARTITIONED BY (insertDate)
 ```
 
 * 克隆TABLE

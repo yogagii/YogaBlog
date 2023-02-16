@@ -208,6 +208,22 @@ resource | 00000003-0000-0ff1-ce00-000000000000/jnj.sharepoint.com@{{tenantId}}
 client_secret | {{secret_value}}
 grant_type | client_credentials
 
+```python
+import requests, json
+
+token_url = 'https://accounts.accesscontrol.windows.net/%s/tokens/OAuth/2/'%(tenantId)
+
+auth_config={
+    'grant_type': 'client_credentials',
+    'client_id': '%s@%s'%(clientId, tenantId),
+    'client_secret': clientSecret,
+    'resource': '00000003-0000-0ff1-ce00-000000000000/xxx.sharepoint.com@%s'%(tenantId)
+}
+
+res = requests.post(url=token_url, data=auth_config)
+token = json.loads(res.text)['access_token']
+```
+
 ### Get List by title
 
 __GET__ https://[YourSharePointCollectionURL]/_api/web/lists/GetByTitle('[list name]')/items
@@ -225,6 +241,34 @@ Headers: Authorization = Bearer {{token}}
 __GET__ https://[YourSharePointCollectionURL]/_api/web/GetFileByServerRelativeUrl('/teams/{{sitename}}/Shared Documents/General/{{filename}}')/$value
 
 Headers: Authorization = Bearer {{token}}
+
+### Create File
+
+__POST__ https://[YourSharePointCollectionURL]/_api/web/GetFolderByServerRelativeUrl('/teams/{{sitename}}/Shared Documents/General')/Files/Add(url='[FileName]', overwrite=true)
+
+Headers: Authorization = Bearer {{token}}
+
+Body: binary
+
+```python
+from io import BytesIO
+import csv
+from requests.structures import CaseInsensitiveDict
+
+sourcedf = spark.sql(f"select * from <TableName>");
+
+csv_buffer = BytesIO()
+data = sourcedf.toPandas()
+data.to_csv(csv_buffer, index = False, encoding = "utf_8_sig")
+content = csv_buffer.getvalue()
+
+send_url = "https://[YourSharePointCollectionURL]/_api/web/GetFolderByServerRelativeUrl('/teams/{{sitename}}/Shared Documents/General')/Files/Add(url='[FileName]', overwrite=true)"
+
+headers = CaseInsensitiveDict()
+headers["Authorization"] = 'Bearer %s'%(token)
+
+res = requests.post(url=send_url, headers=headers, data=content)
+```
 
 https://www.c-sharpcorner.com/article/how-to-test-sharepoint-online-rest-apis-using-postman-tool/
 

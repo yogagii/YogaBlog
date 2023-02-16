@@ -49,7 +49,9 @@ Service principal ID: [Client ID]
 
 Service principal key: ###
 
-To file path: [container]
+Azure cloud type: Azure China 踩坑：选Data Factory's cloud type会导致删文件失败
+
+Test connection: To file path: [container] SP如果只到container的权限to linked services是不通的
 
 ### 4.Sharepoint
 
@@ -108,6 +110,24 @@ Source:
 * Dataset properties: v_url = concat(variables('v_url'), item(), concat('?agentId=',pipeline().parameters.v_agentId,'&agentName=',pipeline().parameters.v_agentName),'&stockDate=',formatDateTime(adddays(addhours(utcnow(),8),-1),'yyyy-MM-dd'))
 
 _踩坑：默认UTC时间，需addhours(utcnow(),8)转成北京时间_
+
+### HTTP -> Azure Data Lake Storage
+
+用 HTTP 调取 Sharepoint 接口，将sharepoint文件入湖
+
+Source:
+* Linked Service: HTTP
+* format: Binary
+* Base URL: @{concat('https://xxx.sharepoint.com/teams/XXXTeam/_api/web/GetFileByServerRelativeUrl(''/teams/XXXTeam/Shared Documents/General/',linkedService().filename,''')/$value')
+}
+* Request method: GET
+* Additional headers: Authorization: @{concat('Bearer ', activity('getToken').output.access_token)}
+
+Sink:
+* Linked Service: Azure Data Lake Storage Gen2
+* format: Binary
+
+用Binary可以保留原始文件格式，亲测csv，excel，pdf，png均能成功
 
 ## General
 

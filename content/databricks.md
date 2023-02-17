@@ -55,6 +55,11 @@ df = spark.read \
   .load("abfss://container@blob.xxx.cn/folder/filename_*.txt") \
   .select("*", "_metadata")
 display(df)
+
+df.createOrReplaceTempView("df_spark")
+df1=spark.sql(f"select distinct _metadata.file_name as filename from (select * from df_spark order by _metadata) a")
+for i in range(0,30):
+    filename=str(df1.collect()[i][0])
 ```
 
 * os
@@ -314,23 +319,6 @@ INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
 SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
 ```
 
-__OPTIMIZE__
-
-优化 Delta Lake 数据的布局，优化数据子集或按列归置数据。
-
-```sql
-OPTIMIZE table_name [WHERE predicate]
-  [ZORDER BY (col_name1 [, ...] ) ]
-```
-
-启用自动优化
-
-```sql
--- 所有新表
-set spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite = true;
-set spark.databricks.delta.properties.defaults.autoOptimize.autoCompact = true;
-```
-
 * Insert Table: TXT
 
 法一：
@@ -365,6 +353,23 @@ def insertTxT_Pandas(FileName, LandingTableName, TableColumn,RenameColumn,header
     df_DateLake.createOrReplaceTempView("df_spark");
     columns = delInsertTime(TableColumn);
     spark.sql(f"insert into {LandingTableName}({TableColumn}) select {columns}, now() InsertTime from df_spark;");
+```
+
+__OPTIMIZE__
+
+优化 Delta Lake 数据的布局，优化数据子集或按列归置数据。
+
+```sql
+OPTIMIZE table_name [WHERE predicate]
+  [ZORDER BY (col_name1 [, ...] ) ]
+```
+
+启用自动优化
+
+```sql
+-- 所有新表
+set spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite = true;
+set spark.databricks.delta.properties.defaults.autoOptimize.autoCompact = true;
 ```
 
 ## SQL
@@ -419,6 +424,27 @@ Enable range join using a range join hint
 SELECT /*+ RANGE_JOIN(ranges, 10) */ *
 FROM points JOIN ranges ON points.p >= ranges.start AND points.p < ranges.end;
 ```
+
+* INFORMATION_SCHEMA 
+
+The INFORMATION_SCHEMA is a SQL standard based schema, provided in every catalog created on Unity Catalog.
+
+Table | Desc
+| - | -
+CATALOGS | Describes catalogs.
+TABLES | Describes tables and views defined within the catalog.
+COLUMNS | Describes columns of tables and views in the catalog.
+
+
+https://learn.microsoft.com/en-us/azure/databricks/sql/language-manual/sql-ref-information-schema
+
+```sql
+SELECT table_owner FROM information_schema.tables WHERE table_schema = 'information_schema' AND table_name = 'columns';
+
+SELECT ordinal_position, column_name, data_type FROM information_schema.tables
+```
+
+_踩坑: AnalysisException: [UC_NOT_ENABLED] Unity Catalog is not enabled on this cluster._
 
 ## Data Lake Storage Gen2
 

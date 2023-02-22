@@ -57,7 +57,13 @@ select * from Student where Sno = @Proc_Son
 exec Proc_Stu
 ```
 
-### STUFF 字符串合并
+### for xml path 多行合并
+
+将查询结果集以XML形式展现，将多行的结果，展示在同一行。PATH模式：通过简单的XPath语法来允许用户自定义嵌套的XML结构、元素、属性值。
+
+```sql
+select ','+name from <table> FOR xml path('') 
+```
 
 SQL SERVER 分组group by之后，字符串合并在一起，逗号隔开
 
@@ -119,15 +125,37 @@ select DATEADD(month,-24,CURRENT_DATE()) -- 2年前的今天
 ```
 
 ### 字符串操作
+* substring 字符串截取
+```sql
+select substring(string('02月'),1,2) -- 02
+```
+
+* STUFF (source_string, start, length, change_string) 字符串替换
 
 ```sql
-select substring(string('02月'),1,2) -- substring 字符串截取
+select stuff('02月',1,1,'') -- 2月
+```
+
+* concat 字符串拼接, 忽略NULL
+```sql
+select concat(NUll, 'HaHa') -- 'HaHa'
+select NULL+'HaHa' -- NULL
+```
+* CONCAT_WS(separator,input_string1,input_string2) 用分隔符拼接多个字符串, 忽略NULL
+```sql
+select concat(',', 'A', NUll, 'B') -- 'A,B'
+select concat_ws(',',collect_set(filename)) totalname from <table>
 ```
 
 ### 运算符
 
-<>不等于，不包含null的情况
+* <>不等于，不包含null的情况
 ```sql
 -- ActivityStatus = 'Success' | 'Failed' | null
 select * from ActivityLogs where ActivityStatus <> 'Success' or ActivityStatus is null
+```
+
+* ISNULL(p1, p2) p1为null返回p2，否则返回p1
+```sql
+select isnull(TableName,'')+Remark -- 解决其中一个字段为空的情况，等效于concat
 ```

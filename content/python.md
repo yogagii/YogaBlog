@@ -184,3 +184,37 @@ yesterday=utc8 - datetime.timedelta(days=1) # 昨天
 lastMonday=(utc8 - datetime.timedelta(days = utc8.weekday() + 7)).strftime("%Y-%m-%d") # 上周一
 begindate=datetime.datetime.strptime("2022-01-01","%Y-%m-%d") # 指定一天
 ```
+
+## 循环
+
+* For
+
+for 循环可以遍历任何可迭代对象，如一个列表或者一个字符串
+
+for [variable] in [sequence]:
+    (statements)
+else:
+    (statements)
+
+```python
+for x in range(6):
+  print(x) # 0 1 2 3 4 5
+  if x == 3:
+    break
+else:
+  print("Finished!")
+```
+
+* While
+
+while 判断条件(condition)：
+    执行语句(statements)
+
+```python
+a = 1
+while a < 10:
+  print(a)
+  a += 2
+else:
+  print ("a >= 10")
+```

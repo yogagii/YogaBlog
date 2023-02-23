@@ -166,6 +166,10 @@ Get Token
 
 * Items: @activity('LookupConfigTable').output.value
 
+_踩坑：ForEach 中调用 notebook 报错：java.lang.Exception: Unable to start python kernel for ReplId-6ab47-72d45-cb368-d, kernel exited with exit code 1. Another app is currently holding the xtables lock. Perhaps you want to use the -w option?_
+
+* Sequential: 勾选后顺序执行
+
 ## Databricks
 
 ### >>> Notebook

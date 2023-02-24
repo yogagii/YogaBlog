@@ -57,6 +57,17 @@ select * from Student where Sno = @Proc_Son
 exec Proc_Stu
 ```
 
+### 局部变量
+
+* 全局变量是由系统定义的，在整个SQL Server实例内都能访问到的变量，以@@作为第一个字符，用户只能访问，不可以赋值
+* *局部变量由用户定义，生命周期只在一个批处理有效，局部变量以@作为第一个字符，由用户自己定义和赋值
+
+```sql
+DECLARE @i NVARCHAR(20)
+SET @i=1
+PRINT @i
+```
+
 ### for xml path 多行合并
 
 将查询结果集以XML形式展现，将多行的结果，展示在同一行。PATH模式：通过简单的XPath语法来允许用户自定义嵌套的XML结构、元素、属性值。
@@ -116,12 +127,29 @@ FROM
 
 ### date 日期
 
+* current_date
+* current_timestamp
+* now
+
+```sql
+select current_date(); -- 2023-02-24
+select current_timestamp(); -- 2023-02-24T06:43:26.124+0000
+select now(); -- 2023-02-24T06:43:37.100+0000
+```
+
+* dateadd
+```sql
+select current_date()-weekday(current_date())-7; -- 上周一
+select year(current_date())*100+month(current_date()); -- 202302
+
+select DATEADD(month,-24,CURRENT_DATE()) -- 2年前的今天
+```
+
+* date_format
 ```sql
 --- utc +8小时
 select date_format(dateadd(hour,8,current_timestamp()),'y') -- 2023
 select date_format(dateadd(hour,8,current_timestamp()),'yMM') -- 202302
-
-select DATEADD(month,-24,CURRENT_DATE()) -- 2年前的今天
 ```
 
 ### 字符串操作
@@ -158,4 +186,9 @@ select * from ActivityLogs where ActivityStatus <> 'Success' or ActivityStatus i
 * ISNULL(p1, p2) p1为null返回p2，否则返回p1
 ```sql
 select isnull(TableName,'')+Remark -- 解决其中一个字段为空的情况，等效于concat
+```
+
+* IN (一般比OR操作符清单执行更快)
+```sql
+select * from <TABLE> where id in (1001, 1002); -- id=1001 or id=1002
 ```

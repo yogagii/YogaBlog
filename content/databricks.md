@@ -374,6 +374,14 @@ set spark.databricks.delta.properties.defaults.autoOptimize.autoCompact = true;
 
 ## SQL
 
+* 自定义变量
+```sql
+SET delDate=current_date();
+set tableList = ('TABLE1', 'TABLE2');
+
+delete from <TABLE> where insertDate=${hiveconf:delDate} and tablename in ${hiveconf:tableList};
+```
+
 * 自定义函数
 ```sql
 CREATE OR REPLACE FUNCTION ToDouble(value STRING) RETURNS DOUBLE RETURN double(replace(replace(replace(replace(trim(value),'-',''),'"',''),',',''),'/',''))

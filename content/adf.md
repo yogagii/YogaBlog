@@ -187,16 +187,15 @@ _踩坑：ADF 调用notebook 报错：java.lang.Exception: Unable to start pytho
 1. 多个grandpa错开时间执行
 2. 在ForEach 上Settings里勾选 Sequential 顺序执行，不并发
 3. 调用 Notebook 时加上retry次数，Notebook 里需加上delete语句防止数据重复
-4. Notebook 增加配置（未验证）
+4. Notebook 执行IPTABLES配置（未验证）
 
 ```python
 %sh
 IPTABLES="/sbin/iptables"
 IPTABLES_WAIT="-w 20"
 ```
-```sql
-set mapreduce.fileoutputcommitter.marksuccessfuljobs=false
-```
+
+5. 微软建议：Cluster增加配置 "spark.databricks.python.defaultPythonRepl pythonshell" 
 
 ---
 

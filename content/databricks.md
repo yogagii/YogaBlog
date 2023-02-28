@@ -372,6 +372,14 @@ set spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite = true
 set spark.databricks.delta.properties.defaults.autoOptimize.autoCompact = true;
 ```
 
+## Delta Live Table 增量实时表
+
+```sql
+CREATE OR REFRESH STREAMING LIVE TABLE customers_silver
+AS SELECT * FROM STREAM(LIVE.customers_bronze)
+```
+当为管道触发更新时，流式处理表或视图仅处理自上次更新以来到达的新数据。 增量实时表运行时会自动跟踪已处理的数据。
+
 ## SQL
 
 * 自定义变量
@@ -638,6 +646,18 @@ _踩坑：ADF 调用notebook 报错：Failure starting repl. Try detaching and r
 
 1. 在ADF activity侧加上了自动重试 retry 次数。（当cmd1成功，cmd2失败，重生会导致cmd1反复执行，所以 DML 增量数据若要加retry 需要先 delete 插入数据，全量数据truncate不回重复）
 2. 建议对于生产job任务采用Job cluster，而不是all purpose cluster。 Job cluster有更好的资源隔离，即用即删，成本也更便宜。但是job cluster背后要足量ip，ip不足会导致job直接挂掉无法修复，一般是有1024网段的databricks采用。
+
+_踩坑：IpykernelUtils are causing the conflict and holding the python process. It is since 11.3 which has introduced Ipykernel shells_
+
+在cluster添加如下spark configuration：
+"spark.databricks.python.defaultPythonRepl pythonshell"
+
+_踩坑：Caused by: org.apache.hadoop.fs.PathIOException: `/[schemaName]/[tableName]/\_SUCCESS': Input/output error: Parallel access to the create path detected. Failing request to honor single writer semantics_
+
+限制Spark往HDFS写出数据时生成_SUCCESS文件 （未验证）
+```sql
+set mapreduce.fileoutputcommitter.marksuccessfuljobs=false
+```
 
 ---
 

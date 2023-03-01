@@ -56,6 +56,14 @@ and sharing internally & externally.
 
 ## Azure Blob Storage
 
+Azure Blob Storage 是 Microsoft 提供的适用于云的对象存储解决方案。 Blob 存储最适合存储巨量的非结构化数据。
+
+Azure Data Lake Storage Gen2 在 Blob 存储的基础上构建，提供了分层文件系统以及 Blob 存储的优势，并通过以下方式增强了性能、管理和安全性：
+
+* 分层命名空间极大地提高了目录管理操作的性能，从而提高了整体作业性能。
+* 管理更为容易，可以通过目录和子目录来组织和操作文件。
+* 可以在目录或单个文件上定义 POSIX 权限。
+
 Azure storage offers different access tiers:
 
 * Hot tier: 适用于存储经常访问或修改的数据的联机层。存储成本最高，但访问成本最低。

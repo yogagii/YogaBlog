@@ -189,6 +189,10 @@ Delta Lake 特性：
 ```sql
 DESCRIBE DETAIL eventsTable
 ```
+返回对表的每次写入的出处信息，包括操作、用户等。 表历史记录会保留 30 天。即使parquet文件被vacuum，历史也会保留。
+```sql
+DESCRIBE HISTORY eventsTable
+```
 
 delta表的schema中，字段名的小写不能相同，delta lake区分大小写，但保存时不敏感，而parquet保存时是大小写敏感的
 
@@ -199,6 +203,13 @@ delta表是一个目录，表的根目录除了表数据外，有一个_delta_lo
 truncate table不会释放存储空间：Delta Lake 删除操作后，旧数据文件不会被完全删除，仍保留在磁盘上，但在 Delta Lake 事务日志中记录为“tombstoned”（不再是活动表的一部分）。可以通过time travel回到表的早期版本，如果要删除超过某个时间段的文件，可以使用 VACUUM 以递归方式清空与 Spark 表关联的目录，并删除超过保留期阈值的未提交文件。 默认阈值为 7 天。
 
 ```sql
+select * from table_name VERSION AS OF 100
+-- 回滚
+RESTORE [ TABLE ] table_name [ TO ] time_travel_version
+```
+
+```sql
+-- 清理
 VACUUM table_name [RETAIN num HOURS] [DRY RUN]
 ```
 
@@ -228,6 +239,9 @@ create table STG.TableName
 USING delta 
 LOCATION "abfss://container@blob.xxx.cn/folder/STG/TableName";
 ```
+如果省略 USING，则默认值为 DELTA。
+
+对于除 DELTA 之外的任何 data_source，还必须指定 LOCATION，除非catalog为 hive_metastore。
 
 设置湖地址
 ```sql
@@ -796,3 +810,27 @@ df.count()
 df.collect()
 df.show()
 ```
+
+---
+
+## Diagnostic setting
+
+Azure portal -> Databricks -> Monitoring -> Diagnostic settings
+
+workspace的监控日志，比如谁生成/删除一个token
+
+
+## Unity Catalog 数据治理组件
+
+功能：
+* 治理所有数据资产：数仓，库表，数据湖，文件，机器学习模型，dashboard, notebook
+* 数据血缘
+* 安全策略
+* ABAC权限管理，表级、列级权限控制（WIP）
+* 数据审计，数据共享
+
+Hierarchy of primary data objects flows 主要数据对象的层次结构:
+* Metastore 元存储：元数据的顶级容器，用于管理对数据资产的访问的权限，用户可以查看分配了USAGE数据权限的所有目录。
+* Catalog 目录
+* Schema 架构/数据库
+* Table 表/视图

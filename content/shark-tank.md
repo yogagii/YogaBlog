@@ -227,10 +227,20 @@ const output_addr = process.cwd() + '/wav/tschina.wav';
 await transcodeMediaFile(video_addr, output_addr, 'wav')
 ```
 
+```bash
+ffmpeg -i input.mp4 output.avi
+```
+
 3.ffmpeg-extract-frames
 
 npm i ffmpeg-extract-frames-quality
 
+返回关键帧时间点
+```bash
+ffmpeg -i ./video/dm.mp4 -filter:v "select='gt(scene,0.1)',showinfo" -f null - 2>&1
+```
+
+返回截图
 ```js
 await extractFrames({
   input: video_addr,
@@ -238,8 +248,6 @@ await extractFrames({
   offsets: [1000, 2000, 650000],
 });
 ```
-
-ffmpeg -i ./video/dm.mp4 -filter:v "select='gt(scene,0.1)',showinfo" -f null - 2>&1
 
 ## OCR
 

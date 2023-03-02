@@ -663,6 +663,8 @@ _踩坑：ADF 调用notebook 报错：Failure starting repl. Try detaching and r
 
 _踩坑：IpykernelUtils are causing the conflict and holding the python process. It is since 11.3 which has introduced Ipykernel shells_
 
+当存在在一个interactive cluster上同时跑多个并行notebooks的情况，IpykernelUtils 会引起冲突并且holding python process, 进而出现无法启动python kernel的错误。
+
 在cluster添加如下spark configuration：
 "spark.databricks.python.defaultPythonRepl pythonshell"
 

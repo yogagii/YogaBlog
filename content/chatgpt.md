@@ -5,13 +5,13 @@ Tags: ML
 Author: Yoga
 
 
-版本 | 发布时间 | 训练方案 | 参数量 | 是否开放接口
+版本 | 发布时间 | 训练方案 | 参数量 | 模型
 | - | - | - | - | - |
-GPT(GPT-1) | 2018 年 6 月 | 无监督学习 | 1.17 亿 | 是
-GPT-2 | 2019 年 2 月 | 多任务学习 | 15 亿 | 是
-GPT-3 | 2020 年 5 月 | 海量参数 | 1,750 亿 | 是
-ChatGPT(GPT-3.5) | 2022 年 12 月 | 针对对话场景优化 | 1,750 亿 | 否
-GPT-4 | 未发布 | 万亿参数 | 100万亿 | 否
+GPT(GPT-1) | 2018 年 6 月 | 无监督学习 | 1.17 亿 |
+GPT-2 | 2019 年 2 月 | 多任务学习 | 15 亿 |
+GPT-3 | 2020 年 5 月 | 海量参数 | 1,750 亿 | text-curie-001, text-babbage-001, text-ada-001, davinci
+ChatGPT(GPT-3.5) | 2022 年 12 月 | 针对对话场景优化 | 1,750 亿 | text-davinci-003, text-davinci-002, gpt-3.5-turbo
+GPT-4 | 未发布 | 万亿参数 | 100万亿 |
 
 https://blog.csdn.net/hekaiyou/article/details/128303729
 
@@ -104,3 +104,31 @@ text-ada-001 | $0.0004 | $0.0004 | $0.0016
 _基本模型费用 =(prompt+completition) *$0.02_
 
 _训练模型费用 =训练数据量*$0.03 + prompt*$0.12_
+
+### Speech to text
+
+Whisper is a general-purpose speech recognition model. The Whisper v2-large model is currently available through API with the whisper-1 model name.
+
+* Transcription
+```python
+import openai
+audio_file= open("/path/to/file/audio.mp3", "rb")
+transcript = openai.Audio.transcribe("whisper-1", audio_file)
+```
+限制： 25 MB，mp3, mp4, mpeg, mpga, m4a, wav, and webm.
+
+* Translation
+```python
+transcript = openai.Audio.translate("whisper-1", audio_file)
+```
+只支持翻译成英语
+
+https://platform.openai.com/docs/guides/speech-to-text
+
+```bash
+pip install -U openai-whisper
+
+whisper japanese.wav --language Japanese
+```
+
+https://github.com/openai/whisper#available-models-and-languages

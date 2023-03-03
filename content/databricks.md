@@ -212,8 +212,14 @@ RESTORE [ TABLE ] table_name [ TO ] time_travel_version
 -- 清理
 VACUUM table_name [RETAIN num HOURS] [DRY RUN]
 ```
+Vacuum 后可在 Storage Explorer 对应表的文件夹下 Folder Statictis 看到 Active blob明显减少，但是当 Storage Account 启用了软删除 Data protection -> Enable soft delete for blobs / containers 时，Total 数量不会减少，在软删除有效期内删除的文件可以在portal上看到并还原，有效期过后会永久删除
 
-缺点：
+Delta lake 优点：
+* 实时查询，支持ACID功能，保证了数据流入和查询的隔离性，不会产生脏数据。
+* Delta支持数据的删除或更新，数据实时同步 CDC：使用Delta merge功能，启动流作业，实时将上游的数据通过merge更新到Delta Lake中。
+* 数据质量控制：借助于Delta Schema校验功能，在数据导入时剔除异常数据，或者对异常数据做进一步处理。
+
+Delta lake 缺点：
 * 更新操作很重，更新一条数据和更新一批数据的成本可能是一样的，所以不适合一条条的更新数据
 * 更新数据的方式是新增文件，会造成文件数量过多，需要清理历史版本的数据
 * 乐观锁的并发能力较差，更适合写少读多的场景

@@ -19,12 +19,14 @@ https://blog.csdn.net/hekaiyou/article/details/128303729
 
 https://platform.openai.com/docs/api-reference/models
 
-基础模型 | Desc
-| - | - 
-text-davinci-003 | Most capable GPT-3 model. Most powerful
-text-curie-001 | Very capable, but faster and lower cost than Davinci.
-text-babbage-001 | Capable of straightforward tasks, very fast, and lower cost.
-text-ada-001 | The fastest model in the GPT-3 series, and lowest cost.
+基础模型 | Desc | Use cases
+| - | - | -
+davinci 达芬奇 | Most capable GPT-3 model. Most powerful | 文本摘要
+curie 居里 | Very capable, but faster and lower cost than Davinci. | 翻译，分类，文本情感分类
+babbage 巴贝奇 | Capable of straightforward tasks, very fast, and lower cost. | 语义搜索semantic search
+ada | The fastest model in the GPT-3 series, and lowest cost. | 分类，地址提取，关键词
+
+从上往下：模型越小，能力越差，价钱越低，响应速度越快
 
 ```python
 def chat(prompt):
@@ -132,3 +134,56 @@ whisper japanese.wav --language Japanese
 ```
 
 https://github.com/openai/whisper#available-models-and-languages
+
+---
+
+## Azure OpenAI
+
+### 使用场景
+* Content Generation
+    * Automatically generate responses to customer inquries
+    * Generate personalised UI for your website
+* Sumarization
+    * Summary of customer support conversation logs
+    * Subject Matter Exper Document Summarization (financial reporting / analyst articles)
+    * Social Media trends summarization
+* Code generation
+    * Convert natural language to SQL for telemetry data
+    * Convert natural languate to Query proprietary data models
+    * code documentation
+* Semantic Search
+    * Search reviews for a specific product / service
+    * information discovery and knowledge mining
+
+\ | OpenAI | Azure OpenAI
+| - | - | -
+版本 | GPT3.5 | GPT3.0 (DALL·E preview / ChatGPT comming soon)
+Rate limit | TPM (tokens per minute) API调用限制，对企业级大用户量，一分钟头几秒用完TPM，后面几秒无TPM可用 | 
+Data safety | customer-to-OpenAI requests and responses are encrypted | 符合企业安全性 合规性
+
+### Document Process Automation:
+
+Documents (PDF) -> Azure Form Recognizer -> Azure Cognitive Search -> Azure OpenAI Service -> Cosmos DB -> Web Application / PowerBI
+
+### Contact Center Analytics
+
+Telephony Server -> Azure Storage (Audio Files) -> Speech-to-Text -> Azure OpenAI Service -> PowerBI Insights (conversion trends& insights) / CRM (detailed call history incl. summaries, call reasons)
+
+### OpenAI Fine-tuning
+
+Azure OpenAI Studio -> Create customized model -> Upload training data -> Import validation data
+
+不是数据集越多越好，训练越多反而影响了原本模型效果
+
+对于企业内部应用：
+通过 Hyperparams: Top base prompt 最高指示：拒绝回答无关问题
+
+---
+
+## DALL·E 2 图像生成
+
+* Generate an infinite number of images with simple text prompts
+* Accelerate designs or inspire creative decision
+* Build capability into enterprise applications through APls and SDKs
+
+Microsoft Designer: https://designer.microsoft.com

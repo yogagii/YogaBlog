@@ -46,7 +46,7 @@ dbutils.fs.rm("abfss://container@blob.xxx.cn/folder/filename", True)
 dbutils.fs.mkdirs(TempPath)
 dbutils.fs.cp(SapPath+FileName, TempPath)
 ```
-踩坑：若要跟新表结构，需将存表的文件夹删除
+_踩坑：若要跟新表结构，需将存表的文件夹删除_
 
 * 获取文件名
 ```python
@@ -61,6 +61,7 @@ df1=spark.sql(f"select distinct _metadata.file_name as filename from (select * f
 for i in range(0,30):
     filename=str(df1.collect()[i][0])
 ```
+_踩坑：xlsx文件也只能用 .format('csv') 不能 .format("com.crealytics.spark.excel")_
 
 * os
 ```python
@@ -319,6 +320,15 @@ def insertTable(FileName, LandingTableName, TableColumn, ExcelTitle, SaveDay=30,
 ```sql
 INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
 SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
+```
+
+```sql
+merge into <CSTG_SCHEMA><TABLE> a
+using <STG_SCHEMA>.<TABLE> b
+    on a.id=b.id and a.insertDate=b.insertDate -- 同一天内数据更新不会覆盖
+when not matched then insert 
+(<columns>,insertDate)
+values(<columns>)
 ```
 
 * 容错性增量

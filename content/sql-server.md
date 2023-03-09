@@ -175,6 +175,11 @@ select concat(',', 'A', NUll, 'B') -- 'A,B'
 select concat_ws(',',collect_set(filename)) totalname from <table>
 ```
 
+* TRIM 删除前后空格
+```sql
+select TRIM(' A ') -- 'A'
+```
+
 ### 运算符
 
 * <>不等于，不包含null的情况

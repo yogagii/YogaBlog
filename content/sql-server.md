@@ -197,3 +197,25 @@ select isnull(TableName,'')+Remark -- 解决其中一个字段为空的情况，
 ```sql
 select * from <TABLE> where id in (1001, 1002); -- id=1001 or id=1002
 ```
+
+### 集合操作
+
+* UNION (DISTINCT)：并集 (去重 大小写敏感)
+* UNION ALL：并集
+
+query1 UNION (ALL) query2
+```sql
+select 'a' A union select 'a' A -- a
+select 'a' A union select 'b' A -- a, b
+
+select 'a' A union all select 'a' A -- a, a
+```
+
+* INTERSECT (DISTINCT)：交集 (去重 大小写敏感)
+* INTERSECT ALL：交集
+
+query1 INTERSECT query2
+```sql
+select 'a' A intersect select 'a' A -- a
+select 'a' A intersect select 'b' A -- null
+```

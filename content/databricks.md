@@ -785,8 +785,24 @@ spark.table("exam").select("id", "result").where("result > 70").orderBy("result"
 SparkSQL中的三种Join:
 
 * Broadcast Join 小表对大表
+
+将小表的数据分发到每个节点上，供大表使用。executor存储小表的全部数据，牺牲空间，换取shuffle操作大量的耗时。
+
+被广播的表首先被collect到driver段，然后被冗余分发到每个executor上，所以当表比较大时，采用broadcast join会对driver端和executor端造成较大的压力。
+
+基表不能被广播，比如 left outer join 时，只能广播右表
+
 * Shuffle Hash Join
+
+利用key相同必然分区相同的这个原理，先对两张表分别按照join keys进行重分区（shuffle），再对两个表中相对应分区的数据分别进行Hash Join（先将小表分区构造为一张hash表，然后根据大表分区中记录的join keys值拿出来进行匹配）
+
+分区的平均大小不超过spark.sql.autoBroadcastJoinThreshold所配置的值，默认是10M
+
 * Sort Merge Join 大表对大表
+
+将两张表按照join keys进行了重新shuffle，保证join keys值相同的记录会被分在相应的分区。分区后对每个分区内的数据进行排序，排序后再对相应的分区内的记录进行连接
+
+https://blog.csdn.net/hellojoy/article/details/113665938
 
 踩坑：There is not enough memory to build the hash map
 

@@ -87,7 +87,13 @@ WHERE a.ActivityStatus='Failed' and a.BatchRunId='pipeline().parameters.BatchRun
 group by Batchrunid
 ```
 
-### MIN 字符串排序
+### 聚合函数
+
+* SUM
+* COUNT
+* AVG
+* MAX
+* MIN 字符串排序
 
 ```sql
 WITH ListPrice AS (
@@ -218,4 +224,14 @@ query1 INTERSECT query2
 ```sql
 select 'a' A intersect select 'a' A -- a
 select 'a' A intersect select 'b' A -- null
+```
+
+### WHERE VS HAVING
+
+* Where 是一个约束声明，使用Where来约束来之数据库的数据，Where是在结果返回之前起作用的，作用在group by子句和having子句之前，Where中不能使用聚合函数。
+* Having 是一个过滤声明，是在查询返回结果集以后对查询结果进行的过滤操作，在聚合后对组记录进行筛选，在Having中可以使用聚合函数。
+
+查找重复行
+```sql
+select COUNT(*) as RepNum, MaterialCode from <TABLE> group by MaterialCode Having COUNT(*)>1;
 ```

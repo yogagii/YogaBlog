@@ -342,11 +342,20 @@ SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date(
 
 * 全量
 
-```sql
-TRUNCATE TABLE <CSTG_SCHEMA><TABLE>;
+_有 InsertTime>CurrentDate 时需要判断 IsUpdate_
+```python
+IsUpdate=spark.sql('select count(1) Num from <STG_SCHEMA>.<TABLE> where InsertTime>=current_date()');
+if IsUpdate.collect()[0][0] > 0:
+    spark.sql(f'TRUNCATE TABLE <CSTG_SCHEMA><TABLE>;')
+    spark.sql(f'INSERT INTO <CSTG_SCHEMA><TABLE> ({columns},InsertTime) SELECT {columns}, now() FROM <STG_SCHEMA>.<TABLE> where InsertTime>Current_Date();')
+```
 
-INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
-SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
+_没有 InsertTime>CurrentDate 不需要 IsUpdate_
+```sql
+TRUNCATE TABLE <DWD_SCHEMA><TABLE>;
+
+INSERT INTO <DWD_SCHEMA><TABLE> (<columns>)
+SELECT <columns> FROM <CSTG_SCHEMA>.<TABLE>;
 ```
 
 * Insert Table: TXT

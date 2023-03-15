@@ -172,6 +172,15 @@ bytes.decode(encoding="utf-8", errors="strict") # 解码
 str1.expandtabs(tabsize=8) # tab 转空格 
 ```
 
+* 正则
+
+```python
+import re
+
+if (re.match('Actual_sales_2[01][0-9][0-9][0-9][0-9].xlsx', 'Actual_sales_202303.xlsx')):
+  print('File exist')
+```
+
 ## Date 日期
 
 ```python

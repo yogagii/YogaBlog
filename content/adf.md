@@ -103,6 +103,8 @@ _踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.C
 
 加上 *.snappy.parquet 而不是 *.parquet，_delta_log/里包含checkpoint.parquet files
 
+_踩坑：若原表是 delta table，数据源用 parquet 会导致数据中留下全部历史数据，link service 需选 AzureDatebricksDeltaLake_
+
 ### Rest Resource -> 
 
 Source:

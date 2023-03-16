@@ -227,3 +227,22 @@ while a < 10:
 else:
   print ("a >= 10")
 ```
+
+## 异常处理
+
+* 异常捕获
+
+```python
+try:
+  ...
+except Exception as FailReaon:
+  print(str(FailReaon))
+  ...
+else:
+  ...
+```
+
+* 抛出异常
+```python
+raise Exception('Error message');
+```

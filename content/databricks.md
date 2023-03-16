@@ -225,7 +225,32 @@ Delta lake 缺点：
 * 更新数据的方式是新增文件，会造成文件数量过多，需要清理历史版本的数据
 * 乐观锁的并发能力较差，更适合写少读多的场景
 
-_踩坑：用 ADF 将.parquet文件存储到sql server时，delta table格式会保留下全部数据文件浪费sql server空间，将需要转存sql server的表（dm和dim，需要update的表不行）改为 USING parquet，需保证字段格式严格按照ddl中定义的格式._
+_踩坑：用 ADF 将.parquet文件存储到sql server时，delta table格式会保留下全部数据文件，将需要转存sql server的表（dm和dim，需要update的表不行）改为 USING parquet，parquet 表可每次truncate后全量更新，需保证字段格式严格按照ddl中定义的格式._
+
+__DCL__
+
+* blob 存储文件系统的访问权限
+```sql
+GRANT SELECT, MODIFY ON ANY FILE TO `<user>@<domain-name>` --
+```
+
+* schema 访问权限
+```sql
+SHOW GRANTS ON SCHEMA <SCHEMANAME>
+
+GRANT USAGE, SELECT, CREATE, READ_METADATA, MODIFY ON SCHEMA <SCHEMANAME> TO `<user>@<domain-name>`
+```
+
+* table 访问权限
+```sql
+ALTER TABLE <TABLENAME> OWNER TO `<user>@<domain-name>`
+GRANT SELECT, READ_METADATA ON TABLE <TABLENAME> TO `<user>@<domain-name>`
+
+DESCRIBE [EXTENDED] <TABLENAME> --表的基本元数据信息
+
+SHOW GRANTS on TABLE <TABLENAME> --表的权限信息
+SHOW GRANTS `<user>@<domain-name>` on TABLE <TABLENAME>
+```
 
 __DDL__
 * 创建SCHEMA

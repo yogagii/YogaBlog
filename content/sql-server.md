@@ -141,6 +141,9 @@ FROM
 select current_date(); -- 2023-02-24
 select current_timestamp(); -- 2023-02-24T06:43:26.124+0000
 select now(); -- 2023-02-24T06:43:37.100+0000
+
+select date('2023-03-17') -- 2022-03-17
+select timestamp('2023-03-17') -- 2022-03-17T00:00:00.000+0000
 ```
 
 * dateadd

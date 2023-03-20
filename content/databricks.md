@@ -227,6 +227,17 @@ Delta lake 缺点：
 
 _踩坑：用 ADF 将.parquet文件存储到sql server时，delta table格式会保留下全部数据文件，将需要转存sql server的表（dm和dim，需要update的表不行）改为 USING parquet，parquet 表可每次truncate后全量更新，需保证字段格式严格按照ddl中定义的格式._
 
+只有 Delta lake table支持的语句：
+* DELETE FROM
+* UPDATE
+* MERGE INTO
+* CLONE
+* CACHE
+* COPY INTO
+* DESCRIBE HISTORY
+* VACUUM
+* RESTORE
+
 __DCL__
 
 * blob 存储文件系统的访问权限

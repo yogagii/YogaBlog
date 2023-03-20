@@ -19,6 +19,33 @@ $ npm i -g @nestjs/cli
 $ nest new project-name
 ```
 
+## Structure
+
+```
+my-project
+  │── src
+  │   │── common
+  │   │  │── decorators
+  │   │  │── pipe
+  │   │  └── utils
+  │   │── custom
+  │   │  │── dto
+  │   │  │── entities
+  │   │  │── custom.controller.ts
+  │   │  │── custom.service.ts
+  │   │  │── custom.module.ts
+  │   │  │── custom.controller.spec.ts
+  │   │  └── custom.service.spec.ts
+  │   │── app.module.ts
+  │   └── main.ts
+  │── nest-cli.json
+  │── package.json
+  │── tslint.json
+  │── test
+  │   │── app.e2e-spec.ts
+  └── tsconfig.json
+```
+
 ## Controllers 控制器
 
 控制器的目的是接收应用的特定请求。路由机制控制哪个控制器接收哪些请求。通常，每个控制器有多个路由，不同的路由可以执行不同的操作。

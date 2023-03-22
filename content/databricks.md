@@ -137,7 +137,7 @@ df_txt=spark.read.format("text").load(sourcefile);
 ```python
 df_txt.coalesce(1).write.format("text").save("s3://<bucket>/<folder>/filename")
 ```
-踩坑：coalesce只会确保产生一个文件，任会生成以filename命名的文件夹，文件夹下有以part加数字命名的txt文件(以及_SUCCESS, _committed, _started文件)
+_踩坑：coalesce只会确保产生一个文件，仍会生成以filename命名的文件夹，文件夹下有以part加数字命名的txt文件(以及\_SUCCESS, \_committed, \_started文件)_
 
 ```python
 # 解决txt文件每一行有引号
@@ -264,6 +264,7 @@ SHOW GRANTS `<user>@<domain-name>` on TABLE <TABLENAME>
 ```
 
 __DDL__
+
 * 创建SCHEMA
 
 ```sql

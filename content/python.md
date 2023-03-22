@@ -207,6 +207,7 @@ for [variable] in [sequence]:
 else:
     (statements)
 
+遍历数组
 ```python
 for x in range(6):
   print(x) # 0 1 2 3 4 5
@@ -214,6 +215,12 @@ for x in range(6):
     break
 else:
   print("Finished!")
+```
+遍历字典
+```python
+dic = {'a': 1, 'b': 2}
+for key, value in dic.items:
+  print(key, value)
 ```
 
 * While

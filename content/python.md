@@ -189,10 +189,11 @@ import datetime
 utc=datetime.datetime.utcnow() # UTC = datetime.datetime.today()
 utc8=datetime.datetime.today()+datetime.timedelta(hours=8) # UTC8 北京时间
 today=utc8.strftime("%Y-%m-%d") # 2023-02-16
-weekday=utc8.strftime("%w") # 4 (周日0 ~ 周六6)
+weekday=utc8.strftime("%w") # '4' (周日0 ~ 周六6)
 yesterday=utc8 - datetime.timedelta(days=1) # 昨天
 lastMonday=(utc8 - datetime.timedelta(days = utc8.weekday() + 7)).strftime("%Y-%m-%d") # 上周一
 begindate=datetime.datetime.strptime("2022-01-01","%Y-%m-%d") # 指定一天
+begindate=datetime.datetime.strptime("202201","%Y%m") # 指定一天 2022-01-01 00:00:00
 ```
 
 ## 循环

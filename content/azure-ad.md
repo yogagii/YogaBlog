@@ -46,18 +46,38 @@ Azure PowerShell 是一组 cmdlet，用于直接从 PowerShell 管理 Azure 资�
 
 Azure PowerShell 服务管理模块仅适用于 Windows PowerShell。 它与 PowerShell 6 或更高版本不兼容,并且不在 Linux 或 macOS 上运行.
 
-在vm上打开Edge浏览器（不支持ie），登录v-账号，确保域名在whitelist
+brew install --cask powershell
 
-登录到 Azure 中国世纪互联
-```PowerShell
-Connect-AzAccount -Environment AzureChinaCloud
-```
+mac 安装 powershell: https://learn.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-on-macos?view=powershell-7.3
 
 安装 Az.Storage 模块版本
 ```PowerShell
 Install-Module -Name Az.Storage -RequiredVersion 5.4.1
 ```
 
+登录到 Azure 中国世纪互联
+```PowerShell
+Connect-AzAccount -Environment AzureChinaCloud
+```
+
+
+IE 浏览器 -> 齿轮 -> Internet Options -> Security -> Trusted sites -> Sites
+
+https://login.microsoftonline.com
+
+https://aadcdn.msftauth.net
+
+https://aadcdn.msauth.net
+
+Enable Javascript in your browser: Internet Options -> Security -> Custom level -> Scripting - Active scripting: Enable
+
+登录到 Azure Global
+```PowerShell
+Connect-AzAccount
+Set-AzContext -Subscription xxx-xxx # 切换Subscription ID
+```
+
+获取Blob
 ```PowerShell
 # Initialize these variables with your values.
 $rgName = "<resource-group>"
@@ -87,6 +107,10 @@ Start-AzStorageBlobCopy -SrcContainer $srcContainerName `
     -RehydratePriority Standard `
     -Context $ctx
 ```
+_Start-AzStorageBlobCopy: Service request failed.                                                                        
+Status: 403 (This request is not authorized to perform this operation using this permission.)
+ErrorCode: AuthorizationPermissionMismatch_
+
 
 通过更改 Blob 层解除冻结 Blob
 ```powershell
@@ -121,3 +145,5 @@ do {
 }
 While ($Token -ne $Null)
 ```
+
+https://learn.microsoft.com/zh-cn/azure/storage/blobs/archive-rehydrate-to-online-tier?tabs=azure-powershell

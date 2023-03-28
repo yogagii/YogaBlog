@@ -77,13 +77,11 @@ Connect-AzAccount
 Set-AzContext -Subscription xxx-xxx # 切换Subscription ID
 ```
 
-获取Blob
+获取Container
 ```PowerShell
 # Initialize these variables with your values.
 $rgName = "<resource-group>"
 $accountName = "<storage-account>"
-$containerName = "<container>"
-$blobName = "<archived-blob>"
 
 # Get the storage account context
 $ctx = (Get-AzStorageAccount `
@@ -92,7 +90,21 @@ $ctx = (Get-AzStorageAccount `
 
 echo $ctx
 
-# Get blob
+# Get all Containers
+Get-AzStorageContainer -Context $ctx
+```
+
+获取Blob
+```PowerShell
+# Initialize these variables with your values.
+$containerName = "<container>"
+
+# Get all files
+Get-AzStorageBlob -Context $ctx -Container $containerName
+
+$blobName = "<archived-blob>"
+
+# Get one blob
 $blob = Get-AzStorageBlob -Container $containerName -Blob $blobName -Context $ctx
 ```
 

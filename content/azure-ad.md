@@ -60,12 +60,11 @@ Install-Module -Name Az.Storage -RequiredVersion 5.4.1
 Connect-AzAccount -Environment AzureChinaCloud
 ```
 
-
 IE 浏览器 -> 齿轮 -> Internet Options -> Security -> Trusted sites -> Sites
 
-https://login.microsoftonline.com
+https://login.microsoftonline.com / https://login.partner.microsoftonline.cn
 
-https://aadcdn.msftauth.net
+https://aadcdn.msftauth.net / https://aadcdn.msftauth.cn
 
 https://aadcdn.msauth.net
 

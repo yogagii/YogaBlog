@@ -96,6 +96,52 @@ constructor(
 @PrimaryGeneratedColumn | 自动生成的列 |
 @CreateDateColumn | 创建时间
 @UpdateDateColumn | 更新时间
+
+复合主键：拼合多列作为主键
+
+```ts
+@Entity()
+export class FooBar {
+  @PrimaryColumn()
+  public fooid?: number;
+
+  @PrimaryColumn()
+  public barid?: number;
+
+  @ManyToOne(type => Foo, foo => foo.fooBars)
+  @JoinColumn({ name: "fooid"})
+  public foo: Foo | null = null;
+
+  @ManyToOne(type => Bar, bar => bar.fooBars)
+  @JoinColumn({ name: "barid"})
+  public bar: Bar | null = null;
+}
+```
+
+### Repository
+
+```ts
+userRepository.find({
+  select: ["firstName", "lastName"]
+  join: {
+    alias: "user",
+    leftJoinAndSelect: {
+      photo: "user.photos",
+    }
+  },
+  where: [{ firstName: "Timber" }, { firstName: "Stan" }] // or
+  order: {
+    name: "ASC",
+    id: "DESC"
+  },
+  skip: 5,
+  take: 10,
+  cache: true // 缓存
+});
+```
+
+_踩坑： 每个 entity 必须有 primaryColumn，当 primary 重复时，find 主键重复的行只会返回一遍，QueryBuilder 会全部返回_
+
 ### QueryBuilder
 
 使用 QueryBuilder 构建几乎任何复杂性的 SQL 查询

@@ -36,6 +36,17 @@ export PATH=$PATH:$NODEJS_HOME/bin
 source /etc/profile
 ```
 
+## 更新node
+
+node -v
+
+```bash
+sudo su -
+npm cache clean -f
+npm install -g n
+n stable
+```
+
 ## 安装git
 
 ```

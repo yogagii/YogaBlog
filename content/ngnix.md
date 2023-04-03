@@ -29,14 +29,25 @@ nginx -c /etc/nginx/nginx.conf # 找到 nginx.conf 路径
 nginx -s reload
 
 ### 查看Ngnix配置
-```
+```bash
 sudo su -
 ps -aux | grep nginx
-cat /usr/local/nginx/conf/nginx.conf
+# root xxx 0.0  0.0 xxx xxx ? Ss Mar19 0:00 nginx: master process /usr/sbin/nginx
 
-// 测试
+/usr/sbin/nginx -t
+# nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+
+cat /etc/nginx/nginx.conf
+# include /etc/nginx/default.d/*.conf;
+# include /etc/nginx/default.d/*.conf;
+
+cat /etc/nginx/conf.d/swift.conf
+```
+
+```bash
+# 测试
 nginx -t
-// 重启
+# 重启
 service nginx restart
 nginx -s reload
 ```
@@ -95,7 +106,7 @@ location /iqvia-email/ {
 ```
 指向端口
 
-```
+```bash
 next build
 next start -p 3008
 pm2 start npm --name carto-dashboard-3008 -- run start

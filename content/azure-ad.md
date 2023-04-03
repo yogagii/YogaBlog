@@ -38,123 +38,195 @@ Azure DNS: 不能实现域名注册，只提供域名解析服务
 
 ---
 
-## Azure PowerShell
+## Authentication and Authorization
+The basic steps required to use the OAuth 2.0 authorization code grant flow to get an access token from the Microsoft identity platform endpoint are:
 
-Azure PowerShell 是一组 cmdlet，用于直接从 PowerShell 管理 Azure 资源。 
+1. Register your app with Azure AD.
+2. Get authorization.
+3. Get an access token.
+4. Call Microsoft Graph with the access token.
+5. Use a refresh token to get a new access token.
 
-### 安装
+To configure an app to use the OAuth 2.0 authorization code grant flow, you'll need to save the following values when registering the app:
 
-Azure PowerShell 服务管理模块仅适用于 Windows PowerShell。 它与 PowerShell 6 或更高版本不兼容,并且不在 Linux 或 macOS 上运行.
+1. The Application (client) ID assigned by the app registration portal.
+2. A Client (application) Secret
+3. A Redirect URI (or reply URL) for your app to receive responses from Azure AD.
 
-brew install --cask powershell
+The first step to getting an access token for OAuth 2.0 flow is to redirect the user to the Microsoft identity platform /authorize endpoint. Azure AD will sign the user in and ensure their consent for the permissions your app requests. In the authorization code grant flow, after consent is obtained, Azure AD will return an authorization_code to your app that it can use at the Microsoft identity platform /token endpoint for an access token.
 
-mac 安装 powershell: https://learn.microsoft.com/zh-cn/powershell/scripting/install/installing-powershell-on-macos?view=powershell-7.3
+SailsJS
 
-安装 Az.Storage 模块版本
-```PowerShell
-Install-Module -Name Az.Storage -RequiredVersion 5.4.1
-```
+* route：路由
+* policies: 每个接口前先调 isLoggedIn
+* local: 放cliendId, secret, credentical
+* IsLoggedIn: 检查session里是否有token
+* callback：sso回调
+* check：给前端返回userInfo和permission
+* azuerTokenRefresher: 用户一直操作则刷新token过期时间
 
-登录到 Azure 中国世纪互联
-```PowerShell
-Connect-AzAccount -Environment AzureChinaCloud
-```
+### grant_type: authorization_code
 
-IE 浏览器 -> 齿轮 -> Internet Options -> Security -> Trusted sites -> Sites
+```js
+// callback.js
+const tokenReq = {
+  client_id: sails.config.custom.azureAD.clientId,
+  scope: sails.config.custom.azureAD.scope,
+  code: req.query.code,
+  redirect_uri: sails.config.custom.azureAD.redirectUri,
+  grant_type: 'authorization_code',
+  client_secret: sails.config.custom.azureAD.clientSecret,
+}
 
-https://login.microsoftonline.com / https://login.partner.microsoftonline.cn
-
-https://aadcdn.msftauth.net / https://aadcdn.msftauth.cn
-
-https://aadcdn.msauth.net
-
-Enable Javascript in your browser: Internet Options -> Security -> Custom level -> Scripting - Active scripting: Enable
-
-登录到 Azure Global
-```PowerShell
-Connect-AzAccount
-Set-AzContext -Subscription xxx-xxx # 切换Subscription ID
-```
-
-获取Container
-```PowerShell
-# Initialize these variables with your values.
-$rgName = "<resource-group>"
-$accountName = "<storage-account>"
-
-# Get the storage account context
-$ctx = (Get-AzStorageAccount `
-        -ResourceGroupName $rgName `
-        -Name $accountName).Context
-
-echo $ctx
-
-# Get all Containers
-Get-AzStorageContainer -Context $ctx
-```
-
-获取Blob
-```PowerShell
-# Initialize these variables with your values.
-$containerName = "<container>"
-
-# Get all files
-Get-AzStorageBlob -Context $ctx -Container $containerName
-
-$blobName = "<archived-blob>"
-
-# Get one blob
-$blob = Get-AzStorageBlob -Container $containerName -Blob $blobName -Context $ctx
-```
-
-将 Blob 解除冻结到同一存储帐户
-```powershell
-# Copy the source blob to a new destination blob in hot tier with Standard priority.
-Start-AzStorageBlobCopy -SrcContainer $srcContainerName `
-    -SrcBlob $srcBlobName `
-    -DestContainer $destContainerName `
-    -DestBlob $destBlobName `
-    -StandardBlobTier Hot `
-    -RehydratePriority Standard `
-    -Context $ctx
-```
-_Start-AzStorageBlobCopy: Service request failed.                                                                        
-Status: 403 (This request is not authorized to perform this operation using this permission.)
-ErrorCode: AuthorizationPermissionMismatch_
-
-
-通过更改 Blob 层解除冻结 Blob
-```powershell
-# Change the blob's access tier to hot with Standard priority.
-$blob.BlobClient.SetAccessTier("Hot", $null, "Standard")
-```
-
-批量解冻
-```powershell
-$folderName = "<folder>/"
-$blobCount = 0
-$Token = $Null
-$MaxReturn = 5000
-
-do {
-  $Blobs = Get-AzStorageBlob -Context $ctx -Container $containerName -Prefix $folderName -MaxCount $MaxReturn -ContinuationToken $Token
-  if($Blobs -eq $Null) { break }
-  #Set-StrictMode will cause Get-AzureStorageBlob returns result in different data types when there is only one blob
-  if($Blobs.GetType().Name -eq "AzureStorageBlob")
+const tokenRes = await axios.post(
+  'https://login.microsoftonline.com/xxx.onmicrosoft.com/oauth2/v2.0/token',
+  qs.stringify(tokenReq),
   {
-      $Token = $Null
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
   }
-  else
-  {
-    $Token = $Blobs[$Blobs.Count - 1].ContinuationToken;
+)
+
+req.session.aadAccessToken = tokenRes.data.access_token
+req.session.aadRefreshToken = tokenRes.data.refresh_token
+req.session.aadExpiresAt = Date.now() + tokenRes.data.expires_in * 1000
+
+const infoRes = await axios.get('https://graph.microsoft.com/v1.0/me/', {
+  headers: {
+    Authorization: `Bearer ${tokenRes.data.access_token}`,
+  },
+  params: {
+    $select: fields.join(),
+  },
+})
+```
+
+```js
+// isLoggedIn.js
+module.exports = async function isLoggedIn(req, res, proceed) {
+  if (req.session && req.session.uid && req.session.aadRefreshToken) {
+    return proceed()
   }
-  $Blobs | ForEach-Object {
-    if(($_.BlobType -eq "BlockBlob") -and ($_.AccessTier -eq "Archive") ) {
-      $_.BlobClient.SetAccessTier("Hot", $null, "Standard")
+
+  const params = {
+    client_id: sails.config.custom.azureAD.clientId,
+    response_type: 'code',
+    redirect_uri: sails.config.custom.azureAD.redirectUri,
+    response_mode: 'query',
+    scope: sails.config.custom.azureAD.scope,
+    state: req.headers.referer,
+  }
+  return res.status(401).json({
+    message: 'Unauthorized',
+    sso_url: `https://login.microsoftonline.com/#########/oauth2/v2.0/authorize?${qs.stringify(
+      params
+    )}`,
+  })
+}
+```
+
+### grant_type: client_credentials
+
+```js
+const tokenEndpoint = 'https://login.microsoftonline.com/#########/oauth2/v2.0/token'
+
+const tokenReq = {
+  client_id: sails.config.custom.azureAD.clientId,
+  scope: 'https://graph.microsoft.com/.default',
+  client_secret: sails.config.custom.azureAD.clientSecret,
+  grant_type: 'client_credentials',
+}
+
+async function retriveToken() {
+  const tokenRes = await axios.post(tokenEndpoint, qs.stringify(tokenReq), {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
+  token = tokenRes.data.access_token
+  setTimeout(retriveToken, 3300 * 1000)
+}
+```
+
+### grant_type: refresh_token
+
+```js
+// azureTokenRefresher.js
+module.exports = async function isLoggedIn(req, res, next) {
+  if (req.session && typeof req.session.aadExpiresAt === 'number' && req.session.aadExpiresAt < Date.now() + 300000) {
+    // Refresh the AD access token if it expires in 300s
+    const tokenReq = {
+      client_id: sails.config.custom.azureAD.clientId,
+      scope: sails.config.custom.azureAD.scope,
+      refresh_token: req.session.aadRefreshToken,
+      redirect_uri: sails.config.custom.azureAD.redirectUri,
+      grant_type: 'refresh_token',
+      client_secret: sails.config.custom.azureAD.clientSecret,
     }
+    const tokenRes = await axios.post(
+      'https://login.microsoftonline.com/xxx.onmicrosoft.com/oauth2/v2.0/token',
+      qs.stringify(tokenReq),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    )
+
+    req.session.aadAccessToken = tokenRes.data.access_token
+    req.session.aadExpiresAt = Date.now() + tokenRes.data.expires_in * 1000
+  }
+  return next()
+}
+```
+
+---
+
+## NestJS + Passport
+
+auth/guards/aad-auth.guard.ts
+```ts
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class AADAuthGuard extends AuthGuard('aad') {}
+```
+
+auth/strategies/aad.strategy.ts
+```ts
+import { OIDCStrategy } from 'passport-azure-ad';
+import { PassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AADStrategy extends PassportStrategy(OIDCStrategy, 'aad') {
+  constructor() {
+    super(
+      {
+        identityMetadata:
+          'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration',
+        clientID: <ClientID>,
+        clientSecret: <ClientSecret>,
+        responseType: 'id_token',
+        responseMode: 'form_post',
+        issuer: null,
+        audience: null,
+        loggingLevel: 'info',
+        passReqToCallback: true,
+        validateIssuer: false,
+        allowHttpForRedirectUrl: true,
+        redirectUrl: <RedirectURL>,
+      },
+      (iss, sub, profile, accessToken, refreshToken, done) => {},
+    );
+  }
+
+  async validate(payload: any) {
+    return payload;
   }
 }
-While ($Token -ne $Null)
 ```
 
-https://learn.microsoft.com/zh-cn/azure/storage/blobs/archive-rehydrate-to-online-tier?tabs=azure-powershell
+https://www.npmjs.com/package/passport-azure-ad

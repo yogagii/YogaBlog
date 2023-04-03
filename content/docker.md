@@ -114,3 +114,29 @@ pnpm install
 du -sh 显示文件大小
 
 ### 法3. 用docker管理node_module
+
+---
+
+## peerDependency 对等依赖关系
+
+```
+APP
+└---node_modules
+    |---KeyPackage 核心依赖库（e.g React）
+    |---Package_A
+    |   └---node_modules
+    |       └---KeyPackage 核心依赖库
+    |---Package_B
+    |   └---node_modules
+    |       └---KeyPackage 核心依赖库
+```
+
+npm 从版本v7开始，install默认以peerDependencies的方式下载，避免核心依赖库被重复下载
+
+_踩坑：
+用户依赖的包版本与各个子项目依赖的包版本相互不兼容，那么就会报错：无法解析依赖树的问题（依赖冲突）Conflicting peer dependency: mssql@6.4.1_
+
+```bash
+npm install xxxx --legacy-peer-deps 
+```
+绕过peerDependency里依赖的自动安装，忽略项目中引入的各个依赖模块之间依赖相同但版本不同的问题，以npm v3-v6的方式去继续执行安装操作。

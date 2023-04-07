@@ -187,6 +187,8 @@ export class CatsModule {}
 export class AppModule {}
 ```
 
+![nestjs](img/nest1.png)
+
 ## Middleware 中间件
 
 Nest 中间件等价于 express 中间件
@@ -293,6 +295,26 @@ export class CatsController {
 Nest提供了通过 @SetMetadata() 装饰器将定制元数据附加到路由处理程序的能力。
 ```ts
 @SetMetadata('roles', ['admin'])
+```
+
+## Interceptor 拦截器
+
+拦截器是使用 @Injectable() 装饰器注解的类。拦截器应该实现 NestInterceptor 接口。
+
+功能：在函数执行之前/之后绑定额外的逻辑；转换从函数返回的结果；转换从函数抛出的异常
+
+* 在接口相应前后记录时间
+* 包装返回的数据
+* 缓存拦截器
+
+```ts
+@Injectable()
+export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
+    console.log('Before...')
+    return next.handle().pipe(map(data => ({ data, code: 200, message: '请求成功', }))); // After
+  }
+}
 ```
 
 ## Task Scheduling 定时任务

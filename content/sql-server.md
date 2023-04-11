@@ -190,6 +190,13 @@ select concat_ws(',',collect_set(filename)) totalname from <table>
 select TRIM(' A ') -- 'A'
 ```
 
+* 大小写
+```sql
+select LOWER('yoga') -- yoga
+select UPPER('yoga') -- YOGA
+select INITCAP('yoga') -- Yoga
+```
+
 ### 运算符
 
 * <>不等于，不包含null的情况

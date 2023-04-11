@@ -6,8 +6,8 @@ Author: Yoga
 
 ## Authentication
 
-SI. No. | Description | REST API | Http Methods
-- | - | - | -
+| SI. No. | Description | REST API | Http Methods
+| - | - | - | -
 1 | Logon using username and password  | http://host:<port>/biprws/vx/logon/long | GET,POST
 2 | Logoff (token must be in Header) | http://host:<port>/biprws/vx/logoff | POST
 

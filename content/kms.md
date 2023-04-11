@@ -109,8 +109,8 @@ const decryptedConfig = await sails.helpers.getConfig(key);
 
 ## Env part
 
-Environment | Config file
-- | -
+| Environment | Config file
+| - | -
 dev | config/env/development.js
 stage | config/env/staging.js
 production | config/env/production.js

@@ -6,12 +6,12 @@ Author: Yoga
 | Observable | Promise |
 | - | - |
 | 陈述式，直至subscription才会触发 | promise创建之后立即执行 |
-支持多值甚至是数据流 | 只能提供单个值
-能够在执行前或执行中被取消 dispose | 不可以取消
-多次调用 retry 能够触发多次异步操作 | promise只可以被执行一次，重复调用，promise内部直接返回之前的状态
-/ | 可使用async,await让多个promise进行同步
-根据内部操作去判别使用异步还是同步 | promise一定是异步的
-rxjs: subscribe(), map(), pipe() | then()
+支持多值甚至是数据流 | 只能提供单个值 |
+能够在执行前或执行中被取消 dispose | 不可以取消 |
+多次调用 retry 能够触发多次异步操作 | promise只可以被执行一次，重复调用，promise内部直接返回之前的状态 |
+/ | 可使用async,await让多个promise进行同步 |
+根据内部操作去判别使用异步还是同步 | promise一定是异步的 |
+rxjs: subscribe(), map(), pipe() | then() |
 
 * Observable 创建的异步任务，可以被处理，而且是延时加载的，封装了大量的方法供我们使用以处理复杂的异步任务。
 * promise 解决嵌套地狱，解决大量的异步回调所造成的难以调试问题

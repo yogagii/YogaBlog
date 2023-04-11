@@ -312,7 +312,7 @@ drop PROCEDURE mypro1;
 
 原文链接：https://blog.csdn.net/scj0725/article/details/114625180
 
-Procedure | Function
+| Procedure | Function
 | - | -
 作为PL/SQL语句执行 | 作为一个表达式执行
 在 COMMAND 命令窗口中，使用 EXECUTE 命令执行过程 | 借用 select 语句来执行

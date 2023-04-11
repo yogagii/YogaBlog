@@ -89,7 +89,7 @@ constructor(
 
 ### 创建Entity
 
-装饰器 | description | extr
+| 装饰器 | description | extr
 | - | - | -
 @Column | 添加表列 | @Column({ length: 100 })
 @PrimaryColumn | 创建主列 | 每个实体必须至少有一个主键列

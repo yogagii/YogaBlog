@@ -156,7 +156,7 @@ npm i --save @types/react-virtualized
 
 Required Property:
 
-Property | Type | Required | Description
+| Property | Type | Required | Description |
 | - | - | - | - |
 height | number | y | list height
 width | number | y | list width
@@ -209,7 +209,7 @@ npm install react-virtuoso
 
 Property:
 
-Property | Type | Required | Description
+| Property | Type | Required | Description |
 | - | - | - | - |
 data | readonly D[] | n | data list
 itemContent | ItemContent<D> | n | Set the callback to specify the contents of the item.

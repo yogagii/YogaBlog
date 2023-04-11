@@ -33,8 +33,8 @@ There are more than 600 finance users actively utilize the platform service ever
 
 ## Tableau REST API:
 
-Description | API | Params
-- | - | -
+| Description | API | Params
+| - | - | -
 Get Users in Group | GET /api/api-version/sites/site-id/groups/group-id/users | pageSize
 Get Users on Site	| GET /api/api-version/sites/site-id/users | pageSize, filter
 Query Views for Site | GET /api/api-version/sites/site-id/views | includeUsageStatistics, fields, pageNumber
@@ -47,8 +47,8 @@ link: https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api_ref.htm
 
 ## Viz Option:
 
-Key | Value
-- | -
+| Key | Value
+| - | -
 hideTabs | true
 ':toolbar' | 'top'
 ':showShareOptions' | false
@@ -89,8 +89,8 @@ export default Workbook;
 
 ## Viz API:
 
-Class | Properties | Type | Description
-- | - | - | -
+| Class | Properties | Type | Description
+| - | - | - | -
 Viz | getWorkbook() | Workbook | One Workbook is supported per visualization.
 Workbook | getActiveSheet() | Sheet | Gets the currently active sheet (the active tab)
 SheetInfo | getName() | string | Gets the name of the sheet.
@@ -106,8 +106,8 @@ Parameter | getCurrentValue() | DataValue | The current value of the parameter.
 
 ## Viz Event Classes:
 
-Name | Event Class Passed in the Callback | Description
-- | - | -
+| Name | Event Class Passed in the Callback | Description
+| - | - | -
 CUSTOM_VIEW_LOAD | CustomViewEvent | Raised when a custom view has finished loading.
 PARAMETER_VALUE_CHANGE | ParameterEvent | Raised when any parameter has changed state.
 FILTER_CHANGE | FilterEvent | Raised when any filter has changed state.
@@ -134,8 +134,8 @@ link: https://help.tableau.com/v2018.2/api/js_api/en-us/JavaScriptAPI/js_api_ref
 
 ## FIlter for report:
 
-Description | Store | Function | Action | Parameter
-- | - | - | - | -
+| Description | Store | Function | Action | Parameter
+| - | - | - | - | -
 get report filter list | getReportStore | getInputControls | / | viewContext
 get report filter detail | getReportInputControlStore | getInputControl | / | viewContext, inputControlId
 get report filter options | getReportInputControlStore | getLov | / | viewContext, inputControlId
@@ -144,8 +144,8 @@ set report filter value | / | / | USER_SET_INPUT_CONTROL_SELECTION | viewContext
 
 ## FIlter for document:
 
-Description | Store | Function | Action | Parameter
-- | - | - | - | -
+| Description | Store | Function | Action | Parameter
+| - | - | - | - | -
 get document filter list | getDocumentStore | getInputControls | / | viewContext
 get document filter detail | getDocumentInputControlStore | getInputControl | / | viewContext, inputControlId
 get document filter options | getDocumentInputControlStore | getLov | / | viewContext, inputControlId
@@ -154,8 +154,8 @@ set document filter value | / | / | USER_SET_INPUT_CONTROL_SELECTION | viewConte
 
 ## SAP Prompt Function:
 
-Description | Store | Function | Action | Parameter
-- | - | - | - | -
+| Description | Store | Function | Action | Parameter
+| - | - | - | - | -
 activate prompt options | / | / | GET_PARAMETER_LOV | viewContext, parameterId, (prepare, data)
 get prompt value | getDocumentStore | getParameters | / | viewContext
 get prompt options | getParameterStore | getLov | / | viewContext, parameterId
@@ -163,16 +163,16 @@ set prompt value | / | / | USER_VALIDATE_PROMPTS | viewContext, inputControlId, 
 
 ## SAP Driller Function:
 
-Description | Store | Function | Action | Parameter
-- | - | - | - | -
+| Description | Store | Function | Action | Parameter
+| - | - | - | - | -
 get driller current list | getReportStore | getDrillerElements | / | viewContext
 get driller all list | getReportStore | getDrillerFilters | / | viewContext
 get driller detail | getDrillerFilterStore | getDrillerFilter | / | viewContext, filterId
 
 ## Post Message:
 
-Description | Type | Value | Interval
-- | - | - | -
+| Description | Type | Value | Interval
+| - | - | - | -
 Code injection finished | string | 'SAP_WEBI_INJECTED' | false
 Filter data | object | { type: 'filters-selection', data: filters, docId: getWebiViewerArgs().id } | true
 Tab data | object | { type: 'tab-selection', data: tab, docId: getWebiViewerArgs().id } | true

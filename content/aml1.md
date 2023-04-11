@@ -36,7 +36,7 @@ Attached to your Azure Machine Learning Workspace. Can be used to run pipelines 
 * Azure Machine Learning Compute: Training
 * Azure Kubernetes Service: Deployment
 
-Compute Target | Automated ML | AML Pipelines | AML Designer
+| Compute Target | Automated ML | AML Pipelines | AML Designer |
 | - | - | - | - |
 Local Computer | Yes |  | 
 AML compute cluster | Yes | Yes | Yes

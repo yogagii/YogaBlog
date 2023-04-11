@@ -33,8 +33,8 @@ https://www.jianshu.com/p/6931b0abc956
 * When experiment is over (We can’t be doing one experiment forever)
 * When release is approved (e.g. Mock Closing ended)
 
-- | Permission Toggle | Authorization Service
-- | - | -
+| - | Permission Toggle | Authorization Service
+| - | - | -
 Purpose | To hide release from deployment. Experiment new feature for specific users before releasing for public use. | To limit user access on long-term capabilities and by job roles. For example, admin page, data access etc.
 Longevity | Short Term (Time-boxed) | Long Term
 Maintenance | Product Team only | Business Admin (by Job Role)

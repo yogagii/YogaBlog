@@ -28,7 +28,7 @@ docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 4000:80 phpmyadmin
 docker ps
 ```
 
-CONTAINER ID | IMAGE | PORTS | NAMES
+| CONTAINER ID | IMAGE | PORTS | NAMES
 | - | - | - | -
 0bfccc26fcfe | phpmyadmin | 0.0.0.0:4000 -> 80/tcp | myadmin
 

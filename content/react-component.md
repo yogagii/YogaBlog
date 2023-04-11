@@ -94,8 +94,8 @@ ___
 
 React支持的事件：
 
-事件类型 | 事件名称
-- | -
+| 事件类型 | 事件名称
+| - | -
 剪贴板事件 | onCopy / onCut / onPaste 
 键盘事件 | onKeyDown / onKeyPress / onKeyUp
 焦点事件 | onFocus / onBlur

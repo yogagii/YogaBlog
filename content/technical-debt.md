@@ -42,8 +42,8 @@ Pros:
 
 There are a few metrics that we can use to calculate the weight of interest 
 
-Metric | Interest Rate Calculation
-- | -
+| Metric | Interest Rate Calculation
+| - | -
 How frequent is our team going to change | Divide the number of new team members (joined less than 2 months) over total team members as weightage. For example, 2 out of 8 team members are new. The interest rate will be 2/8 = 25%
 How frequent is the code going to change | 50% for code that is changing frequently. 25% for code that has moderate change frequency. 0% for code that is not going to change.
 What is our code test coverage | 50% for features that does not have good test coverage.
@@ -51,8 +51,8 @@ How long has the technical debt exist in the backlog | 5% for every sprint that 
 
 Examples:
 
-Summary | Story Points | Interest Rate | Total Story Points | Remarks
-- | - | - | - | -
+| Summary | Story Points | Interest Rate | Total Story Points | Remarks
+| - | - | - | - | -
 Remove feature toggle for "Profile" page | 2 | 2 x ( 0% + 25% + 0% + 2 x 5%) = 0.7 | 2 + 0.7 = 2.7 ≅ 3 | Assuming the team is stable - 0%; Assuming the code is not going to change as frequent - 25%; Assuming there are good test coverage on this feature - 0%; Assuming the tech debt has been in backlog for 2 sprints - 2 x 5 %
 
 ## Payback Strategy

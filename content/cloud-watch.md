@@ -49,8 +49,8 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
 
 ## Log level
 
-Priority | Level | Log functions that produce visible output
-- | - | -
+| Priority | Level | Log functions that produce visible output |
+| - | - | - |
 0 | silent | N/A
 1 | error | .error()
 2 | warn | .warn(), .error()

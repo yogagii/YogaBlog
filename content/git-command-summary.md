@@ -191,8 +191,15 @@ git checkout -u [remote-name]/[branch-name]
 git branch -vv
 ```
 * 变基: 
-```
-git rebase [branch-name]
+```bash
+# feature branch
+git add .
+git commit -m ''
+git checkout dev
+# dev branch
+git pull
+git rebase [feature-branch]
+git push
 ```
 
 * token

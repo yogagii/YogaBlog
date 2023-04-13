@@ -15,6 +15,7 @@ Tags: ML
 ### Machine Learning 分类
 
 按照模型训练方式：
+
 * Supervised learning 监督学习: 从输入 -> 输出 学习统计规律 （分类，回归）
 * Unsupervised learning 无监督学习：没有标注数据（聚类，降维/主成分分析，异常检测）
 * Semi-Supervised learning 半监督学习（生成模型）
@@ -33,8 +34,8 @@ Tags: ML
 
 continuous numerical predicition 数值预测：气温，销量，房价
 
-算法 | 特点
-| - | - |
+| 算法 | 特点
+| - | -
 Linear Regression 线性回归 | 训练时间短、线性模型
 Bayesian Linear Regression 贝叶斯线性回归 | 线性模型，训练数据量较少
 Poisson Regression 泊松回归 |  预测事件次数
@@ -43,8 +44,8 @@ Neural Network Regression 神经网络回归 | 精准度高、训练时间较长
 Decision Forest Regression 决策森林回归 | 精准度高、训练时间短
 Boosted Decision Tree Regression 提升决策树回归 | 精确度高、训练时间短、内存占用较大
 
-评估指标 Metrics | desc
-| - | - |
+| 评估指标 Metrics | desc
+| - | -
 平均绝对误差 (MAE) | 预测值与真实值之间的平均绝对误差
 均方根误差 (RMSE) | 模型在预测中会产生多大的误差，对于较大的误差权重较高
 决定系数 (R2) | 0<=R2<=1，1说明模型无错误
@@ -55,21 +56,21 @@ Boosted Decision Tree Regression 提升决策树回归 | 精确度高、训练�
 
 Binary Classification 二分类 / Multi-Class Classification 多分类
 
-算法 | 特点
-| - | - |
+| 算法 | 特点
+| - | -
 Logistic Regression 逻辑回归 | 训练时间短、线性模型
 Support Vector Machines (SVM) 支持向量机 | 线性模型，under 100 features
 Decision Forest 决策森林 | 精准度高，训练时间短
 Boosted Decision Trees 提升决策树 | 精准度高，训练时间短
 Neural Networks 神经网络 | 精准度高、训练时间较长
 
-混淆矩阵 | Actual Positives | Actual Negatives
-| - | - | - |
+| 混淆矩阵 | Actual Positives | Actual Negatives
+| - | - | -
 Predicted Postives | TP | FP
 Predicted Negatives | FN | TN
 
-Performance Metrics 性能评估 | Desc | Formula | 场景
-| - | - | - | - |
+| Performance Metrics 性能评估 | Desc | Formula | 场景
+| - | - | - | -
 Accuracy 准确率 | 所有样本中预测正确的样本占比 | (TP+TN)/(TP+TN+FP+FN) | 数据类别不均衡时不靠谱
 Precision 精准率/查准率 | 在所有被预测为正的样本中实际为正的样本的概率 | TP/(TP+FP) | 预测升的股票里真的升了有多少
 Recall/Sensitivity 召回率/查全率 | 在实际为正的样本中被预测为正样本的概率 | TP/(TP+FN) | 真的患病的病人中里预测正确的人
@@ -82,8 +83,8 @@ Recall/Sensitivity 召回率/查全率 | 在实际为正的样本中被预测为
 1. 历史数据识别和建模 Identify patterns in the past
 2. 预测未来的值 Forecast future values
 
-Component | Desc
-| - | - |
+| Component | Desc
+| - | -
 Level | Average value
 Trend 趋势 | 指在时间序列中的长期移动，上升/降低的趋势
 Seasonality 季节性变动 | 周期性波动（短期）
@@ -286,8 +287,8 @@ Replace clipped Values with the
 
 泛化能力就是说已经得到的拟合函数对于新来的样本的适应性
 
-泛化能力 | 表现 | 偏差 | 方差
-| - | - | - | - |
+| 泛化能力 | 表现 | 偏差 | 方差
+| - | - | - | -
 Overfit models 过拟合 | 在训练数据上表现良好，在未知数据上表现差 | low bias | high variance
 Underfit models 欠拟合 | 在训练数据和未知数据上表现都很差 | high bias | low variance
 

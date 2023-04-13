@@ -521,7 +521,7 @@ FROM points JOIN ranges ON points.p >= ranges.start AND points.p < ranges.end;
 
 The INFORMATION_SCHEMA is a SQL standard based schema, provided in every catalog created on Unity Catalog.
 
-Table | Desc
+| Table | Desc
 | - | -
 CATALOGS | Describes catalogs.
 TABLES | Describes tables and views defined within the catalog.

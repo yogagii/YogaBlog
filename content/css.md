@@ -13,7 +13,7 @@ Author: Yoga
 
 遵循正常文档流，占有文档空间，父级padding影响，根为root
 
-TRBL | 父级 | 定位 |
+| TRBL | 父级 | 定位
 | - | - | -
 无 | 无 | 上一元素底部/浏览器左上角
 无 | 有 | 父级左上角
@@ -24,8 +24,8 @@ TRBL | 父级 | 定位 |
 
 脱离文档流，不占文档空间，父级padding不影响，根为html
 
-TRBL | 父级 | 定位
-| - | - | -
+| TRBL | 父级 | 定位 |
+| - | - | - |
 无 |  | 默认auto, 变回relative
 有 | 父级无position | 找上级直到html
 有 | 父级有position | 父级左上角，无论padding
@@ -34,8 +34,8 @@ TRBL | 父级 | 定位
 
 display: inherit, none, block, inline, inline-block,table, table-cell
 
-元素 | 宽高 | margin | padding | 换行排列 | example
-| - | - | - | - | - | -
+| 元素 | 宽高 | margin | padding | 换行排列 | example |
+| - | - | - | - | - | - |
 块状元素 | y | y | y | y (从上至下) | div, p, nav, ul, li , header, footer, aside
 行内块状元素 | y | y | y | n (从左到右) |
 行内元素 | n | 左右 | y | n (从左到右) | span, a, b, i, strong, em, img, input, select

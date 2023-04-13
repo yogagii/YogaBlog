@@ -144,6 +144,7 @@ select now(); -- 2023-02-24T06:43:37.100+0000
 
 select date('2023-03-17') -- 2022-03-17
 select timestamp('2023-03-17') -- 2022-03-17T00:00:00.000+0000
+select timestamp(concat(substring(insertDate,1,4),'-',substring(insertDate,5,2),'-',substring(insertDate,7,2))) -- insertDate='20230410'  2023-04-10T00:00:00.000+0000
 ```
 
 * dateadd
@@ -187,6 +188,13 @@ select concat_ws(',',collect_set(filename)) totalname from <table>
 * TRIM 删除前后空格
 ```sql
 select TRIM(' A ') -- 'A'
+```
+
+* 大小写
+```sql
+select LOWER('yoga') -- yoga
+select UPPER('yoga') -- YOGA
+select INITCAP('yoga') -- Yoga
 ```
 
 ### 运算符
@@ -237,4 +245,15 @@ select 'a' A intersect select 'b' A -- null
 查找重复行
 ```sql
 select COUNT(*) as RepNum, MaterialCode from <TABLE> group by MaterialCode Having COUNT(*)>1;
+```
+
+### ORDER BY
+
+```sql
+order by qty -- 会逐位比较数字 100 < 20 < 30 
+
+-- 解决方式
+order by qty*1
+order by int(qty)
+order by len(qty) desc -- 可以同时找出正负最大的数
 ```

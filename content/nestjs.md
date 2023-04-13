@@ -520,6 +520,29 @@ export class AuthService {
 }
 
 ```
+Passport JWT
+```ts
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
+import { jwtConstants } from './constants';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: jwtConstants.secret,
+    });
+  }
+
+  async validate(payload: any) {
+    return { userId: payload.sub, username: payload.username };
+  }
+}
+
+```
 
 Node.js提供了一个内置的crypto模块可用于加密和解密字符串
 
@@ -541,6 +564,42 @@ export class CipherService {
     cipher.setAutoPadding(true);
     const receivedPlaintext = cipher.update(data, 'base64', 'utf8');
     return receivedPlaintext + cipher.final('utf8');
+  }
+}
+
+```
+
+自定义JwtStrategy
+```ts
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport';
+
+@Injectable()
+export class CustomStrategy extends PassportStrategy(Strategy, 'custom') { // 自定义Strategy名字
+
+}
+```
+
+aadAuthGuard
+
+https://www.npmjs.com/package/passport-azure-ad
+```ts
+import { OIDCStrategy } from 'passport-azure-ad';
+
+@Injectable()
+export class AADStrategy extends PassportStrategy(OIDCStrategy, 'aad') {
+  constructor() {
+    super(
+      {
+        identityMetadata: 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration',
+        clientID: 'xxx',
+        clientSecret: 'xxx',
+        responseType: 'id_token',
+        responseMode: 'form_post',
+        redirectUrl: 'xxx/callback',
+      },
+      (iss, sub, profile, accessToken, refreshToken, done) => { },
+    );
   }
 }
 

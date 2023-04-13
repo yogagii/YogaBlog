@@ -89,7 +89,7 @@ constructor(
 
 ### 创建Entity
 
-装饰器 | description | extr
+| 装饰器 | description | extr
 | - | - | -
 @Column | 添加表列 | @Column({ length: 100 })
 @PrimaryColumn | 创建主列 | 每个实体必须至少有一个主键列
@@ -140,7 +140,7 @@ userRepository.find({
 });
 ```
 
-_踩坑： 每个 entity 必须有 primaryColumn，当 primary 重复时，find 主键重复的行只会返回一遍，QueryBuilder 会全部返回_
+_踩坑： 每个 entity 必须有 primaryColumn，当 primary 重复时，find 主键重复的行只会返回一遍，QueryBuilder 会全部返回，可以用复合主键让主键唯一_
 
 ### QueryBuilder
 

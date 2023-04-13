@@ -23,7 +23,7 @@ RDD 是一种只读的数据块，当你对一个 RDD 进行了操作,那么结�
 
 RDD操作函数（operation）:
 
-类别 | 函数 | 区别
+| 类别 | 函数 | 区别
 | - | - | -
 Transformation | map, filter, groupBy, join, union, reduce, sort, partitionBy | 返回值还是RDD，不会马上提交Spark集群运行
 Action | count, collect, take, save, show | 返回值不是RDD，会形成DAG提交Spark集群运行并立即返回结果
@@ -36,7 +36,7 @@ Transformation 操作不是马上提交 Spark 集群执行的，在遇到 Transf
 
 shuffle类算子：
 
-类别 | 函数 | 特点
+| 类别 | 函数 | 特点
 | - | - | -
 重分区 | repartition、repartitionAndSortWithinPartitions、coalesce(shuffle=true) | 对所有的分区数据进行随机均匀的打乱，把数据放入下游新的分区内
 聚合 | reduceByKey, groupByKey, aggregateByKey, combineByKey | 所有节点上的相同的key移动到同一个节点上

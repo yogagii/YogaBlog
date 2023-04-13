@@ -5,7 +5,7 @@ Tags: ML
 Author: Yoga
 
 
-版本 | 发布时间 | 训练方案 | 参数量 | 模型
+| 版本 | 发布时间 | 训练方案 | 参数量 | 模型 |
 | - | - | - | - | - |
 GPT(GPT-1) | 2018 年 6 月 | 无监督学习 | 1.17 亿 |
 GPT-2 | 2019 年 2 月 | 多任务学习 | 15 亿 |
@@ -19,7 +19,7 @@ https://blog.csdn.net/hekaiyou/article/details/128303729
 
 https://platform.openai.com/docs/api-reference/models
 
-基础模型 | Desc | Use cases
+| 基础模型 | Desc | Use cases |
 | - | - | -
 davinci 达芬奇 | Most capable GPT-3 model. Most powerful | 文本摘要
 curie 居里 | Very capable, but faster and lower cost than Davinci. | 翻译，分类，文本情感分类
@@ -92,15 +92,15 @@ When the question was not generated on the context, the model will be prompted t
 
 1000 tokens(750 words) $0.02 (prompt+completion 提问+回答总字数)
 
-模型 | 基础模型 使用 |训练模型 | 训练后使用
+| 模型 | 基础模型 使用 |训练模型 | 训练后使用
 | - | - | - | -
 text-davinci-003 | $0.02 | $0.03 | $0.12
 text-curie-001 | $0.002 | $0.003 | $0.012
 text-babbage-001 | $0.0005 | $0.0006 | $0.012
 text-ada-001 | $0.0004 | $0.0004 | $0.0016
 
-视频时长 | 原文字数 | 耗时 | 基本模型费用 | 训练模型费用
-| - | - | - | - | -
+| 视频时长 | 原文字数 | 耗时 | 基本模型费用 | 训练模型费用 |
+| - | - | - | - | - |
 1小时 | 20000 中文字符 | 5-10min | (20000+10000)x2 / 1000x0.02 =$1.2 | 20000*2/1000*0.12 =$4.8 (不包括训练产生费用)
 
 _基本模型费用 =(prompt+completition) *$0.02_
@@ -155,8 +155,8 @@ https://github.com/openai/whisper#available-models-and-languages
     * Search reviews for a specific product / service
     * information discovery and knowledge mining
 
-\ | OpenAI | Azure OpenAI
-| - | - | -
+| \ | OpenAI | Azure OpenAI |
+| - | - | - |
 版本 | GPT3.5 | GPT3.0 (DALL·E preview / ChatGPT comming soon)
 Rate limit | TPM (tokens per minute) API调用限制，对企业级大用户量，一分钟头几秒用完TPM，后面几秒无TPM可用 | 
 Data safety | customer-to-OpenAI requests and responses are encrypted | 符合企业安全性 合规性

@@ -77,8 +77,8 @@ This file is required to determine which branch related to which environment and
   environment: "PROD"
 ```
 
-Pipeline Stage | PREDEV | DEV | STAGE | PROD
-- | - | - | - | -
+| Pipeline Stage | PREDEV | DEV | STAGE | PROD
+| - | - | - | - | -
 Checkout | Y | Y | Y | Y
 Manifest Load | Y | Y | Y | Y
 Setup | Y | Y | Y | Y

@@ -39,6 +39,12 @@ CREATE DATABASE <数据库名>;
 show databases;
 ```
 
+创建数据库
+
+```sql
+create database <数据库名>;
+```
+
 删除数据库
 
 ```sql
@@ -49,6 +55,27 @@ drop database <数据库名>;
 
 ```sql
 use <数据库名>;
+```
+
+创建新用户
+
+```sql
+CREATE USER 'tester'@'localhost' IDENTIFIED BY '123';
+SHOW GRANTS for 'tester'@'localhost';
+GRANT ALL ON *.* TO 'tester'@'localhost' WITH GRANT OPTION;
+flush privileges;
+```
+
+删除用户
+
+```sql
+DROP USER 'tester'@'localhost';
+```
+
+检查端口号
+
+```sql
+show global variables like 'port'; -- 默认 3306
 ```
 
 导入表sql
@@ -312,7 +339,7 @@ drop PROCEDURE mypro1;
 
 原文链接：https://blog.csdn.net/scj0725/article/details/114625180
 
-Procedure | Function
+| Procedure | Function
 | - | -
 作为PL/SQL语句执行 | 作为一个表达式执行
 在 COMMAND 命令窗口中，使用 EXECUTE 命令执行过程 | 借用 select 语句来执行

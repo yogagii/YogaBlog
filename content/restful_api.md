@@ -8,7 +8,7 @@ Author: Yoga
 
 Restful与传统接口对比
 
-操作 | 传统风格 | RESTful风格
+| 操作 | 传统风格 | RESTful风格
 | - | - | - 
 查询 | /user/query?name=tom GET | /user?name=tom GET
 详情 | /user/getInfo?id=1 GET | /user/1 GET

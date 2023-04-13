@@ -21,6 +21,7 @@ rxjs: subscribe(), map(), pipe() | then() |
 一个可观察对象(Observable)，观察者(Observer)订阅(Subscribe)它，当数据就绪时，之前定义的机制就会分发数据给一直处于等待状态的观察者哨兵。
 
 _用户输入框查询:_
+
 1. 防抖。繁触发搜索，一来浪费服务器资源，二来影响客户端的响应。
 2. 防止触发两次。输入的文本没有变化，就不应该重新搜索。
 3. 处理返回顺序。服务器的异步返回的顺序是无法保证的。
@@ -192,11 +193,13 @@ https://blog.csdn.net/qq_34035425/article/details/120598759
 promise是在es6标准中的一种用于解决异步编程的解决方案，由于在语言级别上，不同于Java、Python等多线程语言，js是单线程的，所以在node.js中大量使用了异步编程的技术，这样做是为了避免同步阻塞。
 
 Promise对象代表一个异步操作，有三种状态：
+
 * pending（进行中）
 * fulfilled（已成功）
 * rejected（已失败）
 
 promise的状态只有两种改变情况，且仅改变一次，任何其他操作都无法改变这个状态：
+
 * 由pending转变为resolved
 * 由pending转变为rejected
 
@@ -212,6 +215,7 @@ await的一个Promise对象失败或者返回reject，那么整个async程序都
 * AJAX
 
 微任务microtask：在当前task执行结束后立即执行的任务。
+
 * Promise.then catch finally
 * process.nextTick
 

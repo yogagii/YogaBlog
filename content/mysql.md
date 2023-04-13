@@ -39,6 +39,12 @@ CREATE DATABASE <数据库名>;
 show databases;
 ```
 
+创建数据库
+
+```sql
+create database <数据库名>;
+```
+
 删除数据库
 
 ```sql
@@ -49,6 +55,27 @@ drop database <数据库名>;
 
 ```sql
 use <数据库名>;
+```
+
+创建新用户
+
+```sql
+CREATE USER 'tester'@'localhost' IDENTIFIED BY '123';
+SHOW GRANTS for 'tester'@'localhost';
+GRANT ALL ON *.* TO 'tester'@'localhost' WITH GRANT OPTION;
+flush privileges;
+```
+
+删除用户
+
+```sql
+DROP USER 'tester'@'localhost';
+```
+
+检查端口号
+
+```sql
+show global variables like 'port'; -- 默认 3306
 ```
 
 导入表sql

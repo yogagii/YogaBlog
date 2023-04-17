@@ -292,16 +292,20 @@ Pagination 分页 法二：
 npm i --save class-validator class-transformer
 ```ts
 // pagination.dto.ts
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsPositive, IsInt, Max } from 'class-validator';
 import { Type, Expose } from 'class-transformer';
 
-export class IPaginationDto {
+export class PaginationDto {
   @IsOptional()
   @IsInt()
   @IsPositive()
   @Type(() => Number)
   @Expose()
-  readonly page = 1;
+  @ApiPropertyOptional({
+    default: 1,
+  })
+  readonly page: number = 1;
 
   @IsOptional()
   @IsInt()
@@ -309,7 +313,10 @@ export class IPaginationDto {
   @Type(() => Number)
   @Expose()
   @Max(100)
-  readonly limit = 50;
+  @ApiPropertyOptional({
+    default: 50,
+  })
+  readonly limit: number = 50; // 加:number才会显示在swagger中
 
   get skip(): number {
     return (this.page - 1) * this.limit;
@@ -680,4 +687,74 @@ export class AADStrategy extends PassportStrategy(OIDCStrategy, 'aad') {
   }
 }
 
+```
+
+## Swagger 接口文档
+
+配置
+```ts
+// main.ts
+import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ApplicationModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(ApplicationModule);
+
+  const options = new DocumentBuilder()
+    .setTitle('Project API')
+    .setDescription('The Project API description')
+    .setVersion('1.0')
+    .addTag('project')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(3000);
+}
+bootstrap();
+```
+在DTO中添加request schema
+```ts
+import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
+
+export enum UserRole {
+  'READER',
+  'DESIGNER',
+  'APPROVER',
+  'ADMIN',
+}
+
+export class UserDto {
+  @ApiProperty()  // 必填项
+  email: string;
+
+  @ApiPropertyOptional() // 非必填
+  last_name?: string;
+}
+
+export class ListUserDto extends PaginationDto {
+  @ApiPropertyOptional({
+    description: 'filter: role',
+    enum: UserRole, // 枚举
+    isArray: true, // ?role=0,1
+  })
+  role?: string;
+}
+```
+在controller中添加response schema
+```ts
+import { ApiCreatedResponse } from '@nestjs/swagger';
+import { UserDto, ListUserDto } from './dto/user';
+
+@Controller()
+export class UserController {
+  @Get('/users')
+  @ApiCreatedResponse({
+    type: UserDto,
+    isArray: true,
+  })
+  getUserList(@Query() listUserDto: ListUserDto): Promise<Pagination<UserDto>> {
+    ...
+  }
 ```

@@ -223,14 +223,17 @@ app.use(logger); // 绑定到每个注册路由
 ```ts
 import { ForbiddenException } from '@nestjs/common';
 
-@Get()
-async findAll() {
-  throw new ForbiddenException(); // 内置异常
-  throw new HttpException('Forbidden', HttpStatus.FORBIDDEN); // 基础异常类
-  throw new HttpException({
-    status: HttpStatus.FORBIDDEN,  // 403
-    error: 'This is a custom message',
-  }, HttpStatus.FORBIDDEN);
+throw new ForbiddenException(); // 内置异常
+throw new HttpException('Forbidden', HttpStatus.FORBIDDEN); // 基础异常类
+throw new HttpException({
+  status: HttpStatus.FORBIDDEN,  // 403
+  error: 'This is a custom message',
+}, HttpStatus.FORBIDDEN);
+
+try {
+	return await this.usersRepository.save(userToUpdate);
+} catch (error) {
+  throw new HttpException(error.sqlMessage, HttpStatus.BAD_REQUEST);
 }
 ```
 绑定过滤器
@@ -244,6 +247,7 @@ async findAll() {
 // main.ts
 app.useGlobalFilters(new HttpExceptionFilter()); // 全局范围的过滤器
 ```
+若已经设置了useGlobalFilters，在单个接口上加UseFilters会覆盖掉全局的useGlobalFilters
 
 ## Pipes 管道
 
@@ -263,11 +267,84 @@ Nest 自带八个开箱即用的管道:
 * ParseEnumPipe
 * ParseFloatPipe
 
+验证字符串是否是 UUID
 ```ts
-@Post()
-@UsePipes(ValidationPipe)
-async create(@Body() createCatDto: CreateCatDto) {
-  this.catsService.create(createCatDto);
+@Get('/users/:id')
+getUserDetail(
+  @Param('id', new ParseUUIDPipe()) id: string,
+): Promise<UserDto> {
+  return this.userService.findOne(id);
+}
+```
+Pagination 分页 法一：
+```ts
+import { ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
+@Get('/users')
+  getUserList(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+  ): Promise<UserDto[]> {
+    return this.userService.findAll({ page, limit });
+  }
+```
+Pagination 分页 法二：
+
+npm i --save class-validator class-transformer
+```ts
+// pagination.dto.ts
+import { IsOptional, IsPositive, IsInt, Max } from 'class-validator';
+import { Type, Expose } from 'class-transformer';
+
+export class IPaginationDto {
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  @Type(() => Number)
+  @Expose()
+  readonly page = 1;
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  @Type(() => Number)
+  @Expose()
+  @Max(100)
+  readonly limit = 50;
+
+  get skip(): number {
+    return (this.page - 1) * this.limit;
+  }
+  get take(): number {
+    return this.limit;
+  }
+}
+```
+```ts
+// controller
+import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { PaginationDto } from 'src/core/pagination.dto';
+@Get('/users')
+@UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        excludeExtraneousValues: true, // 排除dto中没有定义的query
+        exposeDefaultValues: true, // 没有query时使用默认值
+      },
+    }),
+  )
+  getUserList(
+    @Query() dto: PaginationDto,
+  ): Promise<UserDto[]> {
+    return this.userService.findAll(dto);
+  }
+
+// service
+findAll(ListUserDto): Promise<UserDto[]> {
+  return this.usersRepository.find({
+    skip: ListUserDto.skip,
+    take: ListUserDto.take,
+  });
 }
 ```
 

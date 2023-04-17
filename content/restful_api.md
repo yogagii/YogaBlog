@@ -97,3 +97,5 @@ https://api.example.com/v1/zoos
 * 500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功。
 
 参考文献：http://www.ruanyifeng.com/blog/2014/05/restful_api.html
+
+官网：https://restfulapi.cn/

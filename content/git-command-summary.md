@@ -192,14 +192,15 @@ git branch -vv
 ```
 * 变基: 
 ```bash
+git config --global pull.rebase true
 # feature branch
 git add .
 git commit -m ''
 git checkout dev
 # dev branch
-git pull
+git pull origin dev
 git rebase [feature-branch]
-git push
+git push origin dev
 ```
 
 * token

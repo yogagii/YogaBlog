@@ -190,6 +190,12 @@ select concat_ws(',',collect_set(filename)) totalname from <table>
 select TRIM(' A ') -- 'A'
 ```
 
+* rlike 正则匹配
+```sql
+select * from df_manu where filename rlike 'Actual_sales_2[01][0-9][0-9][0-9][0-9].xlsx'
+-- Actual_sales_202303.xlsx
+```
+
 * 大小写
 ```sql
 select LOWER('yoga') -- yoga

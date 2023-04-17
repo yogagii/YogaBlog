@@ -93,7 +93,7 @@ constructor(
 | - | - | -
 @Column | 添加表列 | @Column({ length: 100 })
 @PrimaryColumn | 创建主列 | 每个实体必须至少有一个主键列
-@PrimaryGeneratedColumn | 自动生成的列 |
+@PrimaryGeneratedColumn | 自动生成的列 | @PrimaryGeneratedColumn('uuid')
 @CreateDateColumn | 创建时间
 @UpdateDateColumn | 更新时间
 
@@ -107,6 +107,9 @@ export class FooBar {
 
   @PrimaryColumn()
   public barid?: number;
+
+  @Column({ unique: true }) // 创建重复会报错
+  email: string;
 
   @ManyToOne(type => Foo, foo => foo.fooBars)
   @JoinColumn({ name: "fooid"})

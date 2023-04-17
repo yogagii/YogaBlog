@@ -157,4 +157,5 @@ const reducers = (state, action) => {
 };
 
 ```
-### 极限性能记录
+
+> setState object/arr类型的变量，若state没有更新，考虑是因为浅拷贝 指针地址不变，尝试setState(...data)

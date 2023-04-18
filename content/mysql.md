@@ -160,7 +160,7 @@ DELETE 语句
 DELETE FROM table_name [WHERE Clause]
 ```
 
-LIKE 子句 (string has somevalue)
+LIKE 子句 (string has somevalue) / ILIKE 不区分大小写
 
 ```sql
 SELECT field1, field2,...fieldN

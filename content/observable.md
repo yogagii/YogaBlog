@@ -186,7 +186,41 @@ return forkJoin([res1, res2]).pipe(
 
 * mergeMap 有顺序依赖的多个请求
 
+```ts
+return this.httpService
+  .get('/res1')
+  .pipe(
+    map(res => res.data),
+  )
+  .pipe(
+    mergeMap(res1 => {
+      return this.httpService.get('/res2', { params: {} });
+    }),
+  )
+  .pipe(
+    map(res2 => res2.data),
+  )
+```
+
+### await
+
+* lastValueFrom / firstValueFrom 取代 toPromise
+```ts
+return await lastValueFrom(
+  this.httpService
+    .post(AuthService.requestUrl, requestData, AuthService.requestConfig)
+    .pipe(
+      map((response: AxiosResponse) => response.data),
+      catchError((e) => {
+        throw new HttpException(e.response.data, HttpStatus.UNAUTHORIZED);
+      }),
+    ),
+);
+```
+
 https://blog.csdn.net/qq_34035425/article/details/120598759
+
+---
 
 ## Promise
 

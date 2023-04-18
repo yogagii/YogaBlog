@@ -335,7 +335,7 @@ import { PaginationDto } from 'src/core/pagination.dto';
     new ValidationPipe({
       transform: true,
       transformOptions: {
-        excludeExtraneousValues: true, // 排除dto中没有定义的query
+        excludeExtraneousValues: true, // 排除dto中没有定义的query，当有其他filter时不能为true
         exposeDefaultValues: true, // 没有query时使用默认值
       },
     }),
@@ -399,6 +399,34 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
     return next.handle().pipe(map(data => ({ data, code: 200, message: '请求成功', }))); // After
   }
 }
+```
+
+全局拦截器用于整个应用程序、每个控制器和每个路由处理程序。在依赖注入方面, 从任何模块外部注册的全局拦截器 无法插入依赖项, 因为它们不属于任何模块。
+
+```ts
+// main.ts
+app.useGlobalInterceptors(
+  new RefreshTokenInterceptor(
+    new AuthService(new HttpService(), new UserManagementService()), 
+  ), // 只能传入实例，不能传入类，当传入的实例又调用其他类时会嵌套多层
+);
+```
+
+从模块(app.module)中设置拦截器可以传入类
+
+```ts
+// app.module
+import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+
+@Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RefreshTokenInterceptor,
+    },
+  ],
+})
 ```
 
 ## Task Scheduling 定时任务
@@ -653,7 +681,7 @@ export class CipherService {
 
 ```
 
-自定义JwtStrategy
+自定义CustomStrategy
 ```ts
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport';
@@ -682,12 +710,12 @@ export class AADStrategy extends PassportStrategy(OIDCStrategy, 'aad') {
         responseMode: 'form_post',
         redirectUrl: 'xxx/callback',
       },
-      (iss, sub, profile, accessToken, refreshToken, done) => { },
+      (iss, sub, profile, accessToken, refreshToken, done) => {},
     );
   }
 }
-
 ```
+跳转到aad登录界面
 
 ## Swagger 接口文档
 
@@ -758,3 +786,66 @@ export class UserController {
     ...
   }
 ```
+
+## Session 会话
+
+$ npm i express-session
+
+$ npm i -D @types/express-session
+
+```ts
+// main.ts
+import * as session from 'express-session';
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+```
+
+从路径处理程序中读取session
+
+```ts
+@Get('callback')
+async ssoCallback(@Session() session: Record<string, any>): Promise<any> {
+  session.token = {
+    ...result,
+    expires_at: new Date().getTime() + result.expires_in * 1000,
+  };
+}
+```
+
+_踩坑：Warning: connect.session() MemoryStore is not
+designed for a production environment, as it will leak
+memory, and will not scale past a single process._
+
+The default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire.
+
+$ npm install memorystore
+
+```ts
+// main.ts
+import session from 'express-session';
+import createMemoryStore from 'memorystore';
+
+const MemoryStore = createMemoryStore(session);
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
+  }),
+);
+
+// tsconfig.json
+"esModuleInterop": true
+```
+
+https://www.npmjs.com/package/memorystore

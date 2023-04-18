@@ -108,7 +108,7 @@ export class FooBar {
   @PrimaryColumn()
   public barid?: number;
 
-  @Column({ unique: true }) // 创建重复会报错
+  @Column({ unique: true }) // 创建重复会报错，大小写不敏感
   email: string;
 
   @ManyToOne(type => Foo, foo => foo.fooBars)
@@ -132,7 +132,13 @@ userRepository.find({
       photo: "user.photos",
     }
   },
-  where: [{ firstName: "Timber" }, { firstName: "Stan" }] // or
+  where: [
+    { 
+      firstName: "Timber",
+      region: region ? In(region.split(',')) : Not(IsNull()), // 多选过滤
+    },
+    { firstName: ILike(`%${name}%`), } // 模糊搜索，不区分大小写
+  ] // or
   order: {
     name: "ASC",
     id: "DESC"

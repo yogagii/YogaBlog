@@ -742,9 +742,10 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
 在DTO中添加request schema
 ```ts
-import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional, ApiProperty, IntersectionType } from '@nestjs/swagger';
 
 export enum UserRole {
   'READER',
@@ -761,7 +762,8 @@ export class UserDto {
   last_name?: string;
 }
 
-export class ListUserDto extends PaginationDto {
+// IntersectionType 可以将两个类型中所有属性组合在一起生成一个新类型
+export class ListUserDto extends IntersectionType(PaginationDto, SortDto) {
   @ApiPropertyOptional({
     description: 'filter: role',
     enum: UserRole, // 枚举
@@ -770,6 +772,7 @@ export class ListUserDto extends PaginationDto {
   role?: string;
 }
 ```
+
 在controller中添加response schema
 ```ts
 import { ApiCreatedResponse } from '@nestjs/swagger';

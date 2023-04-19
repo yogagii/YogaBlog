@@ -737,6 +737,28 @@ _踩坑：Caused by: org.apache.hadoop.fs.PathIOException: `/[schemaName]/[table
 set mapreduce.fileoutputcommitter.marksuccessfuljobs=false
 ```
 
+### Library
+
+_踩坑：Library installation failed due to infra fault_
+
+* 工作区库 workspace-libraries
+
+工作区库充当本地存储库，工作区中的所有用户均可使用共享文件夹中的工作区库，而某个用户文件夹中的工作区库仅该用户可用。
+
+可以从工作区库中创建群集安装库，先在群集上安装工作区库，然后才能将其用于笔记本或作业。
+
+先从公共存储库（PyPI 或 Maven）安装需要的库 create library -> PyPI 将 Python Whl 下载到本地
+
+再上传下载的包到DBFS create library -> Upload -> Python Whl
+
+* 集群库 cluster-libraries
+
+群集库可供群集上运行的所有笔记本使用
+
+安装已上传到工作区的工作区库：Install new -> Workspace
+
+https://learn.microsoft.com/zh-cn/azure/databricks/libraries/workspace-libraries
+
 ---
 
 ```python

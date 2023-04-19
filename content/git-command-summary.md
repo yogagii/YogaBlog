@@ -91,8 +91,9 @@ git log
 git commit --amend
 ```
 * 取消暂存的文件(注意与`git rm --cached`的区别): 
-```
-git reset HEAD filename
+```bash
+git reset HEAD  # 撤删add的所有文件
+git reset HEAD filename # 撤删add的某个文件
 ```
 * 撤销对文件的修改: 
 ```

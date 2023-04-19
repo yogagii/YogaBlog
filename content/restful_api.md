@@ -48,6 +48,14 @@ https://api.example.com/v1/zoos
 
 /zoos/ID/animals：列出某个指定动物园的所有动物
 
+/users?page=1&pageSize=10：分页 pagination
+
+/users?region=US,China：过滤 filtering
+
+/users?sort_by=first_name&order=asc：排序 sortby single column
+
+/users?sort=first_name:asc,age:desc：排序 sortby multiple columns
+
 * POST（CREATE）：在服务器新建一个资源。
 
 /zoos：新建一个动物园

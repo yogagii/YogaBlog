@@ -170,6 +170,7 @@ this.usersRepository
   )
   .where('user.id IN (:...userIdList)', { userIdList })
   .andWhere('user.create_time >= :START_DATE', { START_DATE })
+  // .distinct(true)
   .limit(10)
   .getRawMany(),
 
@@ -180,6 +181,11 @@ const sql = this.usersRepository
   .getQuery();
 console.log(sql);
 ```
+
+使用查询构建器查询可以获得两种类型的结果：
+
+* entities: getOne / getMany
+* raw results: getRawOne / getRawMany
 
 ### 多对多关系
 

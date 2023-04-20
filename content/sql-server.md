@@ -219,6 +219,9 @@ select isnull(TableName,'')+Remark -- 解决其中一个字段为空的情况，
 * IN (一般比OR操作符清单执行更快)
 ```sql
 select * from <TABLE> where id in (1001, 1002); -- id=1001 or id=1002
+IN () -- 语法错误
+IN (NULL) -- null和任何值比较运算都返回的false，返回空
+NOT IN (NULL) -- 同理也返回空
 ```
 
 ### 集合操作

@@ -431,6 +431,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 
 ## Task Scheduling 定时任务
 
+npm install --save @nestjs/schedule
+
 * 计时工作(cron job)
 
 ```ts

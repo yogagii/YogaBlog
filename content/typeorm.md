@@ -318,3 +318,20 @@ const city_list = await this.cityRepository.findOne('枣庄', {
   relations: ['hospitals'],
 });
 ```
+
+_踩坑：entity 修改后报错 TypeORM Error: Entity metadata for Users#majors was not found. Check if you specified a correct entit_
+
+My guess is that the strict equals (===) is colliding with a cache and thinking that the different relative import paths refer to different classes.
+先从其他路径引入Entity，成功后可改回原路径
+```ts
+// src/entities.ts:
+import { Users } from './userManagement/entities/users.entity';
+import { Majors } from './userPreference/entities/majors.entity';
+
+export { Users, Majors };
+
+// userManagement/entities/users.entity
+import { Majors } from 'src/entities'
+```
+
+https://stackoverflow.com/questions/59468756/error-object-metadata-not-found-after-adding-many-to-many-relationships

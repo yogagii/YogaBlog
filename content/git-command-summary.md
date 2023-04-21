@@ -150,17 +150,19 @@ git branch [branch-name]
 git checkout [branch-name]
 ```
 * 新建并切换分支: 
-```
+```bash
 git checkout -b [branch-name]
-git checkout --orphan [branch-name] //创建一个全新分支，分支历史从零开始
+git checkout --orphan [branch-name] # 创建一个全新分支，分支历史从零开始
 ```
 * 合并到当前分支: 
 ```
 git merge [branch-name]
 ```
 * 删除分支: 
-```
+```bash
 git branch -d [branch-name]
+git branch -D [branch-name]  # 强行删除本地分支
+git push origin -d [branch-name]  # 删除远程分支
 ```
 * 重命名分支:
 ```

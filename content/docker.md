@@ -82,6 +82,8 @@ JPM Application Development Pipeline
 
 ![docker](img/jpm.png)
 
+---
+
 ## 节省磁盘空间部署
 
 ### 法1. Monorepo

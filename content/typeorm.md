@@ -319,7 +319,7 @@ const city_list = await this.cityRepository.findOne('枣庄', {
 });
 ```
 
-_踩坑：entity 修改后报错 TypeORM Error: Entity metadata for Users#majors was not found. Check if you specified a correct entit_
+_踩坑：entity 修改后报错 TypeORM Error: Entity metadata for Users#majors was not found. Check if you specified a correct entity_
 
 My guess is that the strict equals (===) is colliding with a cache and thinking that the different relative import paths refer to different classes.
 先从其他路径引入Entity，成功后可改回原路径

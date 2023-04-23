@@ -45,7 +45,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
 * go to https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/vital-platform-dev
 * Click 'Log Groups'
 
-![docker](img/log1.png)
+![cloudwatch](img/log1.png)
 
 ## Log level
 

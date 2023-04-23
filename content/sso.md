@@ -117,6 +117,7 @@ Response:
     * 验证 token 是否有效 (step3)
     * token 验证通过，用返回的用户信息中的邮箱去 User表 中查找是否为注册用户
     * 当用户为首次登录，将返回的用户信息更新到 User表
+    * 将user_id存入session，给与用户挂钩的接口提供uuid
 * app.controller.ts
     * callback 接口获取 code，用 code 换取 token (step2)
     * 将 token 存入session，并添加过期时间 expires_at
@@ -171,7 +172,13 @@ export class SSOAuthGuard {
       );
     }
     const { access_token } = token;
-    return await this.authService.checkToken(access_token).then((res) => res);
+    return await this.authService.checkToken(access_token).then((res) => {
+      if (res && res.id) {
+        request.session.user_id = res.id;
+        return true;
+      }
+      return res;
+    });
   }
 }
 ```
@@ -251,6 +258,15 @@ providers: [
 ```
 
 坏处：需要创建一个空的 LocalAuthGuard
+
+LocalAuthGuard没有讲user_id存入session，需要在.env中添加一个测试账号
+```ts
+// user.controller.ts
+const user_id = process.env.NODE_ENV
+      ? session.user_id
+      : process.env.TEST_USER_ID;
+return this.userService.findOne(user_id);
+```
 
 区分环境 法二：
 ```ts

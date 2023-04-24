@@ -1,10 +1,7 @@
-Title: XENA
-Date: 2020-08-21
-Category: Analytics
-Tags: Docker
+Title: Docker
+Date: 2022-05-04
+Category: Programming
 Author: Yoga
-
-## Docker
 
 Docker的三个基本概念:
 
@@ -29,26 +26,93 @@ Get the app
 brew install --cask --appdir=/Applications docker
 ```
 打开蓝色小鲸鱼APP：Docker
-```
+
+```bash
 docker --version
 ```
-```
+
+添加 Dockerfile
+
+```bash
 git clone https://github.com/docker/getting-started.git
 
-cd getting-started
-docker build -t docker101tutorial
-
-docker run -d -p 80:80 \ —name docker-tutorial docker101tutorial
-
-docker tag docker101tutorial yogadock/docker101tutorial
-docker push yogadock/docker101tutorial
-
+cd getting-started/app
+vi Dockerfile
 ```
-Docker 安装phpmyadmin
+
+```Dockerfile
+# syntax=docker/dockerfile:1
+   
+FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD ["node", "src/index.js"]
+EXPOSE 3000
+```
+
+创建镜像
+
+```bash
+docker build -t getting-started .
+```
+* -t 镜像名
+* . Dockerfile 路径 
+
+创建容器
+
+```bash
+docker run -dp 3000:3000 getting-started
+```
+* -d “detached” mode (in the background)
+* -p port mapping 'host’s port 3000':'container’s port 3000'
+
+列出容器
+
+```bash
+docker ps
+```
+
+停止容器
+
+```bash
+docker stop <the-container-id>
+```
+
+删除容器
+
+```bash
+docker rm <the-container-id>
+```
+
+* -f 不用先停止，强制删除容器
+
+上传镜像
+
+```bash
+docker login -u yogadock
+docker image ls
+
+# docker tag SOURCE_IMAGE[:TAG] USER-NAME/TARGET_IMAGE[:TAG]
+docker tag getting-started yogadock/getting-started
+docker push yogadock/getting-started
+```
+* 不指定tag默认latest
+
+在虚机上运行新实例
+
+Play with Docker: https://labs.play-with-docker.com/
+
+```bash
+docker run -dp 3000:3000 yogadock/getting-started
+```
+---
+
+## Docker 安装phpmyadmin
 
 https://hub.docker.com/_/phpmyadmin
 
-```
+```bash
 docker run --name myadmin -d -e PMA_ARBITRARY=1 -p 4000:80 phpmyadmin
 
 docker ps
@@ -154,63 +218,4 @@ JPM Application Development Pipeline
 
 ![docker](img/jpm.png)
 
----
 
-## 节省磁盘空间部署
-
-### 法1. Monorepo
-
-monorepo模式: 该模式将代码工件作为轻量级 monorepo 的一部分，可能更适合开发团队或多项目环境。
-
-可以从一个标准模式结构开始，然后添加 project 
-
-```
-nest new my-project
-
-cd my-project
-nest generate app my-app
-```
-
-### 法2. pnpm
-
-pnpm 会在全局的 store 目录里存储项目 node_modules 文件的 hard links 。因为这样一个机制，导致每次安装依赖的时候，如果是个相同的依赖，有好多项目都用到这个依赖，那么这个依赖实际上最优情况(即版本相同)只用安装一次。
-
-```
-npm i pnpm -g
-pnpm install
-```
-硬链接 VS 软连接：
-
-* 硬链接是同一个文件多个名字，软链接不是同一个文件
-* 原始文件删掉，硬链接的文件可以访问，软链接的原始文件删掉，访问失效
-* 软连接的指向文件大小是路径的大小，硬链接的大小就是文件的大小
-
-du -sh 显示文件大小
-
-### 法3. 用docker管理node_module
-
----
-
-## peerDependency 对等依赖关系
-
-```
-APP
-└---node_modules
-    |---KeyPackage 核心依赖库（e.g React）
-    |---Package_A
-    |   └---node_modules
-    |       └---KeyPackage 核心依赖库
-    |---Package_B
-    |   └---node_modules
-    |       └---KeyPackage 核心依赖库
-```
-
-npm 从版本v7开始，install默认以peerDependencies的方式下载，避免核心依赖库被重复下载
-
-_踩坑：
-用户依赖的包版本与各个子项目依赖的包版本相互不兼容，那么就会报错：无法解析依赖树的问题（依赖冲突）Conflicting peer dependency: mssql@6.4.1_
-
-```bash
-npm install xxxx --legacy-peer-deps 
-```
-绕过peerDependency里依赖的自动安装，忽略项目中引入的各个依赖模块之间依赖相同但版本不同的问题，以npm v3-v6的方式去继续执行安装操作。

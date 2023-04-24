@@ -6,6 +6,22 @@ Author: Yoga
 
 ## Docker
 
+Docker的三个基本概念:
+
+* Image(镜像)
+* Container(容器)
+* Repository(仓库)
+
+在第一次部署项目的时候把项目等环境直接放进docker里面，下次要迁移项目到另一台服务器上时，把docker镜像上传到docker仓库上，再另一台服务器直接拉取。
+
+Get the app
+
+brew install --cask --appdir=/Applications docker
+
+打开蓝色小鲸鱼APP：Docker
+
+docker --version
+
 ```
 git clone https://github.com/docker/getting-started.git
 
@@ -47,6 +63,52 @@ location /php/ {
   proxy_buffering off;
   proxy_pass http://10.216.104.80:4000;
 }
+```
+
+### NestJs
+
+使用 Docker 将NestJs应用容器化
+
+```md
+# README.md
+# watch docker mode
+$ docker-compose up -d ./docker/docker-compose.dev.yml
+
+# production docker mode
+$ docker-compose up -d ./docker/docker-compose.yml
+```
+
+* Dockerfile：负责导入 Docker 镜像，将它们分为development和production环境，复制我们所有的文件并安装npm依赖项
+
+```ts
+// Dockerfile
+FROM node:latest // 创建新镜像，使用公共存储库中提供的官方Node.js镜像，并指定版本
+
+WORKDIR /usr/src/app/ // Docker 执行的每个命令(在RUN语句中定义)都将在指定的上下文中执行
+
+COPY package.json ./
+RUN npm install
+
+COPY ./ ./
+
+CMD ["npm", "run", "build"]
+```
+
+* docker-compose.yml：负责定义我们的容器、应用程序其他服务所需的图像、存储卷、环境变量等
+
+```ts
+// docker/docker-compose.yml
+version: '3.5'
+
+services:
+  pro_server_container:
+    build: ../
+    ports:
+      - 3000:3000
+    container_name: 'pro_server_container'
+    command: npm run start:prod
+    volumes:
+      - ../dist:/usr/src/app/dist
 ```
 
 ## XENA

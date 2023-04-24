@@ -14,19 +14,24 @@ Docker的三个基本概念:
 
 在第一次部署项目的时候把项目等环境直接放进docker里面，下次要迁移项目到另一台服务器上时，把docker镜像上传到docker仓库上，再另一台服务器直接拉取。
 
-Image是类，Container是实例，类只有一个，但可以new出千千万万个实例对象。
+Image是类，Container是镜像的可运行实例，类只有一个，但可以new出千千万万个实例对象。可以使用DockerAPI或CLI创建、启动、停止、移动或删除容器。
 
 Get the app
 
-安装homebrew: /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+安装 homebrew: 
 
+```bash
+/bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+```
+安装 docker:
 
+```bash
 brew install --cask --appdir=/Applications docker
-
+```
 打开蓝色小鲸鱼APP：Docker
-
+```
 docker --version
-
+```
 ```
 git clone https://github.com/docker/getting-started.git
 

@@ -8,13 +8,18 @@ Author: Yoga
 
 Docker的三个基本概念:
 
-* Image(镜像)
-* Container(容器)
-* Repository(仓库)
+* Image 镜像
+* Container 容器
+* Repository 仓库
 
 在第一次部署项目的时候把项目等环境直接放进docker里面，下次要迁移项目到另一台服务器上时，把docker镜像上传到docker仓库上，再另一台服务器直接拉取。
 
+Image是类，Container是实例，类只有一个，但可以new出千千万万个实例对象。
+
 Get the app
+
+安装homebrew: /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+
 
 brew install --cask --appdir=/Applications docker
 

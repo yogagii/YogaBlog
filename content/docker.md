@@ -87,7 +87,7 @@ docker rm <the-container-id>
 
 * -f 不用先停止，强制删除容器
 
-上传镜像
+上传镜像到 Docker Hub
 
 ```bash
 docker login -u yogadock
@@ -139,7 +139,9 @@ location /php/ {
 }
 ```
 
-### NestJs
+---
+
+## NestJs
 
 使用 Docker 将NestJs应用容器化
 
@@ -184,38 +186,3 @@ services:
     volumes:
       - ../dist:/usr/src/app/dist
 ```
-
-## XENA
-
-username: TST-ITS-SCMStudent17
-
-password: Scm$tudent17a
-
-```js
-docker ps
-docker volumn ls
-docker volume rm 文件名和
-docker volume create xena-training-volume
-docker volume inspect xena-training-volume
-
-docker login xxx.artifactrepo.xxx.com
-// username
-// password
-docker pull xxx.artifactrepo.xxx.com/xena/xena-training-toolbox
-docker run -itd --name=xena-training-toolbox --mount source=xena-training-volume,target=/root/xena xxx.artifactrepo.xxx.com/xena/xena-training-toolbox
-Copy to clipboard
-
-// open docker extension screen
-ll
-// /root/xena 
-kubectl
-git config --global user.email "TST-ITS-SCMStudent#@its.xxx.com"
-git config --global user.name student#
-git clone https://sourcecode.xxx.com/scm/asx-ncnl/student#.git
-```
-
-JPM Application Development Pipeline
-
-![docker](img/jpm.png)
-
-

@@ -42,15 +42,15 @@ Jenkinsfile tells Jenkins to use the Jenkins Pipeline Manager Global Shared Libr
 
 * Jenkinsfile
 
-```python
+```groovy
 #!/bin/groovy
-@Library('jpm_shared_lib@1.x') _
+@Library('jpm_shared_lib@1.x') _  // imports the latest stable version of JPM
 import org.xxx.*
 def args = [:]
 args.debug = true
-args.manifestSourcesFile = 'manifest-sources.yaml'
+args.manifestSourcesFile = 'manifest-sources.yaml' // // tells JPM where to find job configuration
 args.environmentMappingFile = 'environment-mapping.yaml'
-new stdPipeline().execute(args)
+new stdPipeline().execute(args) // invoke the JPM Standard Pipeline
 ```
 
 * manifest.yaml

@@ -13,24 +13,30 @@ https://registry.npmmirror.com/binary.html?path=node/
 
 去下载一个 linux 可用的 node 版本
 
-2. 传输到服务器 /home/jyu36 并解压
+2. 传输到服务器 /home/jyu 并解压
+
+scp ~/Desktop/node-v18.16.0-linux-x64.tar.xz jyu@xx.xx.xx.xx:~
 
 ```bash
 xz -d node-v14.18.2-linux-x64.tar.xz
 tar -xvf node-v14.18.2-linux-x64.tar
 ```
 
-3. 软连接 (不确定是否必须)
+3. 软连接 (步骤3,4二选一)
 
-ln -s /home/nodejs/node-v14.18.2-linux-x64/bin/npm /usr/local/bin
-ln -s /home/nodejs/node-v14.18.2-linux-x64/bin/node /usr/local/bin
+```bash
+ln -s /home/jyu/node-v14.18.2-linux-x64/bin/npm /usr/local/bin
+ln -s /home/jyu/node-v14.18.2-linux-x64/bin/node /usr/local/bin
+```
 
 4. 配置环境变量
+
+env 查看环境变量 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
 
 ```bash
 vi /etc/profile
 
-export NODEJS_HOME=/home/v-jyu36/node-v14.18.2-linux-x64
+export NODEJS_HOME=/home/jyu/node-v14.18.2-linux-x64
 export PATH=$PATH:$NODEJS_HOME/bin
 
 source /etc/profile
@@ -190,6 +196,18 @@ ps -eo pid,ppid,user,cmd,%mem,%cpu --sort=-%cpu|head -n 10
 ```
 
 ## 文本操作
+
+* 定位首行
+
+```
+gg
+```
+
+* 定位尾行
+
+```
+G
+```
 
 * 删除单行
 ```

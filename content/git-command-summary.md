@@ -278,6 +278,14 @@ chmod 777 ./build.sh
 ./build.sh
 ```
 
+* 对已经提交过的文件添加到.gitignore
+```
+git rm -r --cached .
+git add .
+git commit -m "add .gitignore"
+git push
+```
+
 ## PM2进程管理工具
 
 * 启动index.js（node index）并起名:

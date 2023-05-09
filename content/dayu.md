@@ -24,6 +24,10 @@ and sharing internally & externally.
     * build up integration function to make sure data Interoperable by other applications.
     * Store, combine and clean data to make the data reusable by user and other applications. 
 
+## DAYU
+
+MedTech China SC data foundation project to store and combine data from multiple sources as well as build up data catalog to make it findable, reusable and easier to understand.
+
 
 数据来源：
 

@@ -106,6 +106,20 @@ Play with Docker: https://labs.play-with-docker.com/
 ```bash
 docker run -dp 3000:3000 yogadock/getting-started
 ```
+
+数据卷(volumes)
+
+容器是镜像的实例化。数据如果都在容器中，一旦容器删除，数据就会丢失。
+
+数据卷技术可将容器产生的数据同步到本地，容器之间也可以共享，从而实现容器数据的持久化。
+
+```bash
+docker volumn ls # 查看Volumes
+docker volume inspect xena-training-volume # 查看某个volumn
+docker volume rm xena-training-volume # 删除一个 Volume
+docker volume create xena-training-volume # 创建一个Volume
+```
+
 ---
 
 ## Docker 安装phpmyadmin

@@ -187,6 +187,36 @@ console.log(sql);
 * entities: getOne / getMany
 * raw results: getRawOne / getRawMany
 
+子查询
+
+```ts
+import { getConnection } from 'typeorm';
+
+const posts = await getConnection()
+  .createQueryBuilder()
+  .select("user.name", "name")
+  .from(subQuery => {
+    return subQuery
+      .select("user.name", "name")
+      .from(User, "user")
+  }, "user")
+  .getRawMany();
+```
+踩坑：'getConnection' is deprecated. Connection was renamed to DataSource. Old Connection is still there, but now it's deprecated. 
+
+```ts
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+
+constructor(
+  @InjectDataSource('dadb')
+  private datasource: DataSource,
+) {}
+
+const posts = await this.datasource
+  .createQueryBuilder()
+  ...
+```
 ### 多对多关系
 
 一个课程有多位讲师

@@ -68,7 +68,9 @@ SET @i=1
 PRINT @i
 ```
 
-### for xml path 多行合并
+### 多行合并
+
+* for xml path 
 
 将查询结果集以XML形式展现，将多行的结果，展示在同一行。PATH模式：通过简单的XPath语法来允许用户自定义嵌套的XML结构、元素、属性值。
 
@@ -85,6 +87,18 @@ select
 from ActivityLogs a 
 WHERE a.ActivityStatus='Failed' and a.BatchRunId='pipeline().parameters.BatchRunID'
 group by Batchrunid
+```
+
+* STRING_AGG (sqlserver的版本需要2017以上)
+
+```sql
+SELECT STRING_AGG(my_col, ',') AS my_result FROM my_tbl;
+```
+
+If the result is too big, you may get error "**STRING_AGG aggregation result exceeded the limit of 8000 bytes. Use LOB types to avoid result truncation.**" , which can be fixed by changing the query to this:
+
+```sql
+SELECT STRING_AGG(convert(varchar(max), my_col), ',') AS my_result FROM my_tbl;
 ```
 
 ### 聚合函数
@@ -129,6 +143,29 @@ SELECT
   END PriceCNY,
 FROM
   ListPrice
+```
+
+### convert 格式转换
+
+* varchar 转 number
+
+```sql
+convert(int,lead_time); -- 整数
+convert(decimal,lead_time); -- 浮点型 decimal(18,2) 指定保留2位小数
+```
+
+* 四舍五入
+
+```sql
+convert(int, 13.6); -- 13
+round(13.6, 0) -- 14
+cast(13.6 as numeric(18, 0)) -- 14
+```
+
+* 转 varchar
+
+```sql
+convert(varchar(20),@i)
 ```
 
 ### date 日期

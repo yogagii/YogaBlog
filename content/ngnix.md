@@ -6,6 +6,26 @@ Author: Yoga
 
 Nginx就是性能非常好的反向代理服务器，用来做负载均衡。
 
+### 安装
+
+下载  [https://nginx.org/download/nginx-1.14.2.tar.gz](https://nginx.org/download/nginx-1.14.2.tar.gz) 
+
+上传nginx-1.14.2.tar.gz到目标服务器
+
+tar -zxf ***.tar.gz 解压缩
+
+确认gcc是否安装，若否先yum -y install gcc  gcc-c++ kernel-devel
+
+安装完成后进入nginx目录 ./configure
+
+make && make install
+
+安装成功， 进入/usr/local/nigin/sbin/
+
+执行./nginx启动
+
+软连接 ln -s /usr/local/nginx/sbin/nginx /usr/sbin/nginx
+
 ### 启动
 
 踩坑：Redirecting to /bin/systemctl start nginx.service Failed to start nginx.service: Unit not found.
@@ -140,6 +160,26 @@ server {
 location /static {
     alias   /var/www/static;
 }
+```
+
+### SSL 证书
+
+_踩坑：Nginx 配置完后，只能打开http开头的域名，因为缺少SSL证书_
+
+HTTP 协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息
+
+HTTPS 经由 HTTP 进行通信，但利用 SSL/TLS 来加密数据包。HTTPS 开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。
+
+在nginx的conf目录下新建一个cert目录，并将两个证书文件上传到cert目录下
+
+```
+listen 443 ssl; # managed by Certbot
+ssl_certificate "/etc/letsencrypt/live/xxx.cer";
+ssl_certificate_key "/etc/letsencrypt/live/xxx.key";
+ssl_session_cache shared:SSL:1m;
+ssl_session_timeout  10m;
+ssl_ciphers PROFILE=SYSTEM;
+ssl_prefer_server_ciphers on;
 ```
 
 ___

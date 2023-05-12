@@ -16,11 +16,11 @@ tar -zxf ***.tar.gz 解压缩
 
 确认gcc是否安装，若否先yum -y install gcc  gcc-c++ kernel-devel
 
-安装完成后进入nginx目录 ./configure
+安装完成后进入nginx目录 ./configure --with-http_ssl_module
 
 make && make install
 
-安装成功， 进入/usr/local/nigin/sbin/
+安装成功， 进入/usr/local/nginx/sbin/
 
 执行./nginx启动
 
@@ -172,7 +172,7 @@ HTTPS 经由 HTTP 进行通信，但利用 SSL/TLS 来加密数据包。HTTPS �
 
 在nginx的conf目录下新建一个cert目录，并将两个证书文件上传到cert目录下
 
-```
+```bash
 listen 443 ssl; # managed by Certbot
 ssl_certificate "/etc/letsencrypt/live/xxx.cer";
 ssl_certificate_key "/etc/letsencrypt/live/xxx.key";
@@ -180,6 +180,25 @@ ssl_session_cache shared:SSL:1m;
 ssl_session_timeout  10m;
 ssl_ciphers PROFILE=SYSTEM;
 ssl_prefer_server_ciphers on;
+```
+
+_踩坑：[emerg] the "ssl" parameter requires ngx_http_ssl_module. Nginx 缺少 http_ssl_module 模块_
+
+切换到源码包：cd /home/usr/nginx-1.14.2/
+
+./configure --with-http_ssl_module
+
+make (不要make install，否则会覆盖安装)
+
+备份原有已安装好的nginx：cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
+
+停止nginx运行：nginx -s stop
+
+将刚刚编译好的nginx覆盖掉原有的nginx：cp ./objs/nginx /usr/local/nginx/sbin/nginx
+
+启动nginx：nginx
+
+nginx -V 查看是否已成功加入
 ```
 
 ___

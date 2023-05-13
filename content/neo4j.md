@@ -41,6 +41,7 @@ Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在
 创建一个没有属性的节点
 ```SQL
 CREATE (<node-name>:<label-name>) --节点名:标签名，可有多个标签名
+
 CREATE (emp:Employee)
 ```
 创建具有属性的节点
@@ -53,6 +54,7 @@ CREATE (
     <Propertyn-name>:<Propertyn-Value>
   }
 )
+
 CREATE (emp:Employee{id:123,name:"Lokesh"})
 
 CREATE (:Person { name:'Tester',age:10 })
@@ -91,6 +93,55 @@ WHERE cust.id = "1001" AND cc.id= "5001"
 CREATE (cust)-[r:DO_SHOPPING_WITH{shopdate:"12/12/2014",price:55000}]->(cc) 
 RETURN r
 ```
+_Warning: 
+This query builds a cartesian product between disconnected patterns._
+
+_笛卡尔积警告: 时间复杂度为(number of Foo nodes) x (number of Bar nodes)_
+
+created the index: uses a WITH clause to force the first MATCH clause to execute first, avoiding the cartesian product.
+
+* DELETE 删除节点、关系
+
+```SQL
+DELETE <node-name-list> -- 用逗号分隔节点名
+
+MATCH (e: Employee) DELETE e
+
+MATCH (cc: CreditCard)-[rel]-(c:Customer) 
+DELETE cc,c,rel
+```
+
+* REMOVE 删除属性、标签
+
+```SQL
+REMOVE <property-name-list>
+
+MATCH (book { id:122 })
+REMOVE book.price -- 删除属性
+RETURN book
+
+MATCH (m:Movie) 
+REMOVE m:Picture -- 删除标签
+```
+
+* SET 添加、更新属性
+
+```SQL
+MATCH (book:Book)
+SET book.title = 'superstar'
+RETURN book
+```
+
+* ORDER BY 排序
+
+```SQL
+ORDER BY <property-name-list> [DESC] -- 默认升序ASC
+
+match (c:Customer) return c ORDER BY c.id DESC
+```
+
+* UNION 合并
+
 ---
 ## Nestjs
 

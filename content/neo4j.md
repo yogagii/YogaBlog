@@ -165,6 +165,9 @@ import { Neo4jModule } from 'nest-neo4j';
         username: process.env.DATABASE_N4_USERNAME,
         password: process.env.DATABASE_N4_PASSWORD,
         database: process.env.DATABASE_N4_DATABASE,
+        config: {
+          disableLosslessIntegers: true, 
+        },
       }),
     }),
   ],
@@ -173,6 +176,8 @@ import { Neo4jModule } from 'nest-neo4j';
 })
 export class AppModule {}
 ```
+
+_disableLosslessIntegers：Integer常量池--low,high限定范围。Enabling this option can result in a loss of precision and incorrect numeric values being returned if the database contains integer numbers outside of the range [Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]._
 
 ```ts
 import { Injectable } from '@nestjs/common';

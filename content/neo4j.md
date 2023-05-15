@@ -191,13 +191,16 @@ export class SupplyLaneService {
     return this.neo4jService
       .read(
         `
-          match (o:xx) -[r:xx]->(d:xx) return o,r,d
+          match (src:xx) -[r:xx]->(dst:xx) return src,r,dst
         `,
       )
       .then((res) => {
         if (!res.records.length) return undefined;
-        const row = res.records[0];
-        return row;
+        return res.records.map((record) => {
+          src: record.get('src').properties,
+          dst: record.get('dst').properties,
+          lt: record.get('r').properties,
+        });
       });
   }
 }

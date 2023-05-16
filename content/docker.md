@@ -285,14 +285,7 @@ location /php/ {
 
 使用 Docker 将NestJs应用容器化
 
-```md
-# README.md
-# watch docker mode
-$ docker-compose up -d ./docker/docker-compose.dev.yml
-
-# production docker mode
-$ docker-compose up -d ./docker/docker-compose.yml
-```
+根目录下添加Dockerfile和docker-compose.yml
 
 * Dockerfile：负责导入 Docker 镜像，将它们分为development和production环境，复制我们所有的文件并安装npm依赖项
 
@@ -325,9 +318,24 @@ services:
     environment:
       DATABASE_UI_HOST: host.docker.internal // 替换localhost
     ports:
-      - 3000:3001
+      - 3000:3000
     container_name: 'pro_server_container'
     command: npm run start:qa
     volumes:
       - ./dist:/usr/src/app/dist
 ```
+
+* package.json node dist/main 改用nodemon 执行
+
+```json
+{
+	"scripts" : {
+		"start:qa": "nodemon dist/main",
+		"start:prod": "NODE_ENV=production nodemon dist/main",
+	},
+	"dependencies": {
+		"nodemon": "^2.0.20"
+	}
+}
+```
+运行 docker compose up -d

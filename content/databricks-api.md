@@ -49,7 +49,8 @@ Body:
     "base_parameters": {
       "key": "test_key"
     }
-  }
+  },
+  "timeout_seconds": 30, // Maximum completion time for this task. The default behavior is no timeout.
 }
 ```
 
@@ -85,6 +86,8 @@ Result:
   }
 }
 ```
+
+If the task does not complete in this time, Azure Databricks sets its status to “Timed Out”.
 
 ---
 

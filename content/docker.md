@@ -59,6 +59,12 @@ docker build -t getting-started .
 * -t 镜像名
 * . Dockerfile 路径 
 
+列出镜像
+
+```bash
+docker image ls
+```
+
 创建容器
 
 ```bash
@@ -70,7 +76,8 @@ docker run -dp 3000:3000 getting-started
 列出容器
 
 ```bash
-docker ps
+docker ps # 运行中的容器
+docker ps -a 
 ```
 
 停止容器
@@ -107,7 +114,15 @@ Play with Docker: https://labs.play-with-docker.com/
 docker run -dp 3000:3000 yogadock/getting-started
 ```
 
-数据卷(volumes)
+查看日志
+
+```bash
+docker logs <container-id> -f
+```
+
+* -f, --follow 实时输出日志，最后一行为当前时间戳的日志
+
+### volume mount 数据卷
 
 容器是镜像的实例化。数据如果都在容器中，一旦容器删除，数据就会丢失。
 
@@ -115,11 +130,122 @@ docker run -dp 3000:3000 yogadock/getting-started
 
 ```bash
 docker volumn ls # 查看Volumes
-docker volume inspect xena-training-volume # 查看某个volumn
-docker volume rm xena-training-volume # 删除一个 Volume
-docker volume create xena-training-volume # 创建一个Volume
+docker volume inspect todo-db # 查看某个volumn
+docker volume rm todo-db # 删除一个 Volume
+docker volume create todo-db # 创建一个Volume
 ```
 
+```bash
+docker run -dp 3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started
+```
+
+### bind mount
+
+将宿主机中的文件、目录mount到容器上。其上的数据可以被宿主机读写，可以被mount它的所有容器读写。
+
+bind mount the current directory from the host into the /app directory in the container
+```bash
+docker run -dp 3000:3000 \
+  -w /app --mount type=bind,src="$(pwd)",target=/app \
+  node:18-alpine \
+  sh -c "yarn install && yarn run dev"
+```
+
+* -w sets the “working directory” or the current directory that the command will run from
+
+nodemon 是一种工具，可在检测到目录中的文件更改时动重新启动应用程序
+```json
+// package.json
+"scripts": {
+  "dev": "nodemon src/index.js"
+},
+```
+
+### network
+
+```bash
+docker network create todo-app
+docker network ls
+docker network rm todo-app
+```
+
+Start a MySQL container and attach it to the network.
+```bash
+docker run -d \
+  --network todo-app --network-alias mysql \
+  -v todo-mysql-data:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=secret \
+  -e MYSQL_DATABASE=todos \
+  mysql:8.0
+```
+
+connect to the database
+```bash
+docker exec -it <mysql-container-id> mysql -u root -p
+```
+
+Connect app to MySQL
+```bash
+docker run -dp 3000:3000 \
+  -w /app -v "$(pwd):/app" \
+  --network todo-app \
+  -e MYSQL_HOST=mysql \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=secret \
+  -e MYSQL_DB=todos \
+  node:18-alpine \
+  sh -c "yarn install && yarn run dev"
+```
+删除network, database, todo-app都不会使数据丢失
+
+### Docker Compose
+
+Docker Compose is a tool that was developed to help define and share multi-container applications. With Compose, we can create a YAML file to define the services and with a single command, can spin everything up or tear it all down.
+
+管理多个容器的，定义启动顺序的，合理编排，方便管理
+
+docker-compose.yml
+```yaml
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
+```
+By default, Docker Compose automatically creates a network specifically for the application stack (which is why we didn’t define one in the compose file).
+
+```bash
+docker compose up -d
+docker compose down # 默认不会删除volume
+docker compose down --volumes
+```
+
+## .dockerignore
+
+In this case, the node_modules folder should be omitted in the second COPY step because otherwise, it would possibly overwrite files which were created by the command in the RUN step. 
+```
+node_modules
+```
 ---
 
 ## Docker 安装phpmyadmin
@@ -177,6 +303,7 @@ FROM node:latest // 创建新镜像，使用公共存储库中提供的官方Nod
 WORKDIR /usr/src/app/ // Docker 执行的每个命令(在RUN语句中定义)都将在指定的上下文中执行
 
 COPY package.json ./
+COPY package-lock.json ./ // 锁定版本
 RUN npm install
 
 COPY ./ ./
@@ -192,11 +319,15 @@ version: '3.5'
 
 services:
   pro_server_container:
-    build: ../
+    build: ./
+    env_file:
+      - .env // 环境变量
+    environment:
+      DATABASE_UI_HOST: host.docker.internal // 替换localhost
     ports:
-      - 3000:3000
+      - 3000:3001
     container_name: 'pro_server_container'
-    command: npm run start:prod
+    command: npm run start:qa
     volumes:
-      - ../dist:/usr/src/app/dist
+      - ./dist:/usr/src/app/dist
 ```

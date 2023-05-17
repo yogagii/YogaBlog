@@ -237,6 +237,41 @@ return next.handle();
 
 后果：不能保证用户不操作2小时token才过期，若最后一次操作刚好在3600s，则1小时后就会过期
 
+## AD Group
+
+scope="openid"
+
+SSO Supports all Open ID Connect response types when "openid" is in the scope. This allows for user information to be in "id_token" (jwt token). Once decoded, we get an object with access values, expiry time, user/group info, etc.
+
+```json
+{
+  "sub": "000000",
+  "aud": "xxx",
+  "iss": "https://fedlogin.xxx.com",
+  "iat": 1684305147,
+  "exp": 1684305447,
+  "address": {
+    "country": "CN",
+    "region": "AP"
+  },
+  "profile": "xxx",
+  "name": "xxx",
+  "memberOf": ["ITS-APP-XXX-USR", "ITS-APP-XXX-DSG"],
+  "given_name": "xxx",
+  "family_name": "xxx",
+}
+```
+
+npm install @nestjs/jwt
+
+```ts
+import { JwtService } from '@nestjs/jwt';
+
+private readonly jwtService: JwtService
+
+const userInfo = this.jwtService.decode(id_token);
+```
+
 ## 依赖注入
 
 在依赖注入方面, 从任何模块外部main.js注册的全局拦截器 无法插入依赖项, 因为它们不属于任何模块。

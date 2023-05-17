@@ -378,8 +378,49 @@ export class CatsController {
 ```
 Nest提供了通过 @SetMetadata() 装饰器将定制元数据附加到路由处理程序的能力。
 ```ts
+// roles.decorator.ts
 @SetMetadata('roles', ['admin'])
 ```
+
+创建一个RolesGuard类来比较当前用户拥有的角色和当前路径需要的角色
+
+```ts
+// roles.guard.ts
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    if (!requiredRoles) { // 没有@Roles()的接口直接返回true
+      return true;
+    }
+    const request = context.switchToHttp().getRequest();
+    const { user_role } = request.session;
+    return !requiredRoles.some((role) => role > user_role); // 判断用户权限是否大于接口所需权限
+  }
+}
+```
+全局注册RolesGuard
+```ts
+// app.module.ts
+providers: [
+  {
+    provide: APP_GUARD,
+    useClass: process.env.NODE_ENV ? SSOAuthGuard : LocalAuthGuard,
+  },
+  {
+    provide: APP_GUARD,
+    useClass: process.env.NODE_ENV ? RolesGuard : LocalAuthGuard,
+  },
+],
+```
+SSOAuthGuard 会在 RolesGuard 之前执行，SSOAuthGuard 返回 true 才会执行到 RolesGuard。所以可以在 SSOAuthGuard 中在session里存下用户权限 user_role。
 
 ## Interceptor 拦截器
 

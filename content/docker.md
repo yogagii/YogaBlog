@@ -13,6 +13,10 @@ Docker的三个基本概念:
 
 Image是类，Container是镜像的可运行实例，类只有一个，但可以new出千千万万个实例对象。可以使用DockerAPI或CLI创建、启动、停止、移动或删除容器。
 
+## 安装 Docker
+
+* MAC
+
 Get the app
 
 安装 homebrew: 
@@ -30,6 +34,19 @@ brew install --cask --appdir=/Applications docker
 ```bash
 docker --version
 ```
+* LINUX
+
+yum install -y yum-utils device-mapper-persistent-data lvm2
+
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+yum install -y docker-ce docker-ce-cli [containerd.io](http://containerd.io/)
+
+systemctl start docker --add-host=host.docker.internal:host-gateway
+
+docker -v
+
+---
 
 添加 Dockerfile
 
@@ -50,6 +67,9 @@ RUN yarn install --production
 CMD ["node", "src/index.js"]
 EXPOSE 3000
 ```
+
+* RUN: 在容器中运行指令的命令。
+* CMD: 启动容器时运行指定的命令，Dockerfile 中可以有多个 CMD 指令，但只有最后一个生效，如果 docker run 后面指定有参数，该参数将会替换 CMD 的参数。
 
 创建镜像
 
@@ -120,6 +140,12 @@ docker run -dp 3000:3000 yogadock/getting-started
 docker logs <container-id> -f
 ```
 
+显示容器根目录
+
+```bash
+docker exec -it <container-id> ls
+```
+
 * -f, --follow 实时输出日志，最后一行为当前时间戳的日志
 
 ### volume mount 数据卷
@@ -182,6 +208,10 @@ docker run -d \
 connect to the database
 ```bash
 docker exec -it <mysql-container-id> mysql -u root -p
+
+# 等价于
+docker exec -it <mysql-container-id> bin/bash 
+mysql -u root -p
 ```
 
 Connect app to MySQL
@@ -339,3 +369,42 @@ services:
 }
 ```
 运行 docker compose up -d
+
+---
+
+## Watchtower
+
+Watchtower 是一个可以实现自动化更新 Docker 基础镜像与容器的实用工具。它监视正在运行的容器以及相关的镜像，当检测到 reg­istry 中的镜像与本地的镜像有差异时，它会拉取最新镜像并使用最初部署时相同的参数重新启动相应的容器。
+
+```bash
+docker run -d \
+    --name watchtower \
+    --restart unless-stopped \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    containrrr/watchtower -c
+```
+* -s 默认每 5 分钟执行一次 "0 2 * * * *"
+* -c 自动清除旧镜像
+
+If pulling images from private Docker registries, supply registry authentication credentials with the environment variables REPO_USER and REPO_PASS or by mounting the host's docker config file into the container 
+
+vi $HOME/.docker/config.json
+```json
+{
+	"auths": {
+		"<docker_image_name>": {
+      "auth": "<USERNAME>:<PASSWORD> (converted to base 64)",
+      "email": "xxx"
+    },
+	},
+	"credsStore": "desktop"
+}
+```
+```bash
+docker run -d \
+  --name watchtower \
+  -v $HOME/.docker/config.json:/config.json \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  containrrr/watchtower -c
+  --interval 300
+```

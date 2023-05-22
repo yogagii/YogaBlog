@@ -140,13 +140,21 @@ docker run -dp 3000:3000 yogadock/getting-started
 docker logs <container-id> -f
 ```
 
+* -f, --follow 实时输出日志，最后一行为当前时间戳的日志
+
 显示容器根目录
 
 ```bash
 docker exec -it <container-id> ls
 ```
 
-* -f, --follow 实时输出日志，最后一行为当前时间戳的日志
+插件
+
+```bash
+docker plugin ls
+docker plugin stop <plugin-id>
+```
+_docker: Error response from daemon: authorization denied by plugin openpolicyagent/opa-docker-authz-v2:0.4: request rejected by administrative policy._
 
 ### volume mount 数据卷
 
@@ -354,6 +362,7 @@ services:
     volumes:
       - ./dist:/usr/src/app/dist
 ```
+host.docker.internal 是mac和windows的参数，linux环境需在起container时增加--add-host=host.docker.internal:host-gateway
 
 * package.json node dist/main 改用nodemon 执行
 
@@ -369,6 +378,8 @@ services:
 }
 ```
 运行 docker compose up -d
+
+取代了pm2 start —watch 意味着不用装node
 
 ---
 
@@ -405,6 +416,6 @@ docker run -d \
   --name watchtower \
   -v $HOME/.docker/config.json:/config.json \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  containrrr/watchtower -c
+  containrrr/watchtower -c \
   --interval 300
 ```

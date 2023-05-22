@@ -6,11 +6,48 @@ Tags: Azure, ML
 
 ## Databricks 机器学习
 
-湖仓 Lakehouse
+**数据仓库 Data Warehouse**：
 
-数据使用成熟度：Clean Data → Reports → Ad Hoc Queries → Data Exploration → Predictive Modeling
+Structured Data -> ETL -> Data Warehouse -> Business Intelligence
 
-湖仓一体：数据仓库做BI <-> 数据湖做AI
+e.g. snowflake, Azure Synapse Analytics, amazon REDSHIFT, Goodle Big Query
+
+* 通常是以SQL为主的一个独立系统
+* 为商业智能 BI 提供支持
+* 对机器学习和人工智能的支持优先
+
+**数据湖 Data Lake**：
+
+Structured, Semi-, & Unstructured Data -> Data Lake -> ETL -> Machine Learning
+
+e.g. Spark, hadoop, amazon EMR, Cloud Dataproc
+
+* 开放数据格式、开放数据平台
+* 支持AI在内的各种大数据应用
+* 对BI支持有限
+* 可能滋生出数据质量问题
+
+**湖仓 Lakehouse**：
+
+数据使用成熟度：
+
+Clean Data 
+
+→ Reports 
+
+→ Ad Hoc Queries 
+
+→ Data Exploration 发生了什么 
+
+→ Predictive Modeling 什么可能发生 
+
+→ Prescriptive Analytics 应该怎么准备 
+
+→ Automated Decision Making 自动做出最佳决定
+
+> 湖仓一体：数据仓库做BI (发生了什么) <-> 数据湖做AI (什么会发生)
+
+Databricks 湖仓一体数据平台：Data Warehousing, Data Engineering, Data Streaming, Data Science and ML
 
 ## AutoML
 
@@ -74,3 +111,5 @@ print (f'AUC: {roc_auc_score(y_test, model.predict (X_test))}')
 
 ![databricks](img/databricks-ml1.png)
 ![databricks](img/databricks-ml2.png)
+
+https://player.vimeo.com/video/827484225?autoplay=1

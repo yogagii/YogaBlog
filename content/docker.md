@@ -106,6 +106,14 @@ docker ps -a
 docker stop <the-container-id>
 ```
 
+重启容器
+
+```bash
+docker start <the-container-id> # 包含容器文件系统挂载的操作
+docker restart <the-container-id> # 不包含容器文件系统的卸载与挂载操作
+```
+_更新.env文件后得删除容器重建，docker restart/start无用_
+
 删除容器
 
 ```bash

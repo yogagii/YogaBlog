@@ -85,6 +85,12 @@ docker build -t getting-started .
 docker image ls
 ```
 
+删除镜像
+
+```bash
+docker rmi <image-id>
+```
+
 创建容器
 
 ```bash
@@ -171,7 +177,7 @@ _docker: Error response from daemon: authorization denied by plugin openpolicyag
 数据卷技术可将容器产生的数据同步到本地，容器之间也可以共享，从而实现容器数据的持久化。
 
 ```bash
-docker volumn ls # 查看Volumes
+docker volume ls # 查看Volumes
 docker volume inspect todo-db # 查看某个volumn
 docker volume rm todo-db # 删除一个 Volume
 docker volume create todo-db # 创建一个Volume

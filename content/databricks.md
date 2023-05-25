@@ -708,6 +708,7 @@ OPTIONS (
 ) AS
 SELECT * FROM df_spark
 ```
+> 这样创建的表 location在sql server，不在湖中，湖里不会有对应的文件夹
 
 ---
 ## Cluster 集群

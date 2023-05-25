@@ -1,4 +1,4 @@
-Title: 数据仓库技术
+Title: Data Governance
 Date: 2023-03-01
 Category: Programming
 Author: Yoga
@@ -9,7 +9,7 @@ Author: Yoga
 数据 | 来自事务系统、运营数据库和业务线应用程序的关系数据 | 来自 IoT设备、网站、移动应用程序、社交媒体和企业应用程序的非关系和关系数据
 模式 | 写时模式，数据写入前已经定义好schema，更改schema成本较高 | 读时模式，数据在利用的时候再定义schema，灵活方便
 
-## 数据血缘
+## 数据血缘 Data Lineage
 
 https://blog.csdn.net/u011487470/article/details/126767328
 
@@ -41,3 +41,49 @@ https://blog.csdn.net/u011487470/article/details/126767328
 * 确定影响范围：避免出现上游表的修改导致下游表的报错。
 * 评估数据价值、推动数据质量：重点关注输出数量较多的数据节点
 * 数据安全审计：下游数据的安全等级不应该低于上游的安全等级
+
+## 数据治理 Data Governance
+
+数据治理 是指对数据资产的管理活动行使权力和控制的活动集合(规划、监控和执行)。
+
+从范围来讲，数据治理涵盖了从前端业务系统、后端业务数据库再到业务终端的数据分析，从源头到终端再回到源头，形成的一个闭环负反馈系统。
+
+从目的来讲，数据治理就是要对数据的获取、处理和使用进行监督管理。
+
+数据治理 由元数据、数据标准、数据质量、数据集成、主数据、数据资产、数据交换、生命周期、数据安全等组成。
+
+Principles:
+
+* Accountability: people for decisions and monitoring 数据认责管理
+* Standardization: aligning on the same definitions and talking same language 数据标准化
+* Transparency: understand the lifecycle of data 数据透明度
+
+> Data source -> Azure Purview -> Data consumer
+
+Azure Purview enables unified data governance: 
+
+* Data Map: automate and manage metadata at scale 数据地图
+    * Automated Data discovery 数据扫描
+    * Automated Data Classification
+    * Automated Lineage Extraction
+    * Simplified Configuration & Management (web, api, sdk)
+* Data Catalog: enable effortless discovery for data consumers
+    * Self-service Search & Browse 数据搜索
+    * Curated & Standardized Business Glossaries
+    * Interactive Lineage Visualization
+    * Simplified Data Curation and Stewardship
+* Data Insights: access data usage across your organization
+    * Data Asset Distribution 数据被不同部门访问频率 -> 分担成本
+    * Business Glossary
+    * Data Classification & Labelling 数据分类和打标
+    * Data Location & Movement (in progress) 
+
+Data source: On-prem / Cloud / Saas Application
+
+Data consumer: SQL Server / Power BI / Azure SQL / Microsoft 365
+
+Data Use Governance - Polices: 
+
+* Access policy 数据读写权限
+* Encryption policy 数据加密
+* Data Movement & Sharing policy 数据分享权限

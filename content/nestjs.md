@@ -444,6 +444,30 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
 
 全局拦截器用于整个应用程序、每个控制器和每个路由处理程序。在依赖注入方面, 从任何模块外部注册的全局拦截器 无法插入依赖项, 因为它们不属于任何模块。
 
+刷新 Token
+```ts
+@Injectable()
+export class RefreshTokenInterceptor implements NestInterceptor {
+  constructor(private readonly authService: AuthService) {}
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Promise<Observable<any>> {
+    const request = context.switchToHttp().getRequest();
+    const token = request.session.token;
+    await this.authService // 若没有await，先执行next.handle()，then中更新session不会生效
+      .refreshToken(token.refresh_token)
+      .then((result) => {
+        request.session.token = {
+          ...result,
+          expires_at: new Date().getTime() + result.expires_in * 1000,
+        };
+      });
+    return next.handle();
+  }
+}
+```
+
 ```ts
 // main.ts
 app.useGlobalInterceptors(

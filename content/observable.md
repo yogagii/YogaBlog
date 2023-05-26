@@ -149,7 +149,8 @@ newOb.subscribe(data=>console.log(data))
 return this.httpService.get('/api').pipe(
   map(res => res.data),
   catchError(e => {
-    throw new HttpException(`position请求错误`, 400);
+    return new Promise((r) => r(e.response.data)); // 需返回promise, 不能直接返回error
+    throw new HttpException(`position请求错误`, 400); // return 和 throw 二选一
   }),
 );
 ```

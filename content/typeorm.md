@@ -187,7 +187,7 @@ console.log(sql);
 * entities: getOne / getMany
 * raw results: getRawOne / getRawMany
 
-子查询
+**子查询**
 
 ```ts
 import { getConnection } from 'typeorm';
@@ -217,6 +217,17 @@ const posts = await this.datasource
   .createQueryBuilder()
   ...
 ```
+
+**插入**
+
+```ts
+const newSKUs = await this.ugSKUsRepository
+  .createQueryBuilder()
+  .insert()
+  .values(skuList)
+  .execute();
+```
+
 ### 多对多关系
 
 一个课程有多位讲师

@@ -829,7 +829,7 @@ export class UserDto {
   last_name?: string;
 }
 
-// IntersectionType 可以将两个类型中所有属性组合在一起生成一个新类型
+// IntersectionType 可以将两个类型中所有属性组合在一起生成一个新类型，但是继承不到pagination的getter
 export class ListUserDto extends IntersectionType(PaginationDto, SortDto) {
   @ApiPropertyOptional({
     description: 'filter: role',

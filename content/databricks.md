@@ -466,6 +466,15 @@ set tableList = ('TABLE1', 'TABLE2');
 delete from <TABLE> where insertDate=${hiveconf:delDate} and tablename in ${hiveconf:tableList};
 ```
 
+* 日期
+    * date_part 提取部分日期
+    * date_add 返回在 startDate 之后的日期 numDays
+    * date_sub 返回在 startDate 之前的日期 numDays
+    * dayofmonth 返回这个月的第几天
+```sql
+select date_part('YEAR', date_sub(getDate(), dayofmonth(getdate())))*100+date_part('MONTHS', date_sub(getDate(), dayofmonth(getdate()))) DataMonth -- 上个月 202305
+```
+
 * 自定义函数
 ```sql
 CREATE OR REPLACE FUNCTION ToDouble(value STRING) RETURNS DOUBLE RETURN double(replace(replace(replace(replace(trim(value),'-',''),'"',''),',',''),'/',''))

@@ -472,7 +472,10 @@ delete from <TABLE> where insertDate=${hiveconf:delDate} and tablename in ${hive
     * date_sub 返回在 startDate 之前的日期 numDays
     * dayofmonth 返回这个月的第几天
 ```sql
-select date_part('YEAR', date_sub(getDate(), dayofmonth(getdate())))*100+date_part('MONTHS', date_sub(getDate(), dayofmonth(getdate()))) DataMonth -- 上个月 202305
+SET DayL1M=date_sub(getDate(), dayofmonth(getdate())); -- 上个月末 20230531
+SET DayL5M=date_sub(${hiveconf:DayL1M}, 155); -- 6*31 半年前
+SET DataMonth=date_part('YEAR', ${hiveconf:DayL1M})*100+date_part('MONTHS', ${hiveconf:DayL1M}); -- 上个月 202305
+SET DataMonthL6=date_part('YEAR', ${hiveconf:DayL5M})*100+date_part('MONTHS', ${hiveconf:DayL5M}); -- 6个月前 202212
 ```
 
 * 自定义函数

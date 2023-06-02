@@ -829,7 +829,6 @@ export class UserDto {
   last_name?: string;
 }
 
-// IntersectionType 可以将两个类型中所有属性组合在一起生成一个新类型，但是继承不到pagination的getter
 export class ListUserDto extends IntersectionType(PaginationDto, SortDto) {
   @ApiPropertyOptional({
     description: 'filter: role',
@@ -839,6 +838,14 @@ export class ListUserDto extends IntersectionType(PaginationDto, SortDto) {
   role?: string;
 }
 ```
+Mapped types:
+
+* IntersectionType: 可以将两个类型中所有属性组合在一起生成一个新类型，但是继承不到pagination的getter
+* PartialType: 把所有字段变为optional
+* PickType: 选择部分字段
+* OmitType: 排除部分字段
+
+https://docs.nestjs.com/openapi/mapped-types#composition
 
 在controller中添加response schema
 ```ts

@@ -5,7 +5,7 @@ Author: Yoga
 
 ## Spark原理
 
-Spark 是使用 scala 实现的基于内存计算的大数据开源集群计算环境。是UC Berkeley 开源的类Hadoop MapReduce的通用并行框架, 专门用于大数据量下的迭代式计算。
+Spark 是使用 scala 实现的基于内存计算的大数据开源集群计算环境。是UC Berkeley 开源的类Hadoop MapReduce的通用并行框架, 专门用于大数据量下的迭代式计算。提供了 java,scala, python,R 等语言的调用接口。
 
 Spark 在多次运算的情况下是比较快的。因为 Hadoop 在一次 MapReduce 运算之后，会将数据的运算结果从内存写入到磁盘中，第二次运算时再从磁盘中读取数据，2次运算间有多余 IO 消耗；Spark 则是将数据一直缓存在内存中,直到计算得到最后的结果,再将结果写入到磁盘。 
 
@@ -58,6 +58,63 @@ Transformation 函数分为：
 
 ---
 
+## Spark SQL
+
+Spark专门用于大数据量下的迭代式计算，将数据一直缓存在内存中,直到计算得到最后的结果,再将结果写入到磁盘,所以多次运算的情况下,Spark 是比较快的。
+
+- Spark SQL: 提供了类 SQL 的查询,返回 Spark-DataFrame 的数据结构(类似 Hive)
+- Spark Streaming: 流式计算,主要用于处理线上实时时序数据(类似 storm)
+- MLlib: 提供机器学习的各种模型和调优
+- GraphX: 提供基于图的算法,如 PageRank
+
+```sql
+Select id, result from exams where result > 70 order by result
+
+spark.table("exam").select("id", "result").where("result > 70").orderBy("result")
+```
+
+SparkSQL中的三种Join:
+
+* Broadcast Join 小表对大表
+
+将小表的数据分发到每个节点上，供大表使用。executor存储小表的全部数据，牺牲空间，换取shuffle操作大量的耗时。
+
+被广播的表首先被collect到driver段，然后被冗余分发到每个executor上，所以当表比较大时，采用broadcast join会对driver端和executor端造成较大的压力。
+
+基表不能被广播，比如 left outer join 时，只能广播右表
+
+* Shuffle Hash Join
+
+利用key相同必然分区相同的这个原理，先对两张表分别按照join keys进行重分区（shuffle），再对两个表中相对应分区的数据分别进行Hash Join（先将小表分区构造为一张hash表，然后根据大表分区中记录的join keys值拿出来进行匹配）
+
+分区的平均大小不超过spark.sql.autoBroadcastJoinThreshold所配置的值，默认是10M
+
+* Sort Merge Join 大表对大表
+
+将两张表按照join keys进行了重新shuffle，保证join keys值相同的记录会被分在相应的分区。分区后对每个分区内的数据进行排序，排序后再对相应的分区内的记录进行连接
+
+https://blog.csdn.net/hellojoy/article/details/113665938
+
+踩坑：There is not enough memory to build the hash map
+
+_If the estimated size of one of the DataFrames is less than the autoBroadcastJoinThreshold, Spark may use BroadcastHashJoin to perform the join. If the available nodes do not have enough resources to accommodate the broadcast DataFrame, your job fails due to an out of memory error._
+
+In Databricks Runtime 7.0 and above, set the join type to SortMergeJoin with join hints enabled.
+```python
+# disable broadcast
+spark.conf.set("spark.sql.autoBroadcastJoinThreshold", -1)
+```
+
+---
+
+A DataFrame is a distributed collection of data grouped into named columns
+
+DataFrame是一种表格型数据结构，它含有一组有序的列，每列可以是不同的值。DataFrame的行索引是index，列索引是columns。
+
+DataFrame transformations are methods that return a new DataFrame and are lazily evaluated
+
+DataFrame actions are methods that trigger computation. An action is needed to trigger the execution of any DataFrame transformations
+
 ## PySpark
 
 PySpark is an interface for Apache Spark in Python.
@@ -82,12 +139,17 @@ df.columns
 df.collect() # 全部
 df.take(1) # 第一行
 df.tail(1) # 最后一行
-df.toPandas()
+df.count()
 ```
 
 * Selecting Data
 ```python
 df.select(df.c).show() # 选择列
+df.select("id", "result")
+  .where("result > 70")
+  .orderBy("result")
+  .show()
+
 df.filter(df.a == 1).show() # 选择行
 ```
 
@@ -103,6 +165,8 @@ def plus_mean(pandas_df):
 df.groupby('color').applyInPandas(plus_mean, schema=df.schema).show()
 ```
 
+A schema defines the column names and types of a DataFrame
+
 * 创建或替换本地临时视图
 ```python
 df.createOrReplaceTempView("people")
@@ -111,8 +175,12 @@ df.createOrReplaceTempView("people")
 * toPandas
 
 ```python
+# spark 转换为pandas的dataframe
 dfp = df.toPandas()
 display(dfp)
+
+# pandas的dataframe转化为spark的dataframe
+spark_df = sc.createDataFrame(pandas_df)
 ```
 
 ### pyspark.sql.GroupedData
@@ -134,6 +202,14 @@ spark.read.jdbc(url=url,table= 'Onhand_Inventory',properties = properties)
 ```
 
 ## Pandas
+
+```python
+data = {
+    'state':['Ohio','Ohio','Ohio','Nevada','Nevada'],
+    'year':[2000,2001,2002,2001,2002],
+}
+frame = pd.DataFrame(data)
+```
 
 * pandas.DataFrame.assign 根据某个列进行计算得到一个新列
 
@@ -166,11 +242,21 @@ df1.merge(df2, left_on='lkey', right_on='rkey')
 
 * pandas.DataFrame.dropna
 
+```python
+df.drop('age').collect() # 删除列
+df.drop(df.age).collect()
+
+df.select('Age','Gender').dropDuplicates().show() # 去重
+```
+
 Drop the rows where at least one element is missing.
 
 ```python
-# Define in which columns to look for missing values.
-df.dropna(subset=['name', 'toy'])
+df = df.na.drop()  # 删除任何列包含na的行
+df.na.drop("any").show() # 任何出现NaN/null就丢弃
+df.na.drop("all").show() # 一行都是NaN/null才丢弃
+df.na.drop("any",List("age","dt")).show() # 针对特定列出现NaN/null就丢弃改行
+df = df.dropna(subset=['col1', 'col2'])  # 删掉col1或col2中任一一列包含na的行
 ```
 
 * pandas.DataFrame.astype

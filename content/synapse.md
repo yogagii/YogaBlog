@@ -34,6 +34,10 @@ return await Promise.all(
 )
 ```
 
+Error: Insert values statement can contain only constant literal values or variable references
+
+insert语句中必须包含entity中定义的所有column！
+
 2. 不支持OFFSET
 
 ```sql
@@ -48,3 +52,4 @@ SELECT TOP (${pageSize}) * FROM (SELECT TOP(${skip}) * from <TABLE>)
 ```
 
 解决2：totalResults.splice(skip, take)
+

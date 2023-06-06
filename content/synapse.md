@@ -46,6 +46,8 @@ select * from <TABLE> OFFSET 10;
 
 error: Incorrect syntax near 'OFFSET'.
 
+同理 只能find不能findOne
+
 解决1：
 ```sql
 SELECT TOP (${pageSize}) * FROM (SELECT TOP(${skip}) * from <TABLE>)

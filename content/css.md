@@ -180,3 +180,34 @@ ul {
 ```
 
 火狐滚动条不能修改样式
+
+## 选择器
+
+| 伪类选择器 | Desc |
+| - | - |
+:active | 选择正在被激活的元素（匹配指定状态）
+:hover | 选择被鼠标悬浮着的元素（匹配指定状态）
+:visited | 选择已被访问的元素（匹配指定状态）
+:focus | 选择拥有键盘输入焦点的元素
+:enable | 选择每个已启动的元素
+:disable | 选择每个已禁止的元素
+:checked | 选择每个被选中的元素
+:target | 选择当前的锚点元素
+:first-child | 选择满足是其父元素的第一个子元素的元素
+:only-child | 选择满足是其父元素的唯一一个子元素的元素
+:last-child | 选择满足是其父元素的最后一个元素的元素
+:nth-child(n) | 选择满足是其父元素的第n个子元素的元素
+:nth-child(odd) | 奇数行
+:nth-child(even) | 偶数行
+:nth-last-child(n) | 选择满足是其父元素的倒数第n个子元素的元素
+:empty | 选择满足没有子元素的元素
+:not(selector) | 选择不满足selector的元素
+:root | 选择根元素
+
+| 伪元素选择器 | Desc |
+| - | - |
+::first-letter | 选择指定元素的第一个单词
+::first-line | 选择指定元素的第一行
+::after | 在指定元素的内容后面插入内容
+::before | 在指定元素的内容前面插入内容
+::selection | 选择指定元素中被用户选中的内容

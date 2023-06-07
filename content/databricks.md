@@ -4,174 +4,9 @@ Category: Cloud
 Author: Yoga
 Tags: Azure, ETL
 
-
-ETL: Extract, Transform and Load 数据仓库技术
-
 databricks是使用Apache Spark™的原始创建者提供的Databricks统一分析平台。它集成了Spark环境支持Scala、python、R语言进行开发。
 
 adb-xxx.azuredatabricks.net
-
-Workspace -> Users (your own folder) -> 右键import -> .dbc file
-
--> Create -> Notebook -> Default language: python
-
-jobs -> start cluster
-
-## 调用notebook
-
-```python
-%run /_POC_QA_SC_DataCenter/Dayu-connect-to-datalake
-```
-
-```python
-dbutils.notebook.run("/_POC_QA_SC_DataCenter/Dayu-connect-to-datalake_Func", 60, {"argument": "data"})
-```
-* 优势：可传参，可调用多个笔记本
-* 缺点：启动新作业，变量不存在
-
-## Input & Output
-
-```python
-dbutils.widgets.get("argument1")
-dbutils.notebook.exit(data)
-```
-
-ADF 读取output：@activity('Notebook').output
-
-## 文件操作
-
-* dbutils
-```python
-dbutils.fs.ls("abfss://container@blob.xxx.cn/folder/")
-dbutils.fs.rm("abfss://container@blob.xxx.cn/folder/filename", True)
-dbutils.fs.mkdirs(TempPath)
-dbutils.fs.cp(SapPath+FileName, TempPath)
-```
-_踩坑：若要跟新表结构，需将存表的文件夹删除_
-
-* 获取文件名
-```python
-df = spark.read \
-  .format("text") \
-  .load("abfss://container@blob.xxx.cn/folder/filename_*.txt") \
-  .select("*", "_metadata")
-display(df)
-
-df.createOrReplaceTempView("df_spark")
-df1=spark.sql(f"select distinct _metadata.file_name as filename from (select * from df_spark order by _metadata) a")
-for i in range(0,30):
-    filename=str(df1.collect()[i][0])
-```
-_踩坑：xlsx文件也只能用 .format('csv') 不能 .format("com.crealytics.spark.excel")_
-
-* os
-```python
-import os
-
-os.listdir("/")
-```
-
-```
-%sh ls /
-```
-
-* azure-storage-file-datalake
-
-```
-pip install azure-storage-file-datalake
-```
-```python
-import os, uuid, sys
-from azure.storage.filedatalake import DataLakeServiceClient
-from azure.core._match_conditions import MatchConditions
-from azure.storage.filedatalake._models import ContentSettings
-
-def initialize_storage_account():
-    try:  
-        global service_client
-        credential = ClientSecretCredential(tenant_id, client_id, client_secret)
-        service_client = DataLakeServiceClient(account_url=account_url, credential=credential)
-    except Exception as e:
-        print(e)
-
-def list_directory(container="raw", folder="example_folder"):
-    try:
-        file_system_client = service_client.get_file_system_client(file_system=container)
-        paths = file_system_client.get_paths(path=folder)
-        for path in paths:
-            print(path.name + '\n')
-    except Exception as e:
-     print(e)
-
-def create_directory(container="raw", folder="example_folder"):
-    file_system_client = service_client.get_file_system_client(file_system=container)
-    res = file_system_client.create_directory(folder)
-
-def delete_file(container="raw", file="example_folder/example.xlsx"):
-    file_system_client = service_client.get_file_system_client(file_system=container)
-    res = file_system_client.delete_file(file)
-
-def delete_directory(container="raw", folder="example_folder"):
-    file_system_client = service_client.get_file_system_client(file_system=container)
-    res = file_system_client.delete_directory(folder)
-```
-
-## 文件读写
-
-* CSV
-```python
-df_csv=spark.read.format("csv").option("encoding","GBK").load("abfss://container@blob.xxx.cn/folder/filename.csv");
-display(df_csv)
-# GBK解决中文乱码
-```
-```python
-# CSV不需要header
-df_csv.to_csv(<target_file>, index = False, header=False, encoding = 'utf_8_sig')
-```
-_踩坑：encoding为GBK时，excel里将"创作语言和校对"设置英文首选，会出现中文乱码全是？情况_
-
-* TXT
-```python
-df_txt=spark.read.format("text").load(sourcefile);
-```
-
-```python
-df_txt.coalesce(1).write.format("text").save("s3://<bucket>/<folder>/filename")
-```
-_踩坑：coalesce只会确保产生一个文件，仍会生成以filename命名的文件夹，文件夹下有以part加数字命名的txt文件(以及\_SUCCESS, \_committed, \_started文件)_
-
-```python
-# 解决txt文件每一行有引号
-df_txt.to_csv(<target_file>, index = False, header=False, sep='\t', quoting=False, quotechar=' ')
-```
-
-* Excel
-```python
-# header必传项, maxRowsInMemory解决文件过大>10mb
-df_excel=spark.read.format("com.crealytics.spark.excel").option("header","true").option("maxRowsInMemory", 2000).load(sourcefile);
-```
-csv是通过spark读的，excel是spark底层hadoop读的，libraries里安装com.crealytics:spark-excel
-
-```python
-pip install openpyxl
-
-# excel文件得保留header
-df_excel.to_excel(<target_file>, index = False)
-```
-
-* JSON
-```sql
-select * from json.`abfss://container@blob.xxx.cn/folder/filename`
-```
-
-```python
-df_DateLake=spark.read.format("json").load("abfss://container@blob.xxx.cn/folder/filename.json");
-```
-
-* Parquet
-```sql
-select * from delta.`abfss://container@blob.xxx.cn/folder/filename`
-```
 
 ## Delta Table
 
@@ -238,216 +73,6 @@ _踩坑：用 ADF 将.parquet文件存储到sql server时，delta table格式会
 * DESCRIBE HISTORY
 * VACUUM
 * RESTORE
-
-__DCL__
-
-* blob 存储文件系统的访问权限
-```sql
-GRANT SELECT, MODIFY ON ANY FILE TO `<user>@<domain-name>` --
-```
-
-* schema 访问权限
-```sql
-SHOW GRANTS ON SCHEMA <SCHEMANAME>
-
-GRANT USAGE, SELECT, CREATE, READ_METADATA, MODIFY ON SCHEMA <SCHEMANAME> TO `<user>@<domain-name>`
-```
-
-* table 访问权限
-```sql
-ALTER TABLE <TABLENAME> OWNER TO `<user>@<domain-name>`
-GRANT SELECT, READ_METADATA ON TABLE <TABLENAME> TO `<user>@<domain-name>`
-
-DESCRIBE [EXTENDED] <TABLENAME> --表的基本元数据信息
-
-SHOW GRANTS on TABLE <TABLENAME> --表的权限信息
-SHOW GRANTS `<user>@<domain-name>` on TABLE <TABLENAME>
-```
-
-__DDL__
-
-* 创建SCHEMA
-
-```sql
-CREATE SCHEMA example_schema
-LOCATION 'dbfs:/mnt/azrzdbicinmtdpadlsqa/{container}/{example_schema}'
-```
-
-* 创建TABLE
-```sql
-drop table if exists STG.TableName;
-create table STG.TableName 
-(
-`Field1` string,
-`Field2` INT,
-`InsertTime` timestamp)
-USING delta 
-LOCATION "abfss://container@blob.xxx.cn/folder/STG/TableName";
-```
-如果省略 USING，则默认值为 DELTA。
-
-对于除 DELTA 之外的任何 data_source，还必须指定 LOCATION，除非catalog为 hive_metastore。
-
-设置湖地址
-```sql
-set Address=abfss://container@blob.xxx.cn;
-...
-LOCATION "${hiveconf:Address}/folder/CSTG/TableName";
-```
-
-已创建SCHEMA后不需要Location
-```sql
--- 加上comment会更好
-CREATE TABLE IF NOT EXISTS example_schema.example_table
-(
- col1 STRING COMMENT 'col1_comment'
-)
-using delta
-PARTITIONED BY (insertDate)
-```
-
-* 克隆TABLE
-
-> SHALLOW CLONE: 浅表克隆不会将数据文件复制到克隆目标。 表元数据等效于源。 创建这些克隆的成本较低。
-</br>DEEP CLONE: 深层克隆还会将源表数据复制到克隆目标。它还会克隆流元数据。
-
-```sql
-CREATE OR REPLACE TABLE <SCHEMA>.<TABLENAME> DEEP CLONE <SCHEMA>.<TABLENAME>;
-```
-
-__DML__
-
-* Insert Table: CSV/EXCEL (RAW -> STG)
-
-```python
-%python
-import datetime
-ManuPath="abfss://container@blob.xxx.cn/folder/RawZone/MANU/"
-
-def sliceErrorMsg(msg):
-    FailReaon = str(msg)
-    if FailReaon.find(';') > 0:
-        return FailReaon[0:FailReaon.find(';')].replace("'", "`")
-    elif FailReaon.find('.') > 0:
-        return FailReaon[0:FailReaon.find('.')].replace("'", "`")
-    else:
-        return FailReaon[0:30].replace("'", "`")
-
-def insertTable(FileName, LandingTableName, TableColumn, ExcelTitle, SaveDay=30, Path=ManuPath):
-    try:
-        fileFormat = 'csv' if 'csv' in FileName else 'com.crealytics.spark.excel';
-        df_DateLake=spark.read.format(fileFormat).option("header","true").load(Path+FileName);
-    except:
-        spark.sql(f" insert into STG.TableReadLog select '{LandingTableName}',current_date(),now(),'Not found {FileName}',null;");
-    else:
-        df_DateLake.createOrReplaceTempView("df_spark");
-        spark.sql(f"delete from {LandingTableName} where InsertTime<date_sub(now(), {SaveDay})");
-        try:
-            spark.sql(f"insert into {LandingTableName}({TableColumn}) select {ExcelTitle},now() InsertTime from df_spark;");
-        except Exception as FailReaon:
-            FailReaon=sliceErrorMsg(FailReaon);
-            print(FailReaon);
-            spark.sql(f"insert into STG.TableReadLog select '{LandingTableName}',current_date(),now(),'{FailReaon}',null;");
-        else:
-            spark.sql(f"insert into STG.TableWriteLog select '{LandingTableName}',current_date(),now(),null;");
-    
-```
-
-* 增量
-
-```sql
-INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
-SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
-```
-
-```sql
-merge into <CSTG_SCHEMA><TABLE> a
-using <STG_SCHEMA>.<TABLE> b
-    on a.id=b.id and a.insertDate=b.insertDate -- 同一天内数据更新不会覆盖
-when not matched then insert 
-(<columns>,insertDate)
-values(<columns>)
-```
-
-* 容错性增量
-
-```sql
-DELETE FROM <CSTG_SCHEMA><TABLE> A WHERE EXISTS (SELECT key FROM <STG_SCHEMA><TABLE> B WHERE A.key=B.key and B.InsertTime>Current_Date());
-
-INSERT INTO <CSTG_SCHEMA><TABLE> (<columns>, InsertTime)
-SELECT <columns>, NOW() FROM <STG_SCHEMA>.<TABLE> WHERE InsertTime>Current_Date();
-```
-
-* 全量
-
-_有 InsertTime>CurrentDate 时需要判断 IsUpdate_
-```python
-IsUpdate=spark.sql('select count(1) Num from <STG_SCHEMA>.<TABLE> where InsertTime>=current_date()');
-if IsUpdate.collect()[0][0] > 0:
-    spark.sql(f'TRUNCATE TABLE <CSTG_SCHEMA><TABLE>;')
-    spark.sql(f'INSERT INTO <CSTG_SCHEMA><TABLE> ({columns},InsertTime) SELECT {columns}, now() FROM <STG_SCHEMA>.<TABLE> where InsertTime>Current_Date();')
-```
-
-_没有 InsertTime>CurrentDate 不需要 IsUpdate_
-```sql
-TRUNCATE TABLE <DWD_SCHEMA><TABLE>;
-
-INSERT INTO <DWD_SCHEMA><TABLE> (<columns>)
-SELECT <columns> FROM <CSTG_SCHEMA>.<TABLE>;
-```
-
-* Insert Table: TXT
-
-法一：
-```python
-from pyspark.sql.types import *
-
-def insertTxT(FileName, LandingTableName, TableColumn, header=4, SaveDay=30):
-    schemalist = [];
-    for col in TableColumn: schemalist.append(StructField(col, StringType(), True));
-    schema = StructType(schemalist);
-    selectColumn = list(filter(not_blank, TableColumn))
-    df_DateLake=spark.read.format("csv").option("header","false").option("comment","*").option("encoding","utf-8").option("sep","\t").schema(schema).load(SapPath+FileName).select(selectColumn).toPandas().iloc[header:];
-    df_DateLake = spark.createDataFrame(df_DateLake)
-    df_DateLake.createOrReplaceTempView("df_spark");
-    columns = ','.join(selectColumn)+',InsertTime';
-    spark.sql(f"insert into {LandingTableName}({columns}) select *, now() InsertTime from df_spark;");
-```
-
-法二：
-```python
-import pandas
-
-TempPath="dbfs:/FileStore/Temp"
-TempFile="/dbfs/FileStore/Temp/"
-
-def insertTxT_Pandas(FileName, LandingTableName, TableColumn,RenameColumn,header=3, SaveDay=30):
-    dbutils.fs.rm(TempPath,True)
-    dbutils.fs.mkdirs(TempPath)
-    dbutils.fs.cp(SapPath+FileName, TempPath)
-    df_DateLake=pandas.read_csv(TempFile+FileName, header=header,sep='\t', names=RenameColumn,skipinitialspace=True,skip_blank_lines=True,error_bad_lines=False,dtype=str)
-    df_DateLake = spark.createDataFrame(df_DateLake);
-    df_DateLake.createOrReplaceTempView("df_spark");
-    columns = delInsertTime(TableColumn);
-    spark.sql(f"insert into {LandingTableName}({TableColumn}) select {columns}, now() InsertTime from df_spark;");
-```
-
-__OPTIMIZE__
-
-优化 Delta Lake 数据的布局，优化数据子集或按列归置数据。
-
-```sql
-OPTIMIZE table_name [WHERE predicate]
-  [ZORDER BY (col_name1 [, ...] ) ]
-```
-
-启用自动优化
-
-```sql
--- 所有新表
-set spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite = true;
-set spark.databricks.delta.properties.defaults.autoOptimize.autoCompact = true;
-```
 
 ## Delta Live Table 增量实时表
 
@@ -553,6 +178,8 @@ _踩坑: AnalysisException: [UC_NOT_ENABLED] Unity Catalog is not enabled on thi
 
 ## Data Lake Storage Gen2
 
+如果在 ADLS Gen2 上配置防火墙，必须配置网络设置以允许 Azure Databricks 工作区连接到 ADLS Gen2
+
 SAS Token: 共享访问签名是指向一个或多个存储资源的已签名 URI。 该 URI 包括的令牌包含一组特殊查询参数。 该令牌指示客户端可以如何访问资源。 
 
 ```python
@@ -580,6 +207,42 @@ dbutils.fs.mount(
   source = "abfss://<container-name>@<storage-account-name>.dfs.core.windows.net/",
   mount_point = "/mnt/<mount-name>",
   extra_configs = configs)
+```
+
+Azure Key Vault: 将 client secret 保存到 Azure Key Vault
+
+https://learn.microsoft.com/zh-cn/azure/databricks/getting-started/connect-to-azure-storage
+
+To reference the client secret stored in an Azure Key Vault, you can create a secret scope backed by Azure Key Vault in Azure Databricks. https://<databricks-instance>#secrets/createScope
+
+```python
+configs = {"fs.azure.account.auth.type": "OAuth",
+          "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+          "fs.azure.account.oauth2.client.id": "<application-id>",
+          "fs.azure.account.oauth2.client.secret": dbutils.secrets.get(scope="<scope-name>",key="<service-credential-key-name>"),
+          "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/<directory-id>/oauth2/token"}
+
+dbutils.fs.mount(
+  source = "abfss://<container-name>@<storage-account-name>.dfs.core.chinacloudapi.cn/",
+  mount_point = "/mnt/<mount-name>",
+  extra_configs = configs)
+```
+
+```python
+service_credential = dbutils.secrets.get(scope="<scope>",key="<service-credential-key>")
+
+spark.conf.set("fs.azure.account.auth.type.<storage-account>.dfs.core.chinacloudapi.cn", "OAuth")
+spark.conf.set("fs.azure.account.oauth.provider.type.<storage-account>.dfs.core.chinacloudapi.cn", "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider")
+spark.conf.set("fs.azure.account.oauth2.client.id.<storage-account>.dfs.core.chinacloudapi.cn", "<application-id>")
+spark.conf.set("fs.azure.account.oauth2.client.secret.<storage-account>.dfs.core.chinacloudapi.cn", service_credential)
+spark.conf.set("fs.azure.account.oauth2.client.endpoint.<storage-account>.dfs.core.chinacloudapi.cn", "https://login.microsoftonline.com/<directory-id>/oauth2/token")
+```
+
+mount之后可以创建Schema，然后在schema中建的table数据都会存入湖中
+
+```sql
+CREATE SCHEMA ads_jointown
+LOCATION '/mnt/<mount-name>'
 ```
 
 ## AWS S3
@@ -724,6 +387,7 @@ SELECT * FROM df_spark
 > 这样创建的表 location在sql server，不在湖中，湖里不会有对应的文件夹
 
 ---
+
 ## Cluster 集群
 
 Cluster type:
@@ -742,16 +406,17 @@ _踩坑：IpykernelUtils are causing the conflict and holding the python process
 当存在在一个interactive cluster上同时跑多个并行notebooks的情况，IpykernelUtils 会引起冲突并且holding python process, 进而出现无法启动python kernel的错误。
 
 在cluster添加如下spark configuration：
-"spark.databricks.python.defaultPythonRepl pythonshell"
+    "spark.databricks.python.defaultPythonRepl pythonshell"
 
 _踩坑：Caused by: org.apache.hadoop.fs.PathIOException: `/[schemaName]/[tableName]/\_SUCCESS': Input/output error: Parallel access to the create path detected. Failing request to honor single writer semantics_
 
 限制Spark往HDFS写出数据时生成_SUCCESS文件 （未验证）
+    
 ```sql
 set mapreduce.fileoutputcommitter.marksuccessfuljobs=false
 ```
 
-### Library
+## Library
 
 _踩坑：Library installation failed due to infra fault_
 
@@ -772,79 +437,6 @@ _踩坑：Library installation failed due to infra fault_
 安装已上传到工作区的工作区库：Install new -> Workspace
 
 https://learn.microsoft.com/zh-cn/azure/databricks/libraries/workspace-libraries
-
----
-
-```python
-# reading the CDL blob storage using scan_read(SCAN package)
-from sca_read.loader import helper, getSysttemRelatedTables
-
-display(getSystemRelatedTables(storageaccount="xxx", container="xxx", path="/xx/xx/xx", returnType="pandas_dataframe"))
-```
-
-```python
-sdf_SAP = spark.sql("""select * from delta.`abfss://xxx@xxx.net`""")
-
-sdf_SAP.display() ## 点击download下载表格
-```
-underscore variables are related to the pipelining process(sap => L0), don't have any content in it.
-
-```python
-# creation of a tempview / caching the data
-sdf_SAP.createOrReplaceTempView("SAP_AUFK")
-spark.catalog.cacheTable("SAP_AUFK")
-# SAP_AUFK can be called in spark.sql
-print(sdf_SAP.count())
-```
-
-```python
-# access a storage account
-Storage_account = "xxx"
-Container = "xxx"
-SAS_Token = dbutils.secrets.get("xxx", "xxx")
-configOption = "xxx"
-spark.conf.set(configOption, SAS_Token)
-fileSystemUrl = "xxx"
-dbutils.fs.ls(fileSystemUrl) #list files
-```
-
-```python
-# display tables, paths, levels
-import pandas as pd
-
-def showAllTables():
-  l0Tables = dbutils.fs.ls(L0_PATH)
-  dfL0 = pd.DataFrame(l0Tables)
-```
-
-```python
-# print schema
-sdf_SAP.select("Record_ID", "DATE_CREATED").where("Record_ID == '1'").printSchema()
-```
-
-```python
-from pyspark.sql import functions as F
-from pyspark.sql.window import window
-# group by
-windowSpec = Window.partitionBy("Record_ID").orderBy("Record_ID")
-# expansion
-dfExplode = dfForExplode.withColumn('SEQ_NO', F.row_number().over(windowSpec))
-```
-
-```python
-import pyspark
-from pyspark.sql import functions as F
-from pyspark.sql.types import *
-# writes the table in sql server and implements the right table schema
-def scan_pushDfToSQL(
-  df: pyspark.sql.dataframe.DataFrame,
-  sqlTable:str,
-  database:str,
-  sqlserver:str,
-
-sql_table_name = "SIDE_DEPARTMENT_PROJECT_tableName_DEV " # naming conventions
-scan_pushDfToSQL(df = sdf_order_issues_inves, sqlTable = sql_table_name, database = "LEIDEN", modeType = "overwrite", verbose = True)
-```
 
 ---
 

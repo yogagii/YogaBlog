@@ -265,3 +265,76 @@ df = df.dropna(subset=['col1', 'col2'])  # 删掉col1或col2中任一一列包�
 df.astype({'col1': 'int32'})
 df['col1'].astype('float', copy=False)
 ```
+
+---
+
+```python
+# reading the CDL blob storage using scan_read(SCAN package)
+from sca_read.loader import helper, getSysttemRelatedTables
+
+display(getSystemRelatedTables(storageaccount="xxx", container="xxx", path="/xx/xx/xx", returnType="pandas_dataframe"))
+```
+
+```python
+sdf_SAP = spark.sql("""select * from delta.`abfss://xxx@xxx.net`""")
+
+sdf_SAP.display() ## 点击download下载表格
+```
+underscore variables are related to the pipelining process(sap => L0), don't have any content in it.
+
+```python
+# creation of a tempview / caching the data
+sdf_SAP.createOrReplaceTempView("SAP_AUFK")
+spark.catalog.cacheTable("SAP_AUFK")
+# SAP_AUFK can be called in spark.sql
+print(sdf_SAP.count())
+```
+
+```python
+# access a storage account
+Storage_account = "xxx"
+Container = "xxx"
+SAS_Token = dbutils.secrets.get("xxx", "xxx")
+configOption = "xxx"
+spark.conf.set(configOption, SAS_Token)
+fileSystemUrl = "xxx"
+dbutils.fs.ls(fileSystemUrl) #list files
+```
+
+```python
+# display tables, paths, levels
+import pandas as pd
+
+def showAllTables():
+  l0Tables = dbutils.fs.ls(L0_PATH)
+  dfL0 = pd.DataFrame(l0Tables)
+```
+
+```python
+# print schema
+sdf_SAP.select("Record_ID", "DATE_CREATED").where("Record_ID == '1'").printSchema()
+```
+
+```python
+from pyspark.sql import functions as F
+from pyspark.sql.window import window
+# group by
+windowSpec = Window.partitionBy("Record_ID").orderBy("Record_ID")
+# expansion
+dfExplode = dfForExplode.withColumn('SEQ_NO', F.row_number().over(windowSpec))
+```
+
+```python
+import pyspark
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+# writes the table in sql server and implements the right table schema
+def scan_pushDfToSQL(
+  df: pyspark.sql.dataframe.DataFrame,
+  sqlTable:str,
+  database:str,
+  sqlserver:str,
+
+sql_table_name = "SIDE_DEPARTMENT_PROJECT_tableName_DEV " # naming conventions
+scan_pushDfToSQL(df = sdf_order_issues_inves, sqlTable = sql_table_name, database = "LEIDEN", modeType = "overwrite", verbose = True)
+```

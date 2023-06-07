@@ -105,6 +105,18 @@ _踩坑: ErrorCode=ParquetNotSupportedTypeGeneric,'Type=Microsoft.DataTransfer.C
 
 _踩坑：若原表是 delta table，数据源用 parquet 会导致数据中留下全部历史数据，link service 需选 AzureDatebricksDeltaLake_
 
+### Databricks Delta Table -> SQL Server
+
+Source: 
+* Linked service: Azure Databricks Delta Lake
+
+Sink:
+同上
+
+Setting:
+* Enable staging: (Specify whether to copy data via an interim staging store.)
+    Storage Path: raw-sc/temp
+
 ### Rest Resource -> 
 
 Source:

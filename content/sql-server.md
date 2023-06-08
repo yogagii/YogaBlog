@@ -303,3 +303,21 @@ order by qty*1
 order by int(qty)
 order by len(qty) desc -- 可以同时找出正负最大的数
 ```
+
+### ALTER
+
+* 新增字段
+
+```sql
+ALTER TABLE [dbo].[TABLENAME]
+ADD [COLUMNNAME] [decimal](15, 2) NULL;
+```
+
+datatype: [decimal](15, 2), `[nvarchar](256)`, datetime
+
+* 删除字段
+
+```sql
+ALTER TABLE table_name
+DROP COLUMN column_name
+```

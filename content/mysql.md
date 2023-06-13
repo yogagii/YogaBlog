@@ -10,6 +10,12 @@ Author: Yoga
 brew install mysql
 ```
 
+启动 mysql
+
+```
+service mysqld start
+```
+
 登录 mysql
 
 ```sql

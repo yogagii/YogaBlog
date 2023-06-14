@@ -117,6 +117,14 @@ Setting:
 * Enable staging: (Specify whether to copy data via an interim staging store.)
     Storage Path: raw-sc/temp
 
+_踩坑：delta table导入到sql server表的每个字段格式都是nvarchar_
+
+解决方案1：先在sql server手动创建好表，解决方案2：先用source=parquet跑一次创建完所有表，以后再用source=delta主意不要用drop
+
+Sink:
+* Table option: None
+* Pre-copy script: @{concat('truncate table ',item().TableName)}
+
 ### Rest Resource -> 
 
 Source:

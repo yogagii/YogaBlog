@@ -170,6 +170,18 @@ docker plugin stop <plugin-id>
 ```
 _docker: Error response from daemon: authorization denied by plugin openpolicyagent/opa-docker-authz-v2:0.4: request rejected by administrative policy._
 
+配置
+
+```bash
+docker info
+docker info | grep Dir
+du -hs /var/lib/docker/
+df -h /var/lib/docker/
+
+docker system df # 占用的空间
+docker system prune # 清理没用的空间
+```
+
 ### volume mount 数据卷
 
 容器是镜像的实例化。数据如果都在容器中，一旦容器删除，数据就会丢失。

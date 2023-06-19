@@ -313,7 +313,7 @@ ALTER TABLE [dbo].[TABLENAME]
 ADD [COLUMNNAME] [decimal](15, 2) NULL;
 ```
 
-datatype: [decimal](15, 2), `[nvarchar](256)`, datetime
+datatype: [decimal](15, 2), `[nvarchar](256)`, datetime, [float]
 
 * 删除字段
 

@@ -181,6 +181,14 @@ df -h /var/lib/docker/
 docker system df # 占用的空间
 docker system prune # 清理没用的空间
 ```
+_踩坑：
+Job for docker.service failed because the control process exited with error code_
+
+```bash
+cd /etc/docker/ # 进入docker目录
+mv daemon.json daemon.conf # 修改daemon的类型
+systemctl restart docker # 重启docker
+```
 
 ### volume mount 数据卷
 

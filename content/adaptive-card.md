@@ -185,3 +185,13 @@ email/template/data.json
 ```
 
 ![adaptivecard](img/adaptivecard.jpg)
+
+踩坑：Outlook windows 客户端样式错乱，网页版样式正常，MAC 样式正常
+
+Outlook windows 客户端 页面渲染模式为文本渲染，类似于Word：
+
+1. 不能使用布局属性，包括flex、float、absolute、relative等布局，浮动属性 ul,li,dl,dd标签不能用
+2. HTML结构搭建使用table表格编写
+3. css不能用外部样式，不能用内联样式表，样式必须写在行内，否则不生效
+
+https://blog.51cto.com/u_15155081/2720389

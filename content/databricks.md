@@ -353,7 +353,9 @@ config_table = (spark.read
 )
 display(config_table)
 ```
-写入数据库
+
+创建表
+
 ```python
 from pyspark.sql.types import *
 

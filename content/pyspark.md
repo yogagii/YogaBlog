@@ -198,8 +198,23 @@ df1.groupby('id').cogroup(df2.groupby('id'))
 ```python
 df.write.csv('foo.csv', header=True)
 spark.read.csv('foo.csv', header=True).show()
+```
+
+* JDBC
+
+```python
 spark.read.jdbc(url=url,table= 'Onhand_Inventory',properties = properties)
 ```
+
+```python
+spark.write.jdbc(url, table, mode=None, properties=None)
+```
+
+mode：数据更新的模式，append、overwrite、ignore、error（默认，如果数据存在，抛出异常）
+
+不能使用Spark中的jdbc和dataframes进行单个记录更新，只能追加或替换整个表
+
+Using PYODBC to execute query on Azure SQL in Databricks：https://medium.com/@roger_busser/azure-databricks-and-single-row-updates-fe1844a8dbd3
 
 ## Pandas
 

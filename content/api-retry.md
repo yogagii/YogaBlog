@@ -35,7 +35,7 @@ Another consideration is that although exponential back-off strategy is good, in
 
 Truncated Exponential Back-off strategy is a standard error-handling strategy for networked applications. This can be used for requests that return 429, 408 and 5XX status codes.
 
-This strategy can be defined as - Wait Interval = Minimum((Base * 2^n) + Random Interval, Maximum Back-off Time)
+This strategy can be defined as - Wait Interval = Minimum((Base \* 2^n) + Random Interval, Maximum Back-off Time)
 
 ### Implementation
 
@@ -54,20 +54,55 @@ https://www.npmjs.com/package/fetch-retry
 The default behavior of fetch-retry is to wait a fixed amount of time between attempts, but it is also possible to customize this by passing a function as the retryDelay option. The function is supplied three arguments: attempt (starting at 0), error (in case of a network error), and response. It must return a number indicating the delay.
 
 ```js
-var originalFetch = require('isomorphic-fetch');
-var fetch = require('fetch-retry')(originalFetch, {
-    retries: 5,
-    retryDelay: 800
-  });
+var originalFetch = require("isomorphic-fetch");
+var fetch = require("fetch-retry")(originalFetch, {
+  retries: 5,
+  retryDelay: 800,
+});
 
 fetch(url, {
-    retryDelay: function(attempt, error, response) {
-      return Math.pow(2, attempt) * 1000; // 1000, 2000, 4000
-    }
-  }).then(function(response) {
+  retryDelay: function (attempt, error, response) {
+    return Math.pow(2, attempt) * 1000; // 1000, 2000, 4000
+  },
+})
+  .then(function (response) {
     return response.json();
-  }).then(function(json) {
+  })
+  .then(function (json) {
     // do something with the result
     console.log(json);
   });
+```
+
+## 延迟重试
+
+```js
+export const pause = (duration: number) =>
+  new Promise((reslove) => setTimeout(reslove, duration));
+
+// 每10秒请求一次接口，共重试10次
+async checkJobStatus(retries: number, run_id: number, delay = 10 * 1000) {
+  this.getDatabricksResult(run_id).then(async (res) => {
+    if (retries >= 1) {
+      if (res?.data && res.data.state?.life_cycle_state.includes('ED')) {
+        // life_cycle_state == 'TERMINATED' -> update database
+      } else {
+        pause(delay).then(() =>
+          this.checkJobStatus(retries - 1, run_id),
+        );
+      }
+    } else {
+      throw new RequestTimeoutException('Databricks job timeout.');
+    }
+  });
+}
+
+async getDatabricksResult(run_id: number) {
+  const triggerJobAPI = `${process.env.DATABRICKS_HOST}/api/2.1/jobs/runs/get?run_id=${run_id}`;
+  return axios.get(triggerJobAPI, {
+    headers: {
+      Authorization: `Bearer ${process.env.PERSONAL_TOKEN}`,
+    },
+  });
+}
 ```

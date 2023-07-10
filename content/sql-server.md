@@ -233,6 +233,11 @@ select * from df_manu where filename rlike 'Actual_sales_2[01][0-9][0-9][0-9][0-
 -- Actual_sales_202303.xlsx
 ```
 
+* right 右侧提取给定数量的字符
+```sql
+select right('hello', 1) -- o
+```
+
 * 大小写
 ```sql
 select LOWER('yoga') -- yoga

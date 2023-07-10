@@ -97,6 +97,23 @@ constructor(
 @CreateDateColumn | 创建时间
 @UpdateDateColumn | 更新时间
 
+数据类型
+
+```ts
+@PrimaryColumn()
+sku_code: string; // 字符串
+
+@Column()
+lead_time: number; // 整数
+
+
+@Column('float')
+bo_value: number; // 小数
+
+@Column()
+last_modified_date: Date;  // 日期
+```
+
 复合主键：拼合多列作为主键
 
 ```ts

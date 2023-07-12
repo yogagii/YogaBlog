@@ -158,7 +158,7 @@ convert(decimal,lead_time); -- 浮点型 decimal(18,2) 指定保留2位小数
 
 ```sql
 convert(int, 13.6); -- 13
-round(13.6, 0) -- 14
+round(13.6, 0) -- 14, 保留0位小数
 cast(13.6 as numeric(18, 0)) -- 14
 ```
 
@@ -297,6 +297,17 @@ select 'a' A intersect select 'b' A -- null
 ```sql
 select COUNT(*) as RepNum, MaterialCode from <TABLE> group by MaterialCode Having COUNT(*)>1;
 ```
+
+查找A列相同，B列不同的情况
+```sql
+select a.name, a.age
+from <TABLE> a 
+inner join <TABLE> b on a.name=b.name and a.age<>b.age 
+group by a.name, a.age
+order by a.name
+```
+返回结果为空，证明同一个name，虽然有多行数据，但只有相同的一个age；
+a.name<>b.name and a.age=b.age 返回多行数据，证明同一个age会有多个name
 
 ### ORDER BY
 

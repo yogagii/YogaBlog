@@ -107,12 +107,14 @@ sku_code: string; // 字符串
 lead_time: number; // 整数
 
 
-@Column('float')
+@Column('float') // double is available for mysql, not mssql
 bo_value: number; // 小数
 
 @Column()
 last_modified_date: Date;  // 日期
 ```
+
+https://typeorm.io/entities#column-types-for-mssql
 
 复合主键：拼合多列作为主键
 

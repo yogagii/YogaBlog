@@ -100,7 +100,7 @@ constructor(
 数据类型
 
 ```ts
-@PrimaryColumn()
+@PrimaryColumn('varchar', { length: 36 }) // varchar(36)
 sku_code: string; // 字符串
 
 @Column()
@@ -139,6 +139,9 @@ export class FooBar {
   public bar: Bar | null = null;
 }
 ```
+
+_踩坑：拼合太多主键时报错 QueryFailedError: ER_TOO_LONG_KEY: Specified key was too long; max key length is 3072 bytes_
+_解决: @PrimaryColumn('varchar', { length: 36 })_
 
 ### Repository
 

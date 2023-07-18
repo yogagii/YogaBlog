@@ -355,6 +355,30 @@ findAll(ListUserDto): Promise<UserDto[]> {
 }
 ```
 
+query 转string为float
+(url /solutions/:id?boMin=xxx 中的query直接拿到都是string)
+
+```ts
+import { Transform } from 'class-transformer';
+
+export class DetailMdSolutionDto {
+  @ApiPropertyOptional()
+  @Transform(({ value }) => parseFloat(value))
+  boMin?: number;
+}
+```
+```ts
+  @Get('/solutions/:id')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  )
+  getSolution(
+    @Query() detailSolutionDto: DetailMdSolutionDto,
+  ) {...}
+```
+
 ## Guards 守卫
 
 守卫的责任：授权 -- 根据运行时出现的某些条件（例如权限，角色，访问控制列表等）来确定给定的请求是否由路由处理程序处理。

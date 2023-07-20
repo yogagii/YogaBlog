@@ -862,6 +862,9 @@ export class ListUserDto extends IntersectionType(PaginationDto, SortDto) {
   role?: string;
 }
 ```
+
+_踩坑：body为数组类型时显示为 ["string"], 需要用 @ApiBody({ type: [CreateCatDto] }) 显示定义schema_
+
 Mapped types:
 
 * IntersectionType: 可以将两个类型中所有属性组合在一起生成一个新类型，但是继承不到pagination的getter

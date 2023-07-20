@@ -16,6 +16,10 @@ Extensions:
  - SQL Formatter
  - SQLTools
  - TSLint
+ - SQLTools
+ - Docker
+ - JFrog
+ - Databricks
 
 ---
 

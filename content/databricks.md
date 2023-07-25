@@ -180,6 +180,8 @@ _踩坑: AnalysisException: [UC_NOT_ENABLED] Unity Catalog is not enabled on thi
 
 如果在 ADLS Gen2 上配置防火墙，必须配置网络设置以允许 Azure Databricks 工作区连接到 ADLS Gen2
 
+"abfss://<container-name>@<storage-account-name>.dfs.core.windows.net/" 是 AzureBlob Storage Gen2 文件系统的地址, abfss:/ 是ABFSS 协议 (Azure Blob File System Service) 的前缀，指示文件系统的访问协议。
+
 SAS Token: 共享访问签名是指向一个或多个存储资源的已签名 URI。 该 URI 包括的令牌包含一组特殊查询参数。 该令牌指示客户端可以如何访问资源。 
 
 ```python

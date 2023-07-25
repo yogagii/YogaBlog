@@ -133,7 +133,7 @@ Source:
 
 _踩坑：默认UTC时间，需addhours(utcnow(),8)转成北京时间_
 
-### HTTP -> Azure Data Lake Storage
+### Sharepoint (HTTP) -> Azure Data Lake Storage
 
 用 HTTP 调取 Sharepoint 接口，将sharepoint文件入湖
 
@@ -150,6 +150,12 @@ Sink:
 * format: Binary
 
 用Binary可以保留原始文件格式，亲测csv，excel，pdf，png均能成功
+
+### Azure Data Lake Storage -> Sharepoint (HTTP)
+
+1. ADF Copy data 格式错误 失败
+2. 微软建议：ADF调Azure Function：Webhook+API （可行但没必要，Azure Function另外计费，已被Databricks取代）
+3. Databricks 调取 Sharepoint API 成功
 
 ## General
 

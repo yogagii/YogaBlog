@@ -82,3 +82,25 @@ export async function getXlsx(targetData: object[]) {
   return await workbook.xlsx.writeBuffer();
 }
 ```
+
+controller
+```ts
+import { Res } from '@nestjs/common';
+import { Response } from 'express';
+
+@Get('/download')
+async getDownload(
+  @Res() res: Response,
+) {
+  const buffer = await getXlsx(data);
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  );
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename=custom_thresholds.xlsx`,
+  );
+  res.send(buffer);
+}
+```

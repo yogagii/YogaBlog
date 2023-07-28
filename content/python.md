@@ -199,6 +199,9 @@ begindate=datetime.datetime.strptime("202201","%Y%m") # 指定一天 2022-01-01 
 
 DataMonth=(utc8.replace(day=1)-datetime.timedelta(days=1)).strftime('%Y%m') # 上个月 202305
 DataMonthL6=(utc8.replace(day=1)-datetime.timedelta(days=156)).strftime('%Y%m') # 6个月前 202212
+
+DataMonth=utc8.strftime('%Y%m')
+DataMonthL6=(datetime.datetime.strptime(DataMonth,"%Y%m")-dateutil.relativedelta.relativedelta(months=6)).strftime('%Y%m') # 6个月前 202212
 ```
 
 ## 循环

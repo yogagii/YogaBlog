@@ -7,6 +7,7 @@ Author: Yoga
 
 Extensions:
 
+ - GitLens 
  - Prettier - Code formatter
  - Beautify css/sass/scss/less: Beautify css, sass and less code
  - Excel Viewer

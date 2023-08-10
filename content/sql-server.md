@@ -337,3 +337,9 @@ datatype: [decimal](15, 2), `[nvarchar](256)`, datetime, [float]
 ALTER TABLE table_name
 DROP COLUMN column_name
 ```
+
+* 修改字段名
+
+```sql
+EXECUTE sp_rename 'table_name.old_name','new_name','COLUMN'
+```

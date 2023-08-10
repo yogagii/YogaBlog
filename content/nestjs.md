@@ -926,9 +926,11 @@ _踩坑：Warning: connect.session() MemoryStore is not
 designed for a production environment, as it will leak
 memory, and will not scale past a single process._
 
-The default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire.
+解决：
 
 $ npm install memorystore
+
+express-session full featured MemoryStore module without leaks! A session store implementation for Express using lru-cache. Because the default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire. The sessions are still stored in memory, so they're not shared with other processes or services.
 
 ```ts
 // main.ts
@@ -953,3 +955,5 @@ app.use(
 ```
 
 https://www.npmjs.com/package/memorystore
+
+checkPeriod: This option specifies the time interval (in milliseconds) between two consecutive checks for expired sessions. In this case, expired entries are pruned every 24 hours (86400000 milliseconds).

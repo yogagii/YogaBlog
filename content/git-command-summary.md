@@ -380,6 +380,8 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-
 
 ```
 openssl s_client -connect wddfx.xxx.com:443 // https默认443
+
 nslookup 10.47.227.xxx // 诊断网络问题
+nslookup swift.xxx.com // 检查域名指向
 ```
 

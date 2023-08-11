@@ -928,7 +928,7 @@ memory, and will not scale past a single process._
 
 解决：
 
-$ npm install memorystore
+npm install memorystore
 
 express-session full featured MemoryStore module without leaks! A session store implementation for Express using lru-cache. Because the default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire. The sessions are still stored in memory, so they're not shared with other processes or services.
 
@@ -957,3 +957,10 @@ app.use(
 https://www.npmjs.com/package/memorystore
 
 checkPeriod: This option specifies the time interval (in milliseconds) between two consecutive checks for expired sessions. In this case, expired entries are pruned every 24 hours (86400000 milliseconds).
+
+## ENV
+
+nest start 时 .dto.ts 文件内拿不到 process.env.xxx
+
+nest build 时 .dto.ts 文件内可用 process.env.xxx
+

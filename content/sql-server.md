@@ -168,6 +168,14 @@ cast(13.6 as numeric(18, 0)) -- 14
 convert(varchar(20),@i)
 ```
 
+* cast
+
+Use `try_cast` to tolerate malformed input and return NULL instead.
+
+```sql
+try_cast(SuggestedInventory AS DOUBLE)
+```
+
 ### date 日期
 
 * current_date
@@ -309,7 +317,9 @@ order by a.name
 返回结果为空，证明同一个name，虽然有多行数据，但只有相同的一个age；
 a.name<>b.name and a.age=b.age 返回多行数据，证明同一个age会有多个name
 
-### ORDER BY
+### 排序
+
+* order by
 
 ```sql
 order by qty -- 会逐位比较数字 100 < 20 < 30 
@@ -318,6 +328,12 @@ order by qty -- 会逐位比较数字 100 < 20 < 30
 order by qty*1
 order by int(qty)
 order by len(qty) desc -- 可以同时找出正负最大的数
+```
+
+* rank() over
+
+```sql
+select rank() over(order by score desc) 'rank' from <TABLE> -- 新增一列rank 1,2,3...
 ```
 
 ### ALTER

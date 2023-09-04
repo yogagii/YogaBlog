@@ -259,6 +259,7 @@ select INITCAP('yoga') -- Yoga
 ```sql
 -- ActivityStatus = 'Success' | 'Failed' | null
 select * from ActivityLogs where ActivityStatus <> 'Success' or ActivityStatus is null
+select * from ActivityLogs where isNull(ActivityStatus, 0) <> 'Success'
 ```
 
 * ISNULL(p1, p2) p1为null返回p2，否则返回p1

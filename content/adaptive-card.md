@@ -195,3 +195,6 @@ Outlook windows 客户端 页面渲染模式为文本渲染，类似于Word：
 3. css不能用外部样式，不能用内联样式表，样式必须写在行内，否则不生效
 
 https://blog.51cto.com/u_15155081/2720389
+
+解决：https://documentation.mjml.io/#inside-node-js
+ mjml 写模板，用mjml2html转成html

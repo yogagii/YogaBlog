@@ -186,6 +186,7 @@ Job for docker.service failed because the control process exited with error code
 
 ```bash
 cd /etc/docker/ # 进入docker目录
+cp daemon.json daemon_backup.json
 mv daemon.json daemon.conf # 修改daemon的类型
 systemctl restart docker # 重启docker
 ```

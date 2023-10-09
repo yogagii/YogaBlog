@@ -398,3 +398,94 @@ import { Majors } from 'src/entities'
 ```
 
 https://stackoverflow.com/questions/59468756/error-object-metadata-not-found-after-adding-many-to-many-relationships
+
+### 日志 Logging
+
+* logging：true 启用所有查询和错误的记录
+* logging: ["query", "error", "schema", "warn", "info", "log"] 启用不同类型的日志记录
+* logging: "all" 启用所有日志记录
+
+app.module.ts
+```ts
+import { CustomLogger } from './common/utils/customLogger';
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      ...
+      logging: ['info'],
+      logger: new CustomLogger(), // 使用自定义记录器
+      maxQueryExecutionTime: 1, // 记录耗时长 > 1 的查询
+    }), 
+  ]
+})
+```
+/common/utils/customLogger.ts
+```ts
+import { Logger, QueryRunner, QueryRunnerAlreadyReleasedError } from 'typeorm';
+
+export class CustomLogger implements Logger {
+  private queryTime = 0
+
+  logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): void {
+    const sql =
+      query +
+      (parameters && parameters.length
+        ? ` -- PARAMETERS: ${JSON.stringify(parameters)}`
+        : '');
+    // console.log(`[Query] ${sql}`);
+  }
+
+  logQueryError(
+    error: string,
+    query: string,
+    parameters?: any[],
+    queryRunner?: QueryRunner,
+  ): void {
+    // console.error(`[Query Error] ${error}`);
+  }
+
+  logQuerySlow(
+    time: number,
+    query: string,
+    parameters?: any[],
+    queryRunner?: QueryRunner,
+  ): void {
+    this.queryTime += time;
+    // console.warn(`[Query Slow] Execution time: ${time} ms - ${query}`);
+    let tableName = '';
+    if (query.includes('FROM') && query.includes('WHERE')) {
+      tableName = query.split('FROM')[1].split('WHERE')[0];
+    }
+    console.warn(`[Query Slow] Execution time: ${time} ms - ${tableName} - ${this.queryTime}`);
+    // 当前 query 耗时 - 查询表名 - 累计耗时
+  }
+
+  logSchemaBuild(message: string, queryRunner?: QueryRunner): void {
+    // console.log(`[Schema Build] ${message}`);
+  }
+
+  logMigration(message: string, queryRunner?: QueryRunner): void {
+    // console.log(`[Migration] ${message}`);
+  }
+
+  log(
+    level: 'log' | 'info' | 'warn',
+    message: any,
+    queryRunner?: QueryRunner,
+  ): void {
+    // console.log(`[${level}] ${message}`);
+  }
+
+  logTransactionStart(queryRunner?: QueryRunner): void {
+    // console.log(`[Transaction Start]`);
+  }
+
+  logTransactionCommit(queryRunner?: QueryRunner): void {
+    // console.log(`[Transaction Commit]`);
+  }
+
+  logTransactionRollback(queryRunner?: QueryRunner): void {
+    // console.log(`[Transaction Rollback]`);
+  }
+}
+```

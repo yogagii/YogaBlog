@@ -6,11 +6,7 @@ Tags: Azure, ETL
 
 https://docs.databricks.com/api-explorer/workspace/jobs
 
-### Step1: Connection variables
-
-Databricks workspace → User Settings → Access tokens tab → Generate new token.
-
-* Personal_TOKEN: xxxxx
+### Step0: Connection variables
 
 Compute → Cluster → Configuration → Advanced options → JDBC/ODBC
 
@@ -32,7 +28,63 @@ dbutils.notebook.exit(json.dumps({
 }))
 ```
 
-### Step2: Create and trigger a one-time run
+### Step1: Access Token
+
+1. Personal_TOKEN
+
+Login with service account
+
+Databricks workspace → User Settings → Developer -> Access tokens → Generate new token.
+
+Lifetime (days): 90 (max 400)
+
+2. Service Principal
+
+创建 Service Principal: Click + Add and select App registration.
+
+添加 client secret: Certificates & secrets -> new Client secrets 
+
+To access the Databricks REST API with the service principal, you get and then use an Azure AD access token for the service principal. Each Azure AD token is short-lived, typically expiring within one hour.
+
+```shell
+curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token \
+-d 'client_id=<client-id>' \
+-d 'grant_type=client_credentials' \
+-d 'scope=2ff814a6-3304-4ab8-85cb-cd0e6f879c1d%2F.default' \
+-d 'client_secret=<client-secret>'
+```
+
+因为是short-lived，所以需要通过API动态获取
+```ts
+async getADToken(): Promise<string> {
+  const loginUrl = `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/token`;
+  return await lastValueFrom(
+    this.httpService
+      .post(loginUrl, {
+          grant_type: 'client_credentials',
+          client_id: process.env.SP_CLIENT_ID,
+          client_secret: process.env.SP_CLIENT_SECRET,
+          scope: '2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default', // the programmatic ID for Azure Databricks
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        })
+      .pipe(
+        map((response: AxiosResponse) => response.data.access_token),
+        catchError((e) => {
+          return new Promise((r) => r(e.response.data));
+        }),
+      ),
+  );
+}
+```
+https://learn.microsoft.com/en-us/azure/databricks/security/auth-authz/access-control/service-principal-acl
+
+### Step2: Create and trigger a job
+
+1. Create and trigger a one-time run
 
 POST https://adb-{{Databricks_HOST}}.azuredatabricks.net/api/2.1/jobs/runs/submit
 
@@ -63,6 +115,20 @@ Result:
 ```json
 {
   "run_id": 5455
+}
+```
+
+2. Trigger a job
+
+POST https://adb-{{Databricks_HOST}}.azuredatabricks.net/api/2.1/jobs/run-now
+
+Body: 
+```json
+{
+  "job_id": "123",
+  "notebook_params": {
+    "key": "test_key"
+  }
 }
 ```
 

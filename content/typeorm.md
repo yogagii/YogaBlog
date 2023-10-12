@@ -489,3 +489,55 @@ export class CustomLogger implements Logger {
   }
 }
 ```
+
+### 缓存 Cache
+
+app.module.ts
+```ts
+TypeOrmModule.forRoot({
+  synchronize: true, // 首次启用缓存时，必须同步数据库架构 
+  cache: {
+    duration: 1000 * 60, //  默认缓存生存期为1000 ms
+  },
+})
+```
+
+默认情况下，TypeORM 使用一个名为query-result-cache的单独表，并在那里存储所有查询和结果。
+```ts
+cache: {
+  type: "database",
+  tableName: "configurable-table-query-result-cache" // 配置表名
+}
+```
+手动建表
+```sql
+-- mysql
+CREATE TABLE `query-result-cache` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(255) DEFAULT NULL,
+  `time` bigint NOT NULL,
+  `duration` int NOT NULL,
+  `query` text NOT NULL,
+  `result` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+将缓存类型更改为"redis"
+```ts
+cache: {
+    type: "redis",
+    options: {
+        host: "localhost",
+        port: 6379
+    }
+}
+```
+
+在query中启用缓存
+```ts
+const users = await connection.getRepository(User).find({
+  where: { isAdmin: true },
+  cache: true
+});
+```

@@ -541,3 +541,4 @@ const users = await connection.getRepository(User).find({
   cache: true
 });
 ```
+踩坑：.query(’select * from table’) 原始 SQL 查询 无法缓存

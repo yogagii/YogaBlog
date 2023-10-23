@@ -9,11 +9,17 @@ Tags: Azure, ETL
 ### 申请资源
 
 * ADF PaaS Service
-* IR
+* IR (Integration Runtime)
 * Azure SQL Server
 * Key Vault
 * AWS S3
 * Azure Date Lake Storage
+
+### Integration Runtime
+
+If you want to perform data integration securely in a private network environment that doesn't have a direct line-of-sight from the public cloud environment, you can install a self-hosted IR in your on-premises environment behind a firewall, or inside a virtual private network. The self-hosted integration runtime only makes outbound HTTP-based connections to the internet.
+
+_踩坑：Linked service with Self-hosted Integration runtime is not supported in data flow._
 
 ## Linked Service
 
@@ -69,7 +75,7 @@ Sharepoint API 见 https://yogagii.github.io/ms-graph-api.html
 
 ## Activities 
 
-## Move & transform 
+### Move & transform 
 ### >>> Copy data
 
 ### AWS S3 -> Azure Data Lake Storage
@@ -159,7 +165,7 @@ Sink:
 2. 微软建议：ADF调Azure Function：Webhook+API （可行但没必要，Azure Function另外计费，已被Databricks取代）
 3. Databricks 调取 Sharepoint API 成功
 
-## General
+### General
 
 ### >>> Web
 Get Token
@@ -188,7 +194,7 @@ Get Token
 * Stored procedure name: [Procedure_Name]
 * Stored procedure parameters
 
-## Iteration & conditionals
+### Iteration & conditionals
 
 ### >>> ForEach
 
@@ -200,7 +206,7 @@ _踩坑：ForEach 中调用 notebook 报错：java.lang.Exception: Unable to sta
 
 * Sequential: 勾选后顺序执行
 
-## Databricks
+### Databricks
 
 ### >>> Notebook
 

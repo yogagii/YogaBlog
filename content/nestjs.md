@@ -958,6 +958,52 @@ https://www.npmjs.com/package/memorystore
 
 checkPeriod: This option specifies the time interval (in milliseconds) between two consecutive checks for expired sessions. In this case, expired entries are pruned every 24 hours (86400000 milliseconds).
 
+## Caching 缓存
+
+```bash
+npm install cache-manager
+npm install -D @types/cache-manager
+```
+common/cache/cache.module.ts
+```ts
+import { Module, CacheModule } from '@nestjs/common';
+import { CacheService } from './cache.service';
+
+@Module({
+  imports: [
+    CacheModule.register({
+      ttl: 0, // 缓存永不过期
+    }),
+  ],
+  controllers: [],
+  providers: [CacheService],
+  exports: [CacheService],
+})
+export class CustomCacheModule {}
+```
+common/cache/cache.service.ts
+```ts
+import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+
+@Injectable()
+export class CacheService {
+  constructor(
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
+  ) {}
+
+  cacheSet(key: string, value: string) {
+    this.cacheManager.set(key, JSON.stringify(value));
+  }
+
+  async cacheGet(key: any): Promise<any> {
+    const result: string = await this.cacheManager.get(key);
+    return result ? JSON.parse(result) : null;
+  }
+}
+```
+
 ## ENV
 
 nest start 时 .dto.ts 文件内拿不到 process.env.xxx

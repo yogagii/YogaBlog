@@ -52,22 +52,39 @@ async function flushCacheWithDomain(domain) {
 
 ## 本地启动
 
-```js
+```bash
+brew install redis
+```
+
+* start redis foreground
+```bash
+redis-server
+```
+  stop: Ctrl-C.
+
+* start redis background
+```bash
 brew services start redis
 brew services list
-redis-cli ping
-redis-cli -h 127.0.0.1
-CONFIG SET requirepass "xxxxxx" // 同local.js
-AUTH "xxxxxx"
-select 4 // db
-flushdb // clear database
-KEYS * // get all keys
-get sapToken // get certain key
-ttl sapToken // get expire time
-PSETEX sapToken 1500000 "xxx" // set
-del sapToken // delete
-shutdown // shutdown
+brew services stop redis # stop
 ```
+
+* redis-cli
+```bash
+redis-cli ping
+redis-cli -h 127.0.0.1 # 默认 port 6379
+CONFIG SET requirepass "xxxxxx" # 同local.js
+AUTH "xxxxxx"
+select 4 # db
+flushdb # clear database
+KEYS * # get all keys
+get sapToken # get certain key
+ttl sapToken # get expire time
+PSETEX sapToken 1500000 "xxx" # set
+del sapToken # delete
+shutdown # shutdown
+```
+
 ## Redis 读写
 
 ```js

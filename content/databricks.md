@@ -92,6 +92,14 @@ set tableList = ('TABLE1', 'TABLE2');
 delete from <TABLE> where insertDate=${hiveconf:delDate} and tablename in ${hiveconf:tableList};
 ```
 
+* Useful Function
+```sql
+SELECT * EXCEPT insertTime from <table> -- 排除指定字段
+
+select IFNULL(M.MaterialCode, P.MaterialCode) MaterialCode -- IFNULL(A,B) A为空则返回B
+select ISNULL(1) -- true/false
+```
+
 * 日期
     * date_part 提取部分日期
     * date_add 返回在 startDate 之后的日期 numDays

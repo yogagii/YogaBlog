@@ -52,6 +52,8 @@ async function flushCacheWithDomain(domain) {
 
 ## 本地启动
 
+1. MAC
+
 ```bash
 brew install redis
 ```
@@ -83,6 +85,82 @@ ttl sapToken # get expire time
 PSETEX sapToken 1500000 "xxx" # set
 del sapToken # delete
 shutdown # shutdown
+```
+
+2. LINUX
+
+* 安装
+
+```bash
+wget https://download.redis.io/releases/redis-6.2.6.tar.gz # 下载
+tar xzf redis-6.2.6.tar.gz # 解压
+mv redis-6.2.6 /usr/local/redis # 移动
+cd /usr/local/redis # 进入安装目录
+yum -y install gcc automake autoconf libtool make # 安装gcc
+make MALLOC=libc # 编译（指定分配器为libc）
+make install PREFIX=/usr/local/redis # 安装
+```
+
+* 启动
+
+vi redis.conf
+
+/daemonize (查找daemonize)
+
+daemonize no 改为 daemonize yes
+
+```bash
+./bin/redis-server redis.conf # 启动
+ps -ef | grep redis # 查看进程
+netstat -pan | grep 6379 # 查看端口
+
+./bin/redis-cli
+set test hello
+get test
+```
+
+https://baijiahao.baidu.com/s?id=1722728002073366376&wfr=spider&for=pc
+
+* 环境变量
+
+vim ~/.bash_profile
+```
+export REDIS_HOME=/usr/local/redis
+PATH=$PATH:$HOME/bin:$REDIS_HOME/bin
+```
+source ~/.bash_profile
+
+* 远程连接
+
+vi redis.conf
+```bash
+# bind 127.0.0.1 -::1 # 127.0.0.1只允许本机访问，加上#会变成0.0.0.0
+protected-mode no  # yes 以守护进程方式启动 -> no 以配置文件方式启动
+```
+本地连接远程redis：redis-cli -h 10.49.xxx.xxx (不需要加端口号默认6379)
+
+3. docker
+
+```bash
+docker run --restart=always -p 6379:6379 --name myredis -d redis:7.0.12
+
+# 指定redis.conf 以及挂载data的目录
+docker run \
+-p 6379:6379 \
+--name vredis \
+-v /var/docker/redis/redis.conf:/etc/redis/redis.conf \
+-v /var/docker/redis/data:/data \
+--restart=always \
+-d redis:7.0.12 redis-server /etc/redis/redis.conf # -d 后代运行
+```
+
+* 进入容器
+
+```bash
+docker exec -it <CONTAINER_ID> bash # 以交互方式进入容器
+redis-cli
+ctrl+c # 退出 redis
+exit # 退出 docker
 ```
 
 ## Redis 读写

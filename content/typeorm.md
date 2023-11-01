@@ -526,12 +526,18 @@ CREATE TABLE `query-result-cache` (
 将缓存类型更改为"redis"
 ```ts
 cache: {
-    type: "redis",
-    options: {
-        host: "localhost",
-        port: 6379
-    }
+  type: 'redis',
+  options: {
+    // host: 'localhost',
+    // port: 6379
+    url: 'redis://10.xx.xx.xx:6379'
+  }
 }
+```
+踩坑：host和post不生效, use redis url instead
+```js
+// node_modules/@redis/client/dist/lib/client/index.js
+const { hostname, port, protocol, username, password, pathname } = new url_1.URL(url)
 ```
 
 在query中启用缓存

@@ -143,15 +143,23 @@ protected-mode no  # yes 以守护进程方式启动 -> no 以配置文件方式
 
 ```bash
 docker run --restart=always -p 6379:6379 --name myredis -d redis:7.0.12
+```
 
-# 指定redis.conf 以及挂载data的目录
+* 指定redis.conf 以及挂载data的目录
+
+新建data文件夹 /var/docker/redis/data
+
+下载 http://download.redis.io/redis-stable/redis.conf
+放在目录 /var/docker/redis/redis.conf
+
+```bash
 docker run \
 -p 6379:6379 \
 --name vredis \
 -v /var/docker/redis/redis.conf:/etc/redis/redis.conf \
 -v /var/docker/redis/data:/data \
 --restart=always \
--d redis:7.0.12 redis-server /etc/redis/redis.conf # -d 后代运行
+-d redis:7.0.12 redis-server /etc/redis/redis.conf # -d 后台运行
 ```
 
 * 进入容器

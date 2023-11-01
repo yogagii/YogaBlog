@@ -7,6 +7,8 @@ Author: Yoga
 
 cd 文件目录
 
+替换 outbounds: settings: vnext: address 为代理ip
+
 ./v2ray
 
 SwitchyOmega

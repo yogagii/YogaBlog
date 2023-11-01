@@ -399,6 +399,15 @@ services:
 ```
 host.docker.internal 是mac和windows的参数，linux环境需在起container时增加--add-host=host.docker.internal:host-gateway
 
+```bash
+docker run -dp 3000:3000 \
+  --env-file .env \
+  -e DATABASE_UI_HOST=host.docker.internal \
+  --add-host=host.docker.internal:host-gateway \
+  xxx-docker.xxx.xxx.com/imagename:dev
+```
+_console.log(process.env.DATABASE_UI_HOST) // host.docker.internal_
+
 * package.json node dist/main 改用nodemon 执行
 
 ```json

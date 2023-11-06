@@ -1,7 +1,7 @@
 Title: Git命令整理
 Date: 2018-10-14 15:31
 Category: Programming
-Author: 张本轩 & Yoga
+Author: Yoga
 
 
 1. 首先需要明确三个概念，Git中的文件有三种状态: 已提交(commited), 已修改(modified)和已暂存(staged), 这里前两个概念比较好理解，已提交表示数据已保存(执行git commit指令后)，已修改表示修改了文件但还没有保存数据，而已暂存表示已经对当前经过修改的文件做了标记（执行git add filename指令后)

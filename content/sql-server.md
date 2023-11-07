@@ -360,3 +360,9 @@ DROP COLUMN column_name
 ```sql
 EXECUTE sp_rename 'table_name.old_name','new_name','COLUMN'
 ```
+
+* 修改字段类型
+
+```sql
+ALTER TABLE table_name ALTER COLUMN column_name nvarchar(256);
+```

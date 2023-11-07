@@ -401,7 +401,7 @@ https://stackoverflow.com/questions/59468756/error-object-metadata-not-found-aft
 
 ### 日志 Logging
 
-* logging：true 启用所有查询和错误的记录
+* logging: true 启用所有查询和错误的记录
 * logging: ["query", "error", "schema", "warn", "info", "log"] 启用不同类型的日志记录
 * logging: "all" 启用所有日志记录
 

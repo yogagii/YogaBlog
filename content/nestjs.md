@@ -960,6 +960,47 @@ checkPeriod: This option specifies the time interval (in milliseconds) between t
 
 ## Caching 缓存
 
+1. 整个接口缓存
+
+只有使用 GET 方式声明的节点会被缓存，只要api参数相同，则从缓存返回
+```bash
+npm install @nestjs/cache-manager
+```
+全局注册CacheModule
+```ts
+import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
+
+@Module({
+  imports: [
+    CacheModule.register({
+      ttl: 1000 * 60 * 60 * 2, // 2h
+      isGlobal: true, // 声明为全局模块
+    }),
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
+})
+export class AppModule {}
+```
+手动给需要的接口加上Interceptors
+```ts
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+
+@Controller('user')
+export class UserController {
+  @UseInterceptors(CacheInterceptor)
+  @Get('dashboard')
+  findAll() { return ... }
+}
+```
+
+2. 自定义缓存
+
 ```bash
 npm install cache-manager
 npm install -D @types/cache-manager

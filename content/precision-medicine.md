@@ -37,6 +37,8 @@ Roll out a CRM platform specific to diagnostic labs in iConnect to:
 * Managed Apache Airflow
     * Dags: job list
     * Admin/Variables: dna_env_variables
+* EMR
+    * EMR on EC2/Clusters: 查看集群日志
 * CloudWatch
     * Logs group: 运行日志
 * Salesforce: iConnect DB

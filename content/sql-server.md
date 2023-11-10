@@ -132,6 +132,16 @@ FROM
 GROUP BY
   MaterialCode
 ```
+找出相同code中日期最新的一条数据
+```sql
+SELECT t1.*
+FROM your_table t1
+INNER JOIN (
+    SELECT MaterialCode, MAX(date_column) AS max_date
+    FROM your_table
+    GROUP BY code
+) t2 ON t1.MaterialCode = t2.MaterialCode AND t1.date_column = t2.max_date;
+```
 
 ### CASE 条件
 

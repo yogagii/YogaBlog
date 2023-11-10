@@ -977,12 +977,13 @@ import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
       isGlobal: true, // 声明为全局模块
     }),
   ],
-  providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
-  ],
+  // 若全局绑定到所有controller就无需手动给需要的接口加Interceptors
+  // providers: [
+  //   {
+  //     provide: APP_INTERCEPTOR,
+  //     useClass: CacheInterceptor,
+  //   },
+  // ],
 })
 export class AppModule {}
 ```
@@ -992,8 +993,9 @@ import { Controller, Get, UseInterceptors } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('user')
+@UseInterceptors(CacheInterceptor) // 作用于整个controller
 export class UserController {
-  @UseInterceptors(CacheInterceptor)
+  @UseInterceptors(CacheInterceptor) // 或者只作用于单个接口
   @Get('dashboard')
   findAll() { return ... }
 }

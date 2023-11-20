@@ -1000,6 +1000,9 @@ export class UserController {
   findAll() { return ... }
 }
 ```
+1.接口涉及的表若是会随用户操作更新，则不能开启缓存
+
+2.若接口中使用到 @Session 中的 user_id也不能开启缓存，不同用户会返回相同数据
 
 2. 自定义缓存
 

@@ -46,6 +46,14 @@ Roll out a CRM platform specific to diagnostic labs in iConnect to:
 * Bitbucket: 生成dags的python script
 * Jenkins: CICD
 
+Amazon Managed Workflows for Apache Airflow (MWAA) 是一项适用于 Apache Airflow 的托管编排服务
+
+EMR适合跨平台的操作，可以发挥他的集群优势和算力优势；warehouse 内部操作 RS -> RS 去EMR绕一圈性能和性价比都很低，S3 -> Redshift都属于aws范畴内
+
 ### Dag: S3 -> Redshift
 
 ### Dag: Redshift -> Redshift
+
+* stg -> itg
+* itg -> dm
+* dm -> dm

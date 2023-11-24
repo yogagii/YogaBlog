@@ -324,6 +324,11 @@ await this.eventRepository.save(event);
 
 const eventWithDoctor = await this.eventRepository.findOne('588873', {
   relations: ['doctors'],
+  where: {
+    doctors: {
+      first_name: 'Yoga' // 过滤关联表
+    }
+  }
 });
 ```
 

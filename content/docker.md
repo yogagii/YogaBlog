@@ -150,6 +150,8 @@ docker run -dp 3000:3000 yogadock/getting-started
 
 查看日志
 
+默认的日志路径：/var/lib/docker/containers/ID/ID-json.log
+
 ```bash
 docker logs <container-id> -f
 ```

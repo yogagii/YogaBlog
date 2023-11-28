@@ -331,7 +331,7 @@ from io import BytesIO
 def create_csv(sourcedf, filename, target_bucket):
     csv_buffer = BytesIO()
     data = sourcedf.toPandas()
-    data.to_csv(csv_buffer, index = False, encoding = 'utf_8_sig')
+    data.to_csv(csv_buffer, index = False, encoding = 'utf_8_sig') # 参数 compression='gzip' 可以生成压缩文件 filename='data.csv.gz'
     content = csv_buffer.getvalue()
     write_file(filename, target_bucket, content)
 ```

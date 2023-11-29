@@ -299,11 +299,15 @@ export class iqvia_doctor {
   @Column()
   name: string;
 
-  @ManyToMany(() => Event, (event) => event.doctors)
+  @ManyToMany(() => Event, (event) => event.doctors, {
+    onDelete: 'CASCADE', // 删除讲师时会删除对应关系
+  })
   events: Event[];
 }
 ```
 运行后，ORM 将创建Event_doctors_Doctor联结表。
+
+_有关联的数据若需要删除，建议用flag标记而不是直接删除，若不加‘CASCADE’，直接删除时会报 Cannot delete or update a parent row: a foreign key constraint fails_
 
 创建数据
 

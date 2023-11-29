@@ -132,9 +132,12 @@ git remote add <shortname> <url>
 git remote rename [original-name] [new-name]
 ```
 * 修改远程仓库：
-```
+```bash
 git remote set-url [original-name] <url>
+# 更新git密码后需更新远程仓库url
+git remote set-url origin https://username:password@sourcecode.xxx.com/xxx.git
 ```
+
 * 移除远程仓库: 
 ```
 git remote rm [original-name]

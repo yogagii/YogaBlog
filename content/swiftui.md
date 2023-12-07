@@ -117,3 +117,13 @@ https://yogagii.github.io/databricks-api.html
 ## CICD
 
 https://yogagii.github.io/cicd-pipeline.html
+
+## UI Shared Component
+
+UI developer workflow:
+
+1. Check if the common repo already has a component that fits with the user story
+2. If nothing exists, they should add it, PR it
+3. Then in the reliability hub (RH) repo, import that shared component from the shared repo (once published in artifactory)
+4. If they want to alter an existing shared component, there should be a conversation with the Lead Developers on all squads, to ensure not to make a breaking change that affects another project
+5. If for some reason the story has something that shouldn't be added to the shared lib, then add it directly into the RH repo (however this should be rare).

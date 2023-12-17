@@ -58,6 +58,13 @@ EMR适合跨平台的操作，可以发挥他的集群优势和算力优势；wa
 * itg -> dm
 * dm -> dm
 
+t1 >> end
+
+* S3 Bucket
+    * metadata: 配置sql语句，按country_code delete目标表数据，并插入新数据（调用存储过程）
+* Redshift
+    Procedure: LANGUAGE plpgsql
+
 ## Control-M
 
 Control-M是BMC Software提供的企业级集中作业调度管理解决方案

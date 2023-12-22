@@ -557,3 +557,9 @@ const users = await connection.getRepository(User).find({
 });
 ```
 踩坑：.query(’select * from table’) 原始 SQL 查询 无法缓存
+
+时间缓存踩坑：
+
+1. 当本地和dev共用同一个redis时，不能缓存 max(last_modified_date)，本地得到的时间与dev得到的时间有时差，当用本地用dev缓存下的last_modified_date来执行 select * from sku_workspace where last_modified_date=@1 时，会缓存下空数据
+
+2. 从缓存中取得的数据为字符串类型，写进where 语句时需转换为Date类型 where: { last_modified_date: new Date(latestDate) }

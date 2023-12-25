@@ -94,7 +94,7 @@ constructor(
 @Column | 添加表列 | @Column({ length: 100 })
 @PrimaryColumn | 创建主列 | 每个实体必须至少有一个主键列
 @PrimaryGeneratedColumn | 自动生成的列 | @PrimaryGeneratedColumn('uuid')
-@CreateDateColumn | 创建时间
+@CreateDateColumn | 创建时间 | _注意可能与手动写入 new Date()有时差_
 @UpdateDateColumn | 更新时间
 
 数据类型

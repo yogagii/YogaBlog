@@ -312,6 +312,16 @@ select 'a' A intersect select 'b' A -- null
 * Where 是一个约束声明，使用Where来约束来之数据库的数据，Where是在结果返回之前起作用的，作用在group by子句和having子句之前，Where中不能使用聚合函数。
 * Having 是一个过滤声明，是在查询返回结果集以后对查询结果进行的过滤操作，在聚合后对组记录进行筛选，在Having中可以使用聚合函数。
 
+> 在SQL规范中AND操作符的优先级要高于OR操作符，在没有小括号()的限制下，总是优先执行AND语句，再执行OR语句。__把And看做加法，把OR看做乘法__
+
+where A or B and C
+_==> where A + B * C_
+==> where A or (B and C）
+
+where A and B or C
+_==> where A * B + C_
+==> where (A and B) or C
+
 查找重复行
 ```sql
 select COUNT(*) as RepNum, MaterialCode from <TABLE> group by MaterialCode Having COUNT(*)>1;

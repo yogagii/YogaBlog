@@ -586,4 +586,19 @@ const totalWorkspace = await this.workspaceRepository.find({
 2. 从缓存中取得的数据为字符串类型，写进 where 语句时需转换为 Date 类型 where: { last_modified_date: new Date(latestDate) }
 
 3. new Date()获取到的时间类型为 'datetime' 精确到毫秒, 若数据库中 last_moified_date 类型为 'datetime2(7)' 精确到微秒，会使返回结果为空 
-ALTER TABLE sku_workspace ALTER COLUMN last_modified_date datetime;
+    ```ts
+    @PrimaryColumn({ type: 'datetime2' })
+    last_modified_date: Date;
+    ```
+    法一：修改数据库格式：
+    ```sql
+    ALTER TABLE sku_workspace ALTER COLUMN last_modified_date datetime;
+    ```
+    法二：获取到的时间减1秒
+    ```ts
+    latestDate.setMinutes(latestDate.getMinutes() - 1);
+    // 原本获取的时间会丢失微秒的部分，直接用=匹配不上，得用>
+    where: {
+      last_modified_date: MoreThanOrEqual(latestDate),
+    },
+    ```

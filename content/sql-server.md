@@ -263,6 +263,12 @@ select UPPER('yoga') -- YOGA
 select INITCAP('yoga') -- Yoga
 ```
 
+* CHARINDEX ( expressionToFind , expressionToSearch [ , start_location ] ) 包含
+```sql
+select CHARINDEX('Delay', 'Delay - Shipment') -- 1
+select * from systems_alerts where CHARINDEX('Delay', alert_type) > 0
+```
+
 ### 运算符
 
 * <>不等于，不包含null的情况

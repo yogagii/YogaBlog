@@ -61,7 +61,7 @@ __Request:__
 * @Patch()
 * @Delete()
 * @Options()
-* @Header('Cache-Control', 'none') 指定自定义响应头
+* @Header('Cache-Control', 'none') 指定自定义响应头 Response Headers
 * @Redirect('https://nestjs.com', 301) 重定向
 
 Param decorators:
@@ -69,11 +69,18 @@ Param decorators:
 * @Param(key?: string)
 * @Body(key?: string)
 * @Query(key?: string)
+* @Headers()：Request Headers
 
 ```js
 import { Controller, Get, Req, Param } from '@nestjs/common';
+import moment from 'moment-timezone';
+
 @Get(':id')
-findOne(@Param() params): string { //@Param('id') id
+findOne(
+  @Param() params  //@Param('id') id
+  @Headers() headers // headers.timezone = 'Asia/Shanghai'
+): string {
+  const localeTime = moment(date).tz(timezone).format();
   return `This action returns a #${params.id} cat`;
 }
 

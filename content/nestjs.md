@@ -78,7 +78,7 @@ import moment from 'moment-timezone';
 @Get(':id')
 findOne(
   @Param() params  //@Param('id') id
-  @Headers() headers // headers.timezone = 'Asia/Shanghai'
+  @Headers() headers // headers.timezone = 'Asia/Shanghai' (模拟时区Chrome -> More tools -> Sensors -> Location)
 ): string {
   const localeTime = moment(date).tz(timezone).format();
   return `This action returns a #${params.id} cat`;

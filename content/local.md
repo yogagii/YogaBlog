@@ -43,3 +43,8 @@ module.exports = {
   },
 }
 ```
+
+法三：
+```bash
+npm config set strict-ssl false
+```

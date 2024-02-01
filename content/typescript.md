@@ -18,62 +18,96 @@ type Name = {
 
 - 拓展（extends）
 
-```ts
-// interface extends interface
-interface User extends Name {
-  age: number
-}
+  ```ts
+  // interface extends interface
+  interface User extends Name {
+    age: number
+  }
 
-// interface extends type
-interface User extends Name {
-  age: number
-}
+  // interface extends type
+  interface User extends Name {
+    age: number
+  }
 
-// type extends type
-type User = Name & {
-  age: number
-}
-// type extends interface
-type User = Name & {
-  age: number
-}
-```
+  // type extends type
+  type User = Name & {
+    age: number
+  }
+  // type extends interface
+  type User = Name & {
+    age: number
+  }
+  ```
 
 - type 可以声明基本类型别名，联合类型，元组等类型
 
-```ts
-type Name = string // 基本类型别名
-type PetList = [Dog, Pet] // 具体定义数组每个位置的类型
-```
+  ```ts
+  type Name = string // 基本类型别名
+  type PetList = [Dog, Pet] // 具体定义数组每个位置的类型
+  ```
 
 - type 语句中还可以使用 typeof 获取实例的 类型进行赋值
 
-```ts
-let div = document.createElement('div')
-type B = typeof div
-```
+  ```ts
+  let div = document.createElement('div')
+  type B = typeof div
+  ```
 
 - interface 能够声明合并
 
-```ts
-interface User {
+  ```ts
+  interface User {
+    name: string
+  }
+
+  interface User {
+    sex: string
+  }
+
+  /*
+  User 接口为 {
   name: string
-}
+  sex: string 
+  }
+  */
+  ```
 
-interface User {
-  sex: string
-}
+  原文链接：https://juejin.im/post/5c2723635188252d1d34dc7d#heading-11
 
-/*
-User 接口为 {
- name: string
- sex: string 
-}
-*/
-```
+### 泛型
 
-原文链接：https://juejin.im/post/5c2723635188252d1d34dc7d#heading-11
+- Pick 选择
 
+  pick<T，keys>：从Type中选择一系列属性来构造新类型
+
+- Omit 省略
+
+  omit<T，keys>：从Type中移除一系列属性值
+
+  ```ts
+  interface Props{
+    A:string
+    B:string
+    C:number[]
+  }
+  type PickProps= Pick<Props,'A'|'B'> // A, B
+  type OmitProps = Omit<Props,'A'|'B'>; // C
+  ```
+
+- Exclude 排除
+
+  Exclude<T,U> 从第一个联合类型参数中，将第二个联合类型中出现的联合项全部排除
+
+- Extract 提取
+
+  Extract<T,U> 提取Type中所有能够赋值给Union的属性
+
+  ```ts
+  type A = "age" | "name";
+  type B = "like" | "name";
+  type C = Exclude<A, B>; // 'age'
+  type D = Extract<A, B>; // 'name'
+  ```
 ___
 ## 装饰器 Decorators
 

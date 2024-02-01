@@ -548,6 +548,7 @@ handleCron() {
 | minute
 second (optional)
 ```
+cron patterns: http://crontab.org/
 
 stop()-停止一个按调度运行的任务
 

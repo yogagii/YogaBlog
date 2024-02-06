@@ -180,3 +180,6 @@ if all_wheels_on_track == False:
     reward = 1e-3
 ```
 
+Best-route strategy: https://github.com/dgnzlz/Capstone_AWS_DeepRacer
+
+AWS Deepracer Community: https://github.com/aws-deepracer-community/deepracer-analysis

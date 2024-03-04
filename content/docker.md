@@ -42,9 +42,19 @@ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-
 
 yum install -y docker-ce docker-ce-cli [containerd.io](http://containerd.io/)
 
+```bash
 systemctl start docker --add-host=host.docker.internal:host-gateway
 
+systemctl restart docker
+
+# 检查docker服务是否开启自动重启,返回’enabled‘则为已开启
+systemctl is-enabled docker.service
+
+# 若返回’disabled‘，则需要设置为enabled，设置命令
+systemctl enable docker.service
+
 docker -v
+```
 
 ---
 

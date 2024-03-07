@@ -111,6 +111,14 @@ git fetch [remote-name]
 ```
 git pull
 ```
+* 存储工作区和缓存区
+```
+git stash
+git stash list
+git pull origin main
+git stash apply
+```
+
 * 推送到远程仓库: 
 ```
 git push [remote-name] [branch-name]

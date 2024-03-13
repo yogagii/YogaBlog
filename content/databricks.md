@@ -463,12 +463,14 @@ workspace的监控日志，比如谁生成/删除一个token
 
 功能：
 * 治理所有数据资产：数仓，库表，数据湖，文件，机器学习模型，dashboard, notebook
-* 数据血缘
+* 数据血缘 Data lineage
 * 安全策略
-* ABAC权限管理，表级、列级权限控制（WIP）
-* 数据审计，数据共享
+* ABAC权限管理，表级、列级权限控制（WIP） Centralized metadata and user management / Centralized access controls
+* 数据审计 Data access auditing
+* 数据共享 Secure data sharing with Delta Sharing
+* Data search and discovery
 
-Hierarchy of primary data objects flows 主要数据对象的层次结构:
+主要数据对象的层次结构 Hierarchy of primary data objects flows:
 * Metastore 元存储：元数据的顶级容器，用于管理对数据资产的访问的权限，用户可以查看分配了USAGE数据权限的所有目录。
 * Catalog 目录
 * Schema 架构/数据库

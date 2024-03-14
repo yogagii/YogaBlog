@@ -116,6 +116,18 @@ show tables
 desc <表名>
 ```
 
+显示表字段
+
+```sql
+SHOW COLUMNS FROM table_name;
+```
+
+显示建表语句
+
+```sql
+SHOW CREATE TABLE table_name;
+```
+
 删除数据表
 
 ```sql

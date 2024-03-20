@@ -24,16 +24,39 @@ Get the app
 ```bash
 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 ```
-安装 docker:
 
-```bash
-brew install --cask --appdir=/Applications docker
-```
-打开蓝色小鲸鱼APP：Docker
+1. Docker Desktop
 
-```bash
-docker --version
-```
+    安装 docker:
+
+    ```bash
+    brew install --cask --appdir=/Applications docker
+    ```
+    打开蓝色小鲸鱼APP：Docker
+
+    ```bash
+    docker --version
+    ```
+
+2. Rancher Desktop
+
+    https://docs.rancherdesktop.io/getting-started/installation/
+
+    _踩坑：mysql  启动失败 cp_mysql-1  | chown: changing ownership of '/var/lib/mysql/': Permission denied_
+    https://github.com/rancher-sandbox/rancher-desktop/issues/1209
+
+    ```shell
+    cd ~/Library/Application\ Support/rancher-desktop/lima/_config
+    vi override.yaml
+    ```
+    ```yaml
+    mountType: 9p
+    mounts:
+      - location: "~"9p:
+          securityModel: mapped-xattr
+          cache: "mmap"
+    ```
+
 * LINUX
 
 yum install -y yum-utils device-mapper-persistent-data lvm2

@@ -67,6 +67,9 @@ https://blog.csdn.net/jieyanping/article/details/129189230
 https://github.com/dgnzlz/Capstone_AWS_DeepRacer/blob/master/Compute_Speed_And_Actions/RaceLine_Speed_ActionSpace.ipynb
 
 ### Reward function
+
+https://docs.aws.amazon.com/deepracer/latest/developerguide/deepracer-reward-function-input.html#reward-function-input-distance_from_center
+
 * Follow the center line in time trials
 ```js
 if distance_from_center <= marker_1:
@@ -183,3 +186,5 @@ if all_wheels_on_track == False:
 Best-route strategy: https://github.com/dgnzlz/Capstone_AWS_DeepRacer
 
 AWS Deepracer Community: https://github.com/aws-deepracer-community/deepracer-analysis
+
+https://zhuanlan.zhihu.com/p/635604595?utm_id=0

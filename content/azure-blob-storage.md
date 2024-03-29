@@ -95,3 +95,14 @@ downloadFile({
 	name: FILE_NAME
 })
 ```
+
+4. image url
+
+```js
+const blockBlobClient = await getBlockBlobClientByFileName(fileName);
+const downloadBlockBlobResponse = await blockBlobClient.download(0);
+const content = downloadBlockBlobResponse.readableStreamBody;
+
+response.setHeader("Content-Type", "image/jpg");
+content.pipe(response);
+```

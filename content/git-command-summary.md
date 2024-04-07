@@ -90,6 +90,10 @@ git log
 ```
 git commit --amend
 ```
+* 提交取消校验
+```
+git commit --no-verify
+```
 * 取消暂存的文件(注意与`git rm --cached`的区别): 
 ```bash
 git reset HEAD  # 撤删add的所有文件

@@ -45,6 +45,7 @@ Get the app
     _踩坑：mysql  启动失败 cp_mysql-1  | chown: changing ownership of '/var/lib/mysql/': Permission denied_
     https://github.com/rancher-sandbox/rancher-desktop/issues/1209
 
+    Include the following content in /override.yaml:
     ```shell
     cd ~/Library/Application\ Support/rancher-desktop/lima/_config
     vi override.yaml

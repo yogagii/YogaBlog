@@ -196,6 +196,11 @@ git config --global credential.helper cache
 git checkout -b [branch-name] [remote-name]/[branch-name]
 git checkout --track [remote-name]/[branch-name]
 ```
+
+```bash
+git fetch origin
+git checkout -b [branch-name] [remote-name]/[branch-name]
+```
 * 将本地分支与远程分支关联: 
 ```
 git branch --set-upstream-to=origin/dev

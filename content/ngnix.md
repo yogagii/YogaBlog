@@ -40,6 +40,8 @@ make && make install
 
 Linux上开机自动启动Nginx: 在/etc/rc.local文件中加一行 nginx
 
+检查 nginx 运行状态：service nginx status
+
 启动：nginx 或 service nginx start
 
 踩坑：nginx: [error] invalid PID number “” in “/run/nginx.pid”

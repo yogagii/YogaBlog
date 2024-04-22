@@ -242,3 +242,69 @@ dG
 
  软链接的文件内,不是存的数据,而是存的一个文件的全路径名,使用此链接时,会根据此路径找到目标文件，和windows里到快捷方式一样。
 
+--
+
+## 开机启动
+
+* 列出所有启动项命令，开启的和未开启的。开启的会绿色显示为enabled。
+```bash
+systemctl list-unit-files
+systemctl list-unit-files | grep enabled
+```
+* 查看某个.service服务的状态信息 
+```bash
+systemctl status mysqld.service
+systemctl nginx status
+service nginx status
+```
+
+* 查看某个服务是否设置开机启动
+```bash
+systemctl is-enabled mysqld.service
+systemctl is-enabled docker.service
+systemctl is-enabled nginx.service 
+```
+
+* 启用和禁用服务开机启动
+```bash
+systemctl enable mysqld.service
+systemctl enable docker.service
+systemctl enable nginx.service 
+systemctl disable mysqld.service
+chkconfig nginx on
+```
+
+* 启动、停止、重启一个服务
+```bash
+systemctl start mysqld.service
+systemctl stop mysqld.service
+systemctl restart mysqld.service
+service nginx start
+```
+
+_踩坑：Unit nginx.service not found._
+
+vim /lib/systemd/system/nginx.service
+```bash
+[Unit]
+Description=The nginx HTTP and reverse proxy server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+# Nginx will fail to start if /run/nginx.pid already exists but has the wrong
+# SELinux context. This might happen when running `nginx -t` from the cmdline.
+# https://bugzilla.redhat.com/show_bug.cgi?id=1268621
+ExecStartPre=/usr/bin/rm -f /run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t # 换成nginx安装路径
+ExecStart=/usr/sbin/nginx # 换成nginx安装路径
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=mixed
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+```

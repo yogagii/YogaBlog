@@ -10,7 +10,7 @@ Rule-based VS ML
 
 * Rule-based approach: Decision rules are clearly defined by humans
 
-* Machine Learning: Trained from examples. Rules are note defined by humans but learned by the machine fron data.
+* Machine Learning: Trained from examples. Rules are note defined by humans but learned by the machine from data.
 
 AI VS ML VS DL
 

@@ -108,7 +108,28 @@ type Name = {
   type C = Exclude<A, B>; // 'age'
   type D = Extract<A, B>; // 'name'
   ```
-___
+
+### Type Guards
+
+Create type guards that will check whether the record is of type A or B.
+```ts
+// Type guards to determine the type of record
+function isAType(record: A|B): record is A> {
+    return record.type === 'A';
+}
+
+function isBType(record: A|B): record is B> {
+    return record.type === 'B';
+}
+```
+Use these type guards in your loop to narrow the type of record inside the conditional blocks.
+```ts
+res.forEach((record: A|B) => {
+  if (isAType(record)) {...}
+  else if (isBType(record)) {...}
+})
+```
+
 ## 装饰器 Decorators
 
 随着 TypeScript 和 ES6 里引入了类，在一些场景下我们需要额外的特性来支持标注或修改类及其成员。 装饰器（Decorators）为我们在类的声明及成员上通过元编程语法添加标注提供了一种方式。

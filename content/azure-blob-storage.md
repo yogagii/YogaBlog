@@ -106,3 +106,5 @@ const content = downloadBlockBlobResponse.readableStreamBody;
 response.setHeader("Content-Type", "image/jpg");
 content.pipe(response);
 ```
+
+https://learn.microsoft.com/zh-cn/azure/storage/blobs/storage-blob-upload-typescript

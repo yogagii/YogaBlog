@@ -269,6 +269,12 @@ SELECT name FROM person_tbl WHERE name REGEXP '^st';
 SELECT EXPLODE(DATA) data FROM table_name
 ```
 
+返回参数中的第一个非空表达式
+
+```sql
+select COALESCE(CnName, EnName) from table_name
+```
+
 自定义变量
 ```sql
 set @key=value

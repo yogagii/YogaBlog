@@ -254,7 +254,7 @@ systemctl list-unit-files | grep enabled
 * 查看某个.service服务的状态信息 
 ```bash
 systemctl status mysqld.service
-systemctl nginx status
+systemctl status nginx
 service nginx status
 ```
 
@@ -302,7 +302,7 @@ PIDFile=/run/nginx.pid
 # SELinux context. This might happen when running `nginx -t` from the cmdline.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1268621
 ExecStartPre=/usr/bin/rm -f /run/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t # 换成nginx安装路径 chmod +x /usr/local/nginx/sbin/nginx
+ExecStartPre=/usr/sbin/nginx -t # 换成nginx安装路径
 ExecStart=/usr/sbin/nginx # 换成nginx安装路径
 ExecReload=/bin/kill -s HUP $MAINPID
 KillSignal=SIGQUIT
@@ -313,4 +313,11 @@ PrivateTmp=true
 [Install]
 WantedBy=multi-user.target
 ```
+```bash
 systemctl daemon-reload
+systemctl enable nginx.service 
+```
+
+_踩坑：nginx.service: Can't open PID file /run/nginx.pid (yet?) after start: No such file or directory._
+
+In the Nginx configuration file, ensure that the path specified for the PID file matches the actual location of the file. The directive in the nginx.conf file should be similar to pid /run/nginx.pid;

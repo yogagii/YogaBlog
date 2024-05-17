@@ -282,6 +282,11 @@ systemctl restart mysqld.service
 service nginx start
 ```
 
+* Review System Logs
+```bash
+journalctl -xe
+```
+
 _踩坑：Unit nginx.service not found._
 
 vim /lib/systemd/system/nginx.service
@@ -297,7 +302,7 @@ PIDFile=/run/nginx.pid
 # SELinux context. This might happen when running `nginx -t` from the cmdline.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1268621
 ExecStartPre=/usr/bin/rm -f /run/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t # 换成nginx安装路径
+ExecStartPre=/usr/sbin/nginx -t # 换成nginx安装路径 chmod +x /usr/local/nginx/sbin/nginx
 ExecStart=/usr/sbin/nginx # 换成nginx安装路径
 ExecReload=/bin/kill -s HUP $MAINPID
 KillSignal=SIGQUIT
@@ -308,3 +313,4 @@ PrivateTmp=true
 [Install]
 WantedBy=multi-user.target
 ```
+systemctl daemon-reload

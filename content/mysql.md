@@ -90,6 +90,22 @@ show global variables like 'port'; -- 默认 3306
 source /Users/yoga/code/xxx.sql
 ```
 
+导出表
+
+```sql
+-- need FILE privilege: GRANT FILE ON *.* TO 'username'@'hostname';
+SELECT *
+INTO OUTFILE '/path/to/your/outputfile.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+FROM table_name;
+```
+```bash
+mysqldump -u username -p --tab=/path/to/your/directory your_database your_table_name
+mysqldump -u username -p --no-data database table_name > /path/to/your/outputfile.sql
+```
+
 创建数据表
 
 ```sql

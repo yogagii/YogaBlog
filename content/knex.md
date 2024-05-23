@@ -120,7 +120,8 @@ async function getStreamByQuarter(quarter: string) {
 }
 ```
 
-* transaction
+- transaction
+
 ```ts
 export async function dataSync() {
   await dbClient.transaction(async (trx) => {
@@ -129,6 +130,49 @@ export async function dataSync() {
     await trx(tableName).truncate();
     await syncTableStream(dbClient, trx, tableName as TableName);
   });
+}
+```
+
+### Schema
+
+- Create table: knex migrate:make createTableName
+
+```ts
+import { Knex } from "knex";
+
+export async function up(knex: Knex): Promise<void> {
+  return await knex.schema
+    .withSchema(`${process.env.SCHEMA_NAME}`)
+    .createTable("TABLE_NAME", (table) => {
+      table.increments("id").primary(), table.string("name", 255).notNullable();
+      table.string("email", 255);
+    });
+}
+
+export async function down(knex: Knex): Promise<void> {
+  return knex.schema
+    .withSchema(`${process.env.SCHEMA_NAME}`)
+    .dropTable("TABLE_NAME");
+}
+```
+
+- Update table: knex migrate:make updateTableName
+
+```ts
+import { Knex } from "knex";
+
+export async function up(knex: Knex): Promise<void> {
+  return await knex.schema
+    .withSchema(`${process.env.SCHEMA_NAME}`)
+    .alterTable("TABLE_NAME", (table) => {
+      table.datetime("updated_date").defaultTo(knex.fn.now()).notNullable();
+    });
+}
+
+export async function down(knex: Knex): Promise<void> {
+  return knex.schema
+    .withSchema(`${process.env.SCHEMA_NAME}`)
+    .dropTable("updated_date");
 }
 ```
 
@@ -149,7 +193,12 @@ npm run db-migration:migrate
 npx dotenv -e .env.local npm run db-migration:migrate
 ```
 
+_踩坑：若有冲突_
+1. 删除所有不需要运行的文件
+2. 删除cp_persona中knex_migrations表和knex_migrations_lock表
+
 #### Deployment
+
 ```yaml
 deploy:
   enabled: false

@@ -321,3 +321,64 @@ systemctl enable nginx.service
 _踩坑：nginx.service: Can't open PID file /run/nginx.pid (yet?) after start: No such file or directory._
 
 In the Nginx configuration file, ensure that the path specified for the PID file matches the actual location of the file. The directive in the nginx.conf file should be similar to pid /run/nginx.pid;
+
+---
+
+## 定时任务
+
+1. 创建执行脚本
+
+* 检查Docker container运行状态
+check_docker_container.sh
+```bash
+#!/bin/bash
+
+# 设置容器名和接收通知的邮箱
+CONTAINER_NAME="your_container_name"
+EMAIL_RECIPIENT="receiver@example.com"
+
+# 检查容器状态
+container_status=$(docker ps -q -f "name=$CONTAINER_NAME")
+
+# 如果容器不在运行列表中，发送邮件通知
+if [ -z "$container_status" ]; then
+    echo "容器 $CONTAINER_NAME 已停止运行。" | mail -s "容器停止通知" $EMAIL_RECIPIENT
+fi
+```
+* health-check api 检查接口状态
+health_check.sh
+```bash
+#!/bin/bash
+
+# Define variables
+API_URL="https://xxx.com/api/hello"
+EMAIL="receiver@example.com"
+SUBJECT="Health Check Alert"
+BODY="The Health Check API did not return a 200 response code."
+
+# Make the API call
+HTTP_RESPONSE=$(curl --write-out "%{http_code}\n" --silent --output /dev/null "$API_URL")
+
+# Check if the response code is not 200
+if [ "$HTTP_RESPONSE" -ne 200 ]; then
+  echo "$BODY" | mail -s "$SUBJECT" "$EMAIL"
+fi
+```
+
+2. 确保给这个脚本可执行权限
+
+```bash
+chmod +x check_docker_container.sh
+```
+
+3. 设置定时任务
+
+```bash
+crontab -e # Open your crontab file for editing
+crontab -l # verify that your cron job is set up correctly,
+```
+
+```bash
+* * * * * /path/to/check_docker_container.sh > /dev/null 2>&1 # every minute
+0,30 * * * * /var/www/health_check.sh > /dev/null 2>&1 # every half an hour
+```

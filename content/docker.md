@@ -138,6 +138,7 @@ docker run -dp 3000:3000 getting-started
 ```bash
 docker ps # 运行中的容器
 docker ps -a 
+docker ps -q -f name=swift_server # -q 只显示id -f 过滤
 ```
 
 停止容器

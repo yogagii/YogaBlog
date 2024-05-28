@@ -190,9 +190,11 @@ docker run -dp 3000:3000 yogadock/getting-started
 
 ```bash
 docker logs <container-id> -f
+docker logs -f <container-id> --tail=300
 ```
 
 * -f, --follow 实时输出日志，最后一行为当前时间戳的日志
+* --tail 限制行数
 
 显示容器根目录
 

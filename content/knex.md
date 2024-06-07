@@ -57,6 +57,8 @@ export function getDBClient<T extends {}>(
 
 ### Query Builder
 
+https://knex.nodejs.cn/guide/query-builder.html
+
 - select
 - where / whereIn
 - first
@@ -68,6 +70,15 @@ async function getUserInfo(userid: string) {
   const dbclient = getDBClient(config, "employee_table", config.db.userSchema);
   return dbclient.where("id", userid).select().first();
 }
+```
+
+- groupBy
+- max
+
+```ts
+knex.max('age', { as: 'a' })
+knex.max('age as a')
+knex.max({ a: 'age' })
 ```
 
 - timeout

@@ -6,22 +6,49 @@ Author: Yoga
 
 ## Kubernetes
 
-Azure Cli
-```bash
-# list available clouds
-az cloud list --output table
- 
-# China Azure
-az cloud set --name AzureChinaCloud
+### Docker VS K8S
 
-# 登录
+* Docker是一个轻量级的容器化平台，它允许开发人员将应用程序和其依赖项打包为可移植的容器镜像，并在不同的环境中进行部署。Docker采用单机模式，适用于部署和管理单个主机上的容器。它提供了容器的构建、运行和管理功能，并使得应用程序的部署变得简单和可靠。
+* 对于复杂的应用程序，可能需要使用编排工具（如 Docker Compose、Kubernetes）来管理多个容器的部署、协作和扩展。Kubernetes是一个分布式的容器编排工具，适合构建、管理和调度多个容器的集群。它可以管理数千个容器，并提供高自动扩展、负载平衡和故障恢复的功能。
+
+### 核心概念
+
+* Pod：K8S 最小的部署单元，是一组容器的集合。每个 Pod 都由一个特殊的根容器 Pause 容器，以及一个或多个紧密相关的用户业务容器组成。
+
+* Pause 容器作为 Pod 的根容器，以它的状态代表整个容器组的状态。K8S 为每个 Pod 都分配了唯一的 IP 地址，称之为 Pod IP。Pod 里的多个业务容器共享 Pause 容器的IP，共享 Pause 容器挂载的 Volume。
+
+* Label：标签，附加到某个资源上，用于关联对象、查询和筛选。一个 Label 是一个 key=value 的键值对，K8S 通过 Label Selector（标签选择器）来查询和筛选拥有某些 Label 的资源对象
+
+* ReplicaSet（RC）：用来确保预期的 Pod 副本数量，如果有过多的 Pod 副本在运行，系统就会停掉一些 Pod，否则系统就会再自动创建一些 Pod
+
+* Service：定义了一个服务的访问入口，创建 Service 时，K8S会自动为它分配一个全局唯一的虚拟 IP 地址，即 Cluster IP。服务发现就是通过 Service 的 Name 和 Service 的 ClusterIP 地址做一个 DNS 域名映射来解决的
+
+* Namespace：命名空间，Namespace 多用于实现多租户的资源隔离，Namespace 通过将集群内部的资源对象“分配”到不同的Namespace中，形成逻辑上分组的不同项目、小组或用户组
+
+### kubectl
+
+kubectl 是操作 k8s 集群的命令行工具， 可在 k8s 集群的 master 节点执行
+
+mac 安装
+```bash
+brew install kubectl
+kubectl version --client
+```
+
+### AKS
+
+Azure Kubernetes 服务 (AKS) 是一种托管 Kubernetes 服务
+
+```bash
+# login service account
 az login --service-principal --tenant xxx -u xxx -p xxx
 
 # 访问 aks
 az aks get-credentials --resource-group xxx --name xxx
 ```
 
-kubectl 是操作 k8s 集群的命令行工具， 可在 k8s 集群的 master 节点执行
+https://learn.microsoft.com/zh-cn/azure/aks/learn/quick-kubernetes-deploy-cli
+
 ```bash
 # 获取所有部署的 service
 kubectl get services --all-namespaces
@@ -93,6 +120,7 @@ ConfigMap是一种API对象，用于存储不包含敏感信息的配置信息�
 kuberntes中四层的负载均衡调度机制，Ingress借助service的服务发现机制实现集群中Pod资源的动态感知
 
 * kind: Ingress
+
 对外暴露服务，实现http，域名，URI，证书等请求方式，配置规则，Controller控制器通过service服务发现机制动态实现后端Pod路由转发规则的实现
 
 * kind: CronJob

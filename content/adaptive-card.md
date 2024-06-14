@@ -198,3 +198,5 @@ https://blog.51cto.com/u_15155081/2720389
 
 解决：https://documentation.mjml.io/#inside-node-js
  mjml 写模板，用mjml2html转成html
+
+GrapeJS：export MJML 邮件中的HTML

@@ -45,7 +45,7 @@ snyk code test --org=771080d9-f4f9-42f5-b535-bd9bd76d9984
 
 Snyk Preview
 
-https://jenkins.eat.jnj.com/[project-key]/job/[repo-name]/job/[branch]/1/artifact/snyk-scan-id-sast.html
+https://jenkins.xxx.com/[project-key]/job/[repo-name]/job/[branch]/1/artifact/snyk-scan-id-sast.html
 
 Snyk Ignore: .snyk
 

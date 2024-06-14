@@ -15,7 +15,7 @@ SCAN stands for Supply Chain ANalytics. SCAN is an analytics program within Jans
 Objectives:
 
 * Enable data value for business insight
-* Data governance: Identify data ownership , establish data governance rules and process for data creation, using
+* Data governance: Identify data ownership, establish data governance rules and process for data creation, using
 and sharing internally & externally.
 * Data protection: Meet the requirement from legal/quality/Cyber security of data protection
 * FAIR principle
@@ -23,6 +23,14 @@ and sharing internally & externally.
     * Data can be accessible by user,
     * build up integration function to make sure data Interoperable by other applications.
     * Store, combine and clean data to make the data reusable by user and other applications. 
+
+### CDL 
+
+EDW 企业数据仓库: The primary function of the Enterprise Data Warehouse, is to provide a centralized data store of enterprise-level data.
+
+The Common Data Layer (CDL) is a repository that centralizes the Supply Chain Data.This common layer can support all digital solutions across the business. The CDL ingests and publishes near real-time data from supply chain systems globally. The Level 0 layer of the CDL is a direct reflection of the data as it is stored in the upstream source systems.
+
+CDL defined Databricks as the tool to use for data consumption. A secure access to CDL is given via an Azure Active Directory (AD) credential passthrough.
 
 ## DAYU
 

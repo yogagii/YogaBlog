@@ -87,3 +87,9 @@ Data Use Governance - Polices:
 * Access policy 数据读写权限
 * Encryption policy 数据加密
 * Data Movement & Sharing policy 数据分享权限
+
+## Data Democratization 数据民主化
+
+Data democratization is the ability for information in a digital format to be accessible to Subject Matter Expert in JSC and data analysts/scientists.
+
+授予员工访问数据的权限，确保信息易于查找、检索和理解。使决策权掌握在员工手中，并为员工提供一些他们所需的信息以辅助他们优化工作。

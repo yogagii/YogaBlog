@@ -90,7 +90,7 @@ Helm帮助我们管理kubenetes的yaml对象文件，借助go的template语法�
 
 * kind: Deployment
 
-Deployment是一种控制器，用于管理Pod的部署。Deployment确保了在指定的策略下，应用的多个副本可以持续运行，并且如果有任何容器崩溃，Deployment会替换它。
+  Deployment是一种控制器，用于管理Pod的部署。Deployment确保了在指定的策略下，应用的多个副本可以持续运行，并且如果有任何容器崩溃，Deployment会替换它。
 
 ```yaml
 apiVersion: apps/v1
@@ -113,27 +113,88 @@ spec:
 
 * kind: ConfigMap
 
-ConfigMap是一种API对象，用于存储不包含敏感信息的配置信息，可以用作环境变量、命令行参数、配置文件等。
+  ConfigMap是一种API对象，用于存储不包含敏感信息的配置信息，可以用作环境变量、命令行参数、配置文件等。
 
 * kind: Service
 
-kuberntes中四层的负载均衡调度机制，Ingress借助service的服务发现机制实现集群中Pod资源的动态感知
+  kuberntes中四层的负载均衡调度机制，Ingress借助service的服务发现机制实现集群中Pod资源的动态感知
+
+  > 四层负载均衡：负载均衡器用 ip+port 接收请求，再直接转发到后端对应服务上；工作在传输层
 
 * kind: Ingress
 
-对外暴露服务，实现http，域名，URI，证书等请求方式，配置规则，Controller控制器通过service服务发现机制动态实现后端Pod路由转发规则的实现
+  Ingress 是一种用于管理外部 HTTP 和 HTTPS 访问到 K8s 集群内服务的资源对象。它提供了更复杂的负载均衡和路由规则，通过一个外部入口点将流量引导到集群内部的服务上。
+  对外暴露服务，实现http，域名，URI，证书等请求方式，配置规则，Controller控制器通过service服务发现机制动态实现后端Pod路由转发规则的实现
+
+  > 七层负载均衡：负载均衡器根据 虚拟的 url 或主机名 来接收请求，经过处理后再转向相应的后端服务上；工作在应用层
+
+  Ingress 控制器通常会运行一个反向代理负载均衡器（如 Nginx），接收外部请求并根据定义的规则将请求转发到集群内部的服务
+
+  ```yaml
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: authentication
+  spec:
+    ingressClassName: nginx
+    rules:
+      - host: dev.xxx.com
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+      - host: dev.admin.xxx.com
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+  ```
 
 * kind: CronJob
 
-```yaml
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: job-1
-spec:
-  schedule: "*/5 * * * *"
-  concurrencyPolicy: Forbid
-```
+  ```yaml
+  apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: job-1
+  spec:
+    schedule: "*/5 * * * *"
+    concurrencyPolicy: Forbid
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            restartPolicy: OnFailure
+            imagePullSecrets:
+              - name: "{{ .Values.imagePullSecrets }}"
+            containers:
+              - name:  {{.Values.businessDataSync.name}}
+                image: "{{.Values.businessDataSync.appImage.name}}:{{.Values.businessDataSync.appImage.tag }}"
+  ```
+
+  ```ts
+  // index.ts
+  import { sync } from "./syncData";
+  import { uploadToBlob } from "./uploadToBlob";
+
+  async function main() {
+    const args = process.argv;
+
+    if (args.includes("--upload")) {
+      await uploadToBlob();
+    } else {
+      await sync();
+    }
+  }
+
+  main()
+    .then(() => {
+      process.exit(0);
+    })
+    .catch(() => {
+      process.exit(1);
+    });
+  ```
 
 ### Package Stage
 

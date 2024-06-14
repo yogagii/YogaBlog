@@ -256,7 +256,7 @@ SSO Supports all Open ID Connect response types when "openid" is in the scope. T
   },
   "profile": "xxx",
   "name": "xxx",
-  "memberOf": ["ITS-APP-XXX-USR", "ITS-APP-XXX-DSG"],
+  "memberOf": ["XXX-APP-XXX-USR", "XXX-APP-XXX-DSG"],
   "given_name": "xxx",
   "family_name": "xxx",
 }

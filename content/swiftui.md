@@ -69,7 +69,7 @@ Need to calculate event forecast week by week!
 periods just correspond to time periods (of length 1 week) in the planning horizon, starting with the current week which is period 1
 
 - transfer_period - this is the week number where the suggested transfer will take place relative to the current week (period 1)
-- transfer_week - This is the JnJ week-year combination date where the transfer will take place
+- transfer_week - This is the week-year combination date where the transfer will take place
 - transfer_lt - the number of periods (i.e. weeks) it will take for the transfer to arrive at the destination node
 - arrival_period - the period (week) where the transferred inventory will arrive at the destination node and actually change the inventory values at the destination
 

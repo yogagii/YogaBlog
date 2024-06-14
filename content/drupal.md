@@ -118,7 +118,53 @@ Rancher Desktop: https://docs.rancherdesktop.io/getting-started/installation/
     http://127.0.0.1:8080/admin/content
     http://127.0.0.1:8080/node/1
 
-### Drupal API
+### JSON:API
+
+https://jsonapi.org/
+
+> specification for how a client should request that resources be fetched or modified, and how a server should respond to those requests.
+
+Drupal's datastructures, i.e. entity types, bundles, and fields, are incredibly well suited to the JSON:API.
+
+example response
+```json
+{
+  "links": {
+    "self": "http://example.com/articles",
+  },
+  "data": [{
+    "type": "articles",
+    "id": "1",
+    "attributes": {
+      "title": "JSON:API paints my bikeshed!"
+    },
+    "relationships": {
+      "author": {
+        "links": {
+          "self": "http://example.com/articles/1/relationships/author",
+          "related": "http://example.com/articles/1/author"
+        },
+        "data": { "type": "people", "id": "9" }
+      },
+    },
+    "links": {
+      "self": "http://example.com/articles/1"
+    }
+  }],
+  "included": [{
+    "type": "people",
+    "id": "9",
+    "attributes": {
+      "firstName": "Dan",
+    },
+    "links": {
+      "self": "http://example.com/people/9"
+    }
+  }]
+}
+```
+
+### Filtering
 
 * detail with related content
 
@@ -239,3 +285,23 @@ Rancher Desktop: https://docs.rancherdesktop.io/getting-started/installation/
       }
     }
   }
+
+### Axios
+
+```js
+let api = `${hosts.businessCMS}/api/content/${type}`;
+	try {
+		const response = await axios.get(api, {
+			params: {
+        page,
+				limit,
+				filter, // 自动将object形式的filter转化为中括号字符串
+				sort,
+			},
+		});
+    console.info(">>> cms-api get:", hosts.businessCMS, response.request?.path);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+```

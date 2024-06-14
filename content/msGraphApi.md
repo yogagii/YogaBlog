@@ -58,8 +58,6 @@ Step2. 在 teams 里 create a team, Apps -> Sharepoint -> Copy link
 
 Step3. Grant permission to your app go to https://[YourSharePointCollectionURL]/_layouts/15/appinv.aspx
 
-![sharepoint api](img/sharepointapi1.png)
-
 ### Authentication Token
 
 __POST__ https://accounts.accesscontrol.windows.net/{{tenantId}}/tokens/OAuth/2/
@@ -71,7 +69,7 @@ Body:
 | Key | Value
 | - | -
 client_id | {{clientId}}@{{tenantId}}
-resource | 00000003-0000-0ff1-ce00-000000000000/jnj.sharepoint.com@{{tenantId}}
+resource | 00000003-0000-0ff1-ce00-000000000000/xxx.sharepoint.com@{{tenantId}}
 client_secret | {{secret_value}}
 grant_type | client_credentials
 

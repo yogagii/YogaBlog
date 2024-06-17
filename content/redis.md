@@ -4,52 +4,6 @@ Category: Backend
 Tags: database
 Author: Yoga
 
-- 用作缓存
-- 用作存 cookie,session: 容量小，提升速度; 负载均衡指到其他进程里，
-
-cookie 的过期时间和 redis 保持一致
-
-```js
-// local.js
-session: {
-  adapter: '@sailshq/connect-redis',
-  pass: 'XXXXXXXXXXXXX',
-  db: 5,
-},
-```
-
-清缓存
-
-```js
-async function flushCacheWithDomain(domain) {
-  if (!domain) {
-    throw new Error('need domain.')
-  }
-  function innerScan(cursor) {
-    return new Promise((resolve, reject) => {
-      redisClient.scan(cursor, 'MATCH', `*${domain}*`, 'COUNT', '100', (err, res) => {
-        if (err) {
-          reject(err)
-        }
-        const [newCursor, keys] = res
-        Promise.all(keys.map((key) => redisClient.del(key)))
-          .then(() => {
-            sails.log.info(`del ${keys.length} keys.`)
-            if (newCursor === '0' || newCursor === 0) {
-              resolve(1)
-            } else {
-              resolve(innerScan(newCursor))
-            }
-          })
-          .catch(reject)
-      })
-    })
-  }
-
-  await innerScan('0')
-}
-```
-
 ## 本地启动
 
 1. MAC
@@ -225,6 +179,108 @@ const SubscribeExpired = () => {
 if (process.env.NODE_APP_INSTANCE === '0' || !process.env.NODE_APP_INSTANCE) {
   redisClient.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], SubscribeExpired);
 }
+```
+
+## 用作缓存
+
+- 用作缓存
+- 用作存 cookie,session: 容量小，提升速度; 负载均衡指到其他进程里，
+
+cookie 的过期时间和 redis 保持一致
+
+```js
+// local.js
+session: {
+  adapter: '@sailshq/connect-redis',
+  pass: 'XXXXXXXXXXXXX',
+  db: 5,
+},
+```
+
+清缓存
+
+```js
+async function flushCacheWithDomain(domain) {
+  if (!domain) {
+    throw new Error('need domain.')
+  }
+  function innerScan(cursor) {
+    return new Promise((resolve, reject) => {
+      redisClient.scan(cursor, 'MATCH', `*${domain}*`, 'COUNT', '100', (err, res) => {
+        if (err) {
+          reject(err)
+        }
+        const [newCursor, keys] = res
+        Promise.all(keys.map((key) => redisClient.del(key)))
+          .then(() => {
+            sails.log.info(`del ${keys.length} keys.`)
+            if (newCursor === '0' || newCursor === 0) {
+              resolve(1)
+            } else {
+              resolve(innerScan(newCursor))
+            }
+          })
+          .catch(reject)
+      })
+    })
+  }
+
+  await innerScan('0')
+}
+```
+
+### Express 中间件
+
+```ts
+export default express().use(middlewareCollection())
+```
+
+```ts
+export function middlewareCollection() {
+  const middlewarePromise = (async () => {
+    const { environment, sessionSecret, oauth } = await getConfig();
+    const store = await getSessionStore(environment);
+
+    const sessionMiddleware = session({
+      resave: true,
+      saveUninitialized: true,
+      store,
+      secret: sessionSecret,
+      cookie: {
+        maxAge: 1000 * 60 * 15, // 15分钟未操作清除缓存，用户登出
+        secure: true,
+      },
+      proxy: true,
+    });
+
+    return express
+      .Router()
+      .use(sessionMiddleware)
+      .use(passport.initialize())
+      .use(passport.session());
+  })();
+
+import session from "express-session";
+import RedisStore from "connect-redis"; // 内存中的键值存储，高性能和可扩展性
+import sessionFileStore from "session-file-store"; // 设置较为简单，只需要文件系统访问权限, 在需求较低的环境中使用
+
+export const getSessionStore = async (
+  environment: Environments
+): Promise<StoreWithAll> => {
+  if (environment === Environments.LOCAL) {
+    const FileStore = sessionFileStore(session);
+    return new FileStore({
+      path: "../../localsession",
+      retries: 0,
+    }) as StoreWithAll;
+  } else {
+    const redisClient = await Cache.getClientWithConfig();
+    return new RedisStore({
+      client: redisClient,
+      prefix: "user-session:",
+    });
+  }
+};
 ```
 
 ## 数据类型

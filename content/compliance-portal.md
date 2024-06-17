@@ -37,6 +37,25 @@ Health Care Compliance
 * Knex
 	* DB migration
 
+## Full Circle of SDLC
+
+> CSS —— Compliance, Security, Scalability
+
+Quality Risk Management：
+* Concept:
+	* Compliance Analysis
+* Project:
+	* User requirements specification
+	* Functional specification
+	* Detailed Risk Assesment
+	* Technical Design Specification
+	* Traceability Matrix
+* Operation:
+	* Incident management
+* Retirement:
+	* Retirement plan
+
+
 ## High Scalability
 
 > Website scaling helps handle growing traffic and user demands while maintaining peak performance.
@@ -54,21 +73,31 @@ Health Care Compliance
 	Ingress 是一种管理集群内部服务外部访问的 API 对象，主要用于 HTTP 和 HTTPS 路由。它的工作机制类似于 Nginx 或其他反向代理服务器，通过定义规则将外部流量重定向到集群内的服务
 
 
-2. Caching 缓存：缓存是提高性能的重要手段。前端可以使用浏览器缓存和CDN，后端可以采用多层次的缓存技术，比如反向代理缓存和数据库缓存。
+2. Caching 缓存
+	* 缓存 session
+	* 缓存 STEP user token
 
-Caching stores data in a temporary storage location, or cache, for faster retrieval.
+3. 异步处理
 
-CDNs (a form of horizontal scaling) store copies of your website and blog content on servers in various geographic regions. When users request content, the nearest CDN server responds, quickly delivering content while minimizing latency.
+	* Not computing intensive task
+	* Computing intensive task: 
+		* 算分cronjob
+		* 同步数据cronjob
 
-3. Database optimization 数据库优化：使用高效的数据库查询和架构，并考虑使用NoSQL数据库来处理大量的非结构化数据。improve data retrieval speeds: indexing, query optimization, and strategic scaling
+4. Microservices architecture 微服务架构，将单一应用程序拆分为多个小的、独立部署的服务。
 
-4. 异步处理：对于长时间运行的任务，可采用异步处理机制，例如消息队列系统（如Kafka），以避免阻塞主要的应用线程。
+	A microservices architecture divides your website into smaller, autonomous sections that communicate through application programming interfaces (APIs). 
 
-
-5. Microservices architecture 分布式系统：采用分布式架构，将不同的功能模块拆分并分布在多个服务器上。比如使用微服务架构，将单一应用程序拆分为多个小的、独立部署的服务。
-
-A microservices architecture divides your website into smaller, autonomous sections that communicate through application programming interfaces (APIs). This horizontal scaling method allows you to scale individual applications rather than the entire system to make development and updates more agile.
-Tools like Docker manage containerized site segments, while API gateways such as Amazon Web Services and Kong streamline communication between these microservices.
-
-
-
+	packages:
+	* shared
+	* business-file-management-api
+	* business-cms-api
+	* business-notification-api
+	* business-report-api
+	* business-user-behavior-api
+	* admin-experience-api
+	* admin-authorization-api
+	* persona-experience-api
+	* authentication-api
+	* persona-authorization-api
+	* business-data-sync-api

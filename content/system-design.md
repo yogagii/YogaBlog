@@ -61,6 +61,12 @@ Ways to expand to high scalability:
 
 https://webflow.com/blog/website-scaling
 
+https://www.geeksforgeeks.org/what-is-scalability-and-how-to-achieve-it-learn-system-design/
+
+https://www.prepbytes.com/blog/system-design/how-to-achieve-scalability-in-system-design/
+
+https://www.designgurus.io/blog/grokking-system-design-scalability
+
 
 ## Microservices 微服务
 

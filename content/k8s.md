@@ -47,6 +47,22 @@ az login --service-principal --tenant xxx -u xxx -p xxx
 az aks get-credentials --resource-group xxx --name xxx
 ```
 
+配置kubeconfig
+```bash
+# 添加 Context
+kubectl config set-context prod --cluster=xxx --namespace=default --user=xxx --kubeconfig=$HOME/.kube/kube-prod.config
+# 查看 kubeconfig 文件信息
+kubectl config view --kubeconfig=$HOME/.kube/kube-prod.config
+kubectl config get-contexts --kubeconfig=$HOME/.kube/kube-prod.config 
+# 切换 Context
+kubectl config use-context prod  --kubeconfig=$HOME/.kube/kube-prod.config
+# 查看当前 Context
+kubectl config current-context
+kubectl config view
+# 列出所有 Context 
+kubectl config get-contexts
+```
+
 https://learn.microsoft.com/zh-cn/azure/aks/learn/quick-kubernetes-deploy-cli
 
 ```bash

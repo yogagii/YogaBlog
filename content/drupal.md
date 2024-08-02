@@ -178,6 +178,9 @@ example response
 
   GET http://127.0.0.1:8080/jsonapi/node/course?page[offset]=0&page[limit]=20
 
+  _Drupal has a maximum limit of 50 items returned per JSON:API collection page._
+  _limit = 0返回全部数据_
+
 * list search
 
   GET http://127.0.0.1:8080/jsonapi/node/course?filter[title][operator]=CONTAINS&filter[title][value]=test

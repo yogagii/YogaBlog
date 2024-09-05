@@ -108,3 +108,48 @@ content.pipe(response);
 ```
 
 https://learn.microsoft.com/zh-cn/azure/storage/blobs/storage-blob-upload-typescript
+
+5. redirect url
+
+如果直接在接口里返回视频资源，整个视频文件的内容会被加载到内存中可能会导致内存占用过高，可以选择通过HTTP响应重定向用户到Blob文件的URL，直接从blob中流式传输给客户端
+
+```js
+interface ExtendedRequestOptions extends RequestOptions {
+	rejectUnauthorized?: boolean;
+}
+
+export async function downloadRequestHandler(
+	request: Request,
+	response: Response,
+	next: NextFunction
+) {
+	const { destination, filename } = request.params;
+	const fileType = request.params.fileType as FileType;
+	const encodedFilename = encodeURIComponent(fileWithExtensionName);
+	const splits = fileWithExtensionName.split(".");
+	const contentType = getContentType(fileType, splits.pop());
+
+	const { azure } = await getConfig();
+	const { sasToken, sasDomain, blobContainer, storageAccount } = azure.cpBlob;
+	const azureHost = `https://${storageAccount}.privatelink.${sasDomain}`;
+
+	const targetPath = `/${blobContainer}/${destination}/${fileType}/${encodeURIComponent(
+		encodedFilename
+	)}?${sasToken}`;
+
+	proxy(azureHost, {
+		proxyReqPathResolver: () => targetPath,
+		proxyReqOptDecorator: function (proxyReqOpts: ExtendedRequestOptions) {
+			proxyReqOpts.rejectUnauthorized = false;
+			if (proxyReqOpts.headers) {
+				delete proxyReqOpts.headers["authorization"];
+			}
+			return proxyReqOpts;
+		},
+		userResHeaderDecorator: (headers) => {
+			headers["content-type"] = contentType;
+			return headers;
+		},
+	})(request, response, next);
+}
+```

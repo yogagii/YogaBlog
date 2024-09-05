@@ -82,6 +82,54 @@ kubectl --namespace=dev exec -it pod-xxxxx -- ls -al
 kubectl --namespace=dev exec -it pod-xxxxx-- ls -al /mnt/secrets
 kubectl --namespace=dev exec -it pod-xxxxx -- cat /mnt/secrets/AZURE-PASSWORD
 ```
+Debug
+
+```bash
+# 显示资源使用情况：
+kubectl top nodes
+kubectl top pods --all-namespaces
+kubectl get pods --all-namespaces -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name,CPU_REQUESTS:.spec.containers[*].resources.requests.cpu,CPU_LIMITS:.spec.containers[*].resources.limits.cpu,MEMORY_REQUESTS:.spec.containers[*].resources.requests.memory,MEMORY_LIMITS:.spec.containers[*].resources.limits.memory,AGE:.status.startTime'
+
+kubectl get pods -o wide -n dev
+```
+
+Azure Kubernetes Service status is Red, as the total CPU limits is reaching the maximum of a node.
+
+**排查 AKS 群集中 CPU 使用率过高**
+
+https://learn.microsoft.com/zh-cn/troubleshoot/azure/azure-kubernetes/availability-performance/identify-high-cpu-consuming-containers-aks?tabs=command-line#step-2-review-best-practices-to-avoid-high-cpu-usage
+
+Your service will be not stable if the pods are running in system node, since there will have periodic scanning to increase the workload on system node.
+
+service pod 不应该挂载到 system node 上，应该在 working node
+
+要给node pool打label然后在deployment指定label，默认的agentpool=wg1
+
+```yaml
+# dev.values.yaml
+workerPoolLabel: wg1
+# admin-authorization-deployment.yaml
+template:
+    spec:
+      nodeSelector:
+        agentpool: {{ .Values.workerPoolLabel }}
+```
+
+working node 从之前的 2 个根据系统流量自动扩展到 5 个，业务 pod 不会在 system node 抢系统资源导致不稳定发生
+
+手动部署
+
+```bash
+kubectl apply -f . -n namespace
+kubectl edit ingress -n namespace authentication
+       - backend:
+          service:
+            name: blob-service
+            port:
+              number: 80
+        path: /api/internal-course/video
+        pathType: Prefix
+```
 
 ## Helm
 

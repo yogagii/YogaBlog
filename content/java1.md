@@ -54,7 +54,17 @@ java -jar hello.jar
 
 * 检查安装java
 
-https://www.oracle.com/java/technologies/javase/javase9-archive-downloads.html 下载 jdk-9.0.1_osx-x64_bin.dmg 双击安装
+判断自己的mac是macOS x64 还是 macOS ARM64
+
+```bash
+uname -a 
+# Darwin WITSXRQVHQWK75 23.6.0 Darwin Kernel Version 23.6.0: Mon Jul 29 21:14:30 PDT 2024; root:xnu-10063.141.2~1/RELEASE_ARM64_T6000 arm64
+```
+
+https://www.oracle.com/java/technologies/downloads/?er=221886#jdk22-mac
+
+下载 jdk-22_macos-aarch64_bin.dmg 双击安装
+
 ```bash
 java -version
 # java version "9.0.1"
@@ -62,16 +72,16 @@ java -version
 
 * 检查安装maven
 
-https://maven.apache.org/download.cgi 下载 apache-maven-3.8.5-bin.zip，解压并放入user目录下
+https://maven.apache.org/download.cgi 下载 apache-maven-3.8.8-bin.zip，解压并放入user目录下
 
 ```bash
-vim ~/.bash_profile
+vim ~/.zshrc
 
 # maven
-export MAVEN_HOME=/Users/jyu36/apache-maven-3.8.5
+export MAVEN_HOME=/Users/jyu/apache-maven-3.8.8
 export PATH=$PATH:$MAVEN_HOME/bin
 
-source ~/.bash_profile
+source ~/.zshrc
 mvn -v
 ```
 
@@ -84,7 +94,7 @@ mvn -v
 /usr/libexec/java_home -V # 找到本地 Java 的jdk安装目录
 # 9.0.1 (x86_64) "Oracle Corporation" - "Java SE 9.0.1" /Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home
 
-# /Users/jyu36/apache-maven-3.8.5/bin
+# /Users/jyu/apache-maven-3.8.8/bin
 vim mvn
 # 顶部添加
 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home
@@ -93,12 +103,29 @@ mvn -v
 # Java version: 9.0.1, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home
 ```
 
+换源
+
+vi /Users/jyu/apache-maven-3.8.8/conf/settings.xml
+
+```xml
+<mirror>
+  <id>xxx-public-repository-group</id>
+  <mirrorOf>central</mirrorOf>
+  <name>xxx Public Repository Group</name>
+  <url>http://repository.xxx.org/nexus/content/groups/public</url>
+</mirror>
+```
+
+修改
+
 * 安装依赖
 
 进入项目目录
 
 ```bash
 mvn install
+mvn clean install # 先清理项目的工作目录，删除之前构建过程中生成的所有文件（如编译后的类文件、JAR 文件等），确保新的构建是从干净的状态开始的
+mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true # 跳过证书检查
 ```
 
 * 运行项目

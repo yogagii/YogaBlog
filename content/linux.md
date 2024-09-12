@@ -74,7 +74,7 @@ node -v
 df -h # 查看磁盘空间
 du -sh *
 
-cd /home/v-jyu36/ # 不要用root安装
+cd /home/v-jyu/ # 不要用root安装
 wget https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh 
 chmod +x Anaconda3-2022.05-Linux-x86_64.sh
 ./Anaconda3-2022.05-Linux-x86_64.sh
@@ -82,7 +82,7 @@ rm Anaconda3-2022.05-Linux-x86_64.sh
 
 # 修改环境变量
 vi ~/.bashrc
-export PATH="/home/v-jyu36/anaconda3/bin:$PATH" 
+export PATH="/home/v-jyu/anaconda3/bin:$PATH" 
 source ~/.bashrc
 which python # ~/anaconda3/bin/python 
 
@@ -130,7 +130,7 @@ tmux kill-session -t 0 # 杀死某个会话
 
 * 移动文件：mv+源文件/源目录 目标文件/目标目录 
   ```bash
-  mv home/v-jyu36/DigiCertGlobalRootCA.crt.pem /var/www/iqvia_data/private
+  mv home/v-jyu/DigiCertGlobalRootCA.crt.pem /var/www/iqvia_data/private
   ```
 
 * 删除文件或目录

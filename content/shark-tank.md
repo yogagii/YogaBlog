@@ -256,9 +256,9 @@ brew install tesseract
 brew install tesseract-lang
 tesseract -v
 
-tesseract /Users/jyu36/code/sharktank/send-pdf/img/ocr1.png /Users/jyu36/code/sharktank/send-pdf/img/result -l eng
+tesseract /Users/jyu/code/sharktank/send-pdf/img/ocr1.png /Users/jyu/code/sharktank/send-pdf/img/result -l eng
 
-tesseract /Users/jyu36/code/sharktank/send-pdf/img/test-1.jpg /Users/jyu36/code/sharktank/send-pdf/img/result -l chi_sim
+tesseract /Users/jyu/code/sharktank/send-pdf/img/test-1.jpg /Users/jyu/code/sharktank/send-pdf/img/result -l chi_sim
 ```
 npm install node-tesseract-ocr
 

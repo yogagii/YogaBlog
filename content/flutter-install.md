@@ -53,7 +53,7 @@ xcode-select --install
   安装RVM
 ```bash
 curl -L https://get.rvm.io | bash -s stable
-source /Users/jyu36/.rvm/scripts/rvm
+source /Users/jyu/.rvm/scripts/rvm
 ```
   安装Ruby
 ```
@@ -83,7 +83,7 @@ vi ~/.bash_profile
 ```bash
 export PUB_HOSTED_URL=https://pub.flutter-io.cn
 export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-export PATH=/Users/jyu36/flutter/bin:$PATH
+export PATH=/Users/jyu/flutter/bin:$PATH
 ```
 
 vi ~/.zshrc

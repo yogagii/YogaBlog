@@ -116,7 +116,9 @@ vi /Users/jyu/apache-maven-3.8.8/conf/settings.xml
 </mirror>
 ```
 
-修改
+  setting.xml是Maven的全局配置文件，通常位于Maven安装目录下的conf文件夹中。它包含了Maven运行时需要用到的各种配置信息，例如本地仓库的位置、服务器的配置、邮件通知的配置等。
+
+  pom.xml是Maven项目的项目配置文件，通常位于项目的根目录下。它包含了项目的各种信息，如项目坐标、依赖关系、开发者规则、缺陷管理系统、组织和许可证等。
 
 * 安装依赖
 

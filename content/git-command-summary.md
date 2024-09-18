@@ -236,7 +236,13 @@ git config --global credential.helper store
 
 git push origin master
 
--> paste token
+-> paste token 粘贴到输入密码的位置
+
+把token直接添加远程仓库链接中，可以避免同一个仓库每次提交代码都要输入token
+
+```bash
+git remote set-url origin https://<your_token>@github.com/<USERNAME>/<REPO>.git
+```
 
 ## 部署
 

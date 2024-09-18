@@ -126,6 +126,7 @@ vi /Users/jyu/apache-maven-3.8.8/conf/settings.xml
 mvn install
 mvn clean install # 先清理项目的工作目录，删除之前构建过程中生成的所有文件（如编译后的类文件、JAR 文件等），确保新的构建是从干净的状态开始的
 mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true # 跳过证书检查
+mvn clean install -DskipTests # 跳过单元测试
 ```
 
 * 运行项目

@@ -15,18 +15,18 @@ https://registry.npmmirror.com/binary.html?path=node/
 
 2. 传输到服务器 /home/jyu 并解压
 
-scp ~/Desktop/node-v18.16.0-linux-x64.tar.xz jyu@xx.xx.xx.xx:~
+scp ~/Desktop/node-v20.18.0-linux-x64.tar.xz jyu@xx.xx.xx.xx:~
 
 ```bash
-xz -d node-v14.18.2-linux-x64.tar.xz
-tar -xvf node-v14.18.2-linux-x64.tar
+xz -d node-v20.18.0-linux-x64.tar.xz
+tar -xvf node-v20.18.0-linux-x64.tar
 ```
 
 3. 软连接 (步骤3,4二选一)
 
 ```bash
-ln -s /home/jyu/node-v14.18.2-linux-x64/bin/npm /usr/local/bin
-ln -s /home/jyu/node-v14.18.2-linux-x64/bin/node /usr/local/bin
+ln -s /home/jyu/node-v20.18.0-linux-x64/bin/npm /usr/local/bin
+ln -s /home/jyu/node-v20.18.0-linux-x64/bin/node /usr/local/bin
 ```
 
 4. 配置环境变量
@@ -36,7 +36,7 @@ env 查看环境变量 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/r
 ```bash
 vi /etc/profile
 
-export NODEJS_HOME=/home/jyu/node-v14.18.2-linux-x64
+export NODEJS_HOME=/home/jyu/node-v20.18.0-linux-x64
 export PATH=$PATH:$NODEJS_HOME/bin
 
 source /etc/profile

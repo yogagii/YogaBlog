@@ -33,7 +33,7 @@ CONFIG SET requirepass "xxxxxx" # 同local.js
 AUTH "xxxxxx"
 select 4 # db
 flushdb # clear database
-KEYS * # get all keys
+keys * # get all keys
 get sapToken # get certain key
 ttl sapToken # get expire time
 PSETEX sapToken 1500000 "xxx" # set

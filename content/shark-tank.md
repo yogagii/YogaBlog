@@ -141,6 +141,27 @@ async speechRecognition() {
   });
 }
 ```
+AudioStreamContainerFormat有AMR但是azure文档中支持的音频格式没有amr，只有MP3,flac,wav,mp4. 
+Utilize an external conversion tool or library (like FFmpeg) to convert the data into a supported format (WAV, PCM).
+
+前面的示例使用单步识别，可识别单个言语。 单个言语的结束是通过在结束时倾听静音或处理最长 15 秒音频时确定的。
+
+使用连续识别
+```js
+function fromFileCon() {
+  let result = '';
+  speechRecognizer.recognized = (s, e) => {
+    if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
+        console.log(`RECOGNIZED: Text=${e.result.text}`);
+        result+=e.result.text;
+    }
+  };
+  speechRecognizer.sessionStopped = (s, e) => {
+    speechRecognizer.stopContinuousRecognitionAsync();
+  };
+  speechRecognizer.startContinuousRecognitionAsync();
+}
+```
 
 ## Azure Speakers Identification
 

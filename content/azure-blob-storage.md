@@ -153,3 +153,73 @@ export async function downloadRequestHandler(
 	})(request, response, next);
 }
 ```
+
+---
+
+### Monut blob
+
+Linux 挂载步骤如下：
+
+1. sudo su -
+2. rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
+    
+    报错：rpm: unknown option
+    `wget https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm`
+    `rpm -Uvh packages-microsoft-prod.rpm`
+    
+3. yum install blobfuse2
+4. blobfuse2 --version
+5. cd /app
+    切回到自己权限再挂载，否则无法查看挂载后的文件夹
+6. mkdir landing-blob
+7. vi blobfuse-landing-blob.yaml
+8. blobfuse2 mount ./mnt/landing-blob --config-file=./blobfuse-landing-blob-qa.yaml --disable-writeback-cache=true
+    
+    有缓存的情况下，相同文件名在blob里更新后vm上不会更新
+    
+9. 验证文件同步
+
+使用blobfuse2将Azure Blob挂载到VM上时，VM重启后挂载确实可能会失效。这是因为blobfuse2的挂载通常是临时的，并不会在系统重启后自动重新挂载。采取以下几种方法来保持挂载的持久性：
+
+1. **使用fstab文件**：你可以将blobfuse2的挂载信息添加到Linux系统的`/etc/fstab`文件中，这样在每次启动时，系统会自动尝试挂载指定的存储。
+2. **使用启动脚本**：创建一个启动脚本来自动挂载blobfuse2，并将该脚本添加到系统的启动过程中。这样，每次VM启动时，都会自动执行挂载操作。
+
+---
+
+### Proxy
+
+> https://${storageAccount}.privatelink.${sasDomain}/${blobContainer}/${destination}/${fileType}/${encodeURIComponent(encodedFilename)}
+
+```js
+const { azure } = await getConfig();
+const { sasToken, sasDomain, blobContainer, storageAccount } = azure.cpBlob;
+const azureHost = `https://${storageAccount}.privatelink.${sasDomain}`;
+
+const targetPath = `/${blobContainer}/${destination}/${fileType}/${encodeURIComponent(
+  encodedFilename
+)}?${sasToken}`;
+
+proxy(azureHost, {
+  proxyReqPathResolver: () => targetPath,
+  proxyReqOptDecorator: function (proxyReqOpts: ExtendedRequestOptions) {
+    proxyReqOpts.rejectUnauthorized = false;
+    if (proxyReqOpts.headers) {
+      delete proxyReqOpts.headers["authorization"];
+    }
+
+    return proxyReqOpts;
+  },
+})(request, response, next);
+```
+下载图片
+```bash
+curl --request GET --url 'https://xxx.privatelink.blob.core.xxx.cn/blob/xxx/test.jpg?sasToken'  -k --output /home/test.jpg
+```
+
+```java
+String blobUrl = blobClient.getBlobUrl();
+// https://<your-account-name>.blob.core.windows.net/<your-container-name>/<your-blob-name>
+// SAS 令牌访问 Blob
+String sasToken = "?sv=<your-sas-token>";
+String fullBlobUrl = blobUrl + sasToken;
+```

@@ -44,8 +44,12 @@ DEFAULT_PAGINATION = 10
 #RELATIVE_URLS = True
 
 # math
-PLUGIN_PATHS=['pelican-plugins']
+PLUGIN_PATHS=['plugins']
 # PLUGINS = ["render_math"]
+PLUGINS = ['encrypt_content']
+ENCRYPT_CONTENT = {
+  'summary': 'This content is encrypted.'
+}
 
 ## load cache
 LOAD_CONTENT_CACHE = False

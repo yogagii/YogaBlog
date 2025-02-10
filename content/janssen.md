@@ -3,6 +3,7 @@ Date: 2021-6-3
 Category: Project
 Tags: egg
 Author: Yoga
+Password: project
 
 Janssen Training Platform is a digital platform integrating online learning courses, registering offline courses, sharing learning feelings and establishing knowledge system. The platform is divided into mobile app, PC web page and PC management platform.
 

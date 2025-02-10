@@ -2,6 +2,7 @@ Title: Precision Medicine -- iDiscover Data Platform
 Date: 2023-11-08
 Category: Project
 Author: Yoga
+Password: project
 
 ## Business Value
 

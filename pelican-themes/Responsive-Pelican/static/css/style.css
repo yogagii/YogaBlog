@@ -51,6 +51,14 @@ CSS Rules: Sorted alphabetically for better organization.
 /* =Reset CSS (v2.0) http://meyerweb.com/eric/tools/css/reset/
 -------------------------------------------------------------- */
 
+#pec-decrypt-form input[type='password'] {
+	width: 70%;
+	margin-right: 4px;
+}
+
+#pec-decrypt-content {
+	height: 30px;
+}
 
 /*HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {

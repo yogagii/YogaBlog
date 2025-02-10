@@ -35,6 +35,8 @@ This is the content of my blog post.
 
 [pelican](http://docs.getpelican.com/en/stable/install.html)
 
+[pelican-plugin] https://github.com/mindcruzer/pelican-encrypt-content/tree/master
+
 [typogrify](https://pypi.org/project/typogrify/)
 
 ```bash

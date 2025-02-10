@@ -2,6 +2,7 @@ Title: DAYU -- Supply Chain Data Analytics
 Date: 2022-11-22
 Category: Project
 Author: Yoga
+Password: project
 
 ### SCAN
 

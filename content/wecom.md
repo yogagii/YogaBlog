@@ -2,6 +2,7 @@ Title: Wecom Admin Portal
 Date: 2025-02-07
 Category: Project
 Author: Yoga
+Password: project
 
 ## Project Overview
 

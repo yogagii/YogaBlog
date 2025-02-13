@@ -260,3 +260,30 @@ public class WebConfig implements WebMvcConfigurer {
 }
 ```
 若使用filter, Register the Filter Using FilterRegistrationBean or web.xml.
+
+5.使用
+
+直接用
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+Logger logger = LoggerFactory.getLogger(Test.class);
+logger.info("Hello World!")
+```
+或者 @Slf4j 是 Lombok 提供的一个注解，用于在类中生成 SLF4J Logger 的实例，这样你就不需要手动编写 logger 的常规代码。
+
+```java
+java
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j // 使用 @Slf4j 注解
+public class MyController {
+
+  @GetMapping("/hello")
+  public String hello() {
+      log.info("Hello endpoint was called");
+      return "Hello, World!";
+  }
+}
+```

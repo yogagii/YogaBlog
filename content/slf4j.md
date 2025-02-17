@@ -24,6 +24,35 @@ Logger logger = LoggerFactory.getLogger(Test.class);
 logger.info("Hello World!")
 ```
 
+### Log4J2
+
+Log4J2 可以通过异步 Appender 实现非阻塞的日志记录，可以显著提高日志记录的性能，尤其是在高负载情况下。Log4J2 支持许多新的特性，包括更灵活的配置方式（支持 XML、JSON 和 YAML 格式），并且可以通过插件系统轻松扩展功能。
+
+pom.xml
+```xml
+<!-- 使用 spring-boot-starter 会引入 Logback 作为默认日志框架，要去掉这个依赖 -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter</artifactId>
+  <exclusions>
+    <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </exclusion>
+  </exclusions>
+</dependency>
+<!-- 不需要单独添加 log4j-core、log4j-api 和 log4j-slf4j-impl 的依赖，因为它们会通过 spring-boot-starter-log4j2 自动引入 -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
+<!-- log4j-layout-template-json 不是 spring-boot-starter-log4j2 的默认依赖，需要手动添加它 -->
+<dependency>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-layout-template-json</artifactId>
+</dependency>
+```
+
 ### MDC 
 
 Mapped Diagnostic Context (MDC) 是一个用于在日志中添加上下文信息的工具，它属于 SLF4J（Simple Logging Facade for Java）的一部分。MDC 允许你将一组键值对存储在当前线程的上下文中，这些键值对可以被日志框架访问并记录到日志中。

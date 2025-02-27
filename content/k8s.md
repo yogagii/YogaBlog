@@ -35,6 +35,15 @@ brew install kubectl
 kubectl version --client
 ```
 
+### 容器探针
+
+默认情况下Kubernetes只是检查Pod容器是否正常运行，容器的主进程崩溃，Kubelet将重启容器，但即使进程没有崩溃，有时应用程序运行也会出错，比如访问Web服务器时显示500内部错误，此时http进程依旧运行，重启容器可能是最直接有效的办法。
+
+* liveness probe 存活探针: 检查容器是否还在运行，如果探测失败, 就根据Pod重启策略，判断是否要重启容器
+* readiness probe 就绪探针: 保证只有准备好了请求的Pod才能接收客户端请求，如果检查失败，Kubernetes会将该Pod从服务代理的分发后端去除，不再分发请求给该Pod
+
+需要一个判断应用是否正常运行的接口：/healthcheck
+
 ### AKS
 
 Azure Kubernetes 服务 (AKS) 是一种托管 Kubernetes 服务

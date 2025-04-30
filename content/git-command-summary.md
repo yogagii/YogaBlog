@@ -26,6 +26,25 @@ git config remote.origin.url "https://user@sourcecode.xxx.com/scm/asx-xxxx/fpa_f
 git config --list
 ```
 
+### Git Upgrade
+```bash
+brew install git
+brew upgrade git
+
+git --version
+```
+_踩坑：Git 已经通过 Homebrew 安装了版本 2.49.0，但你在终端检查时返回的却是 Apple 提供的版本 2.39.5。这表明你仍在使用系统默认的 Git，而不是通过 Homebrew 安装的版本_
+
+```bash
+which git
+# /usr/bin/git 那就是系统的默认 Git，而不是 Homebrew 的版本
+```
+将 Homebrew 路径添加到 $PATH 中(~/.zshrc)以确保终端优先使用 Homebrew 安装的 Git
+```bash
+export PATH="/opt/homebrew/bin:$PATH"
+export LANG=en_US.UTF-8 # 确保git语言为英语
+```
+
 ## 常用指令
 * 初始化仓库: 
 ```

@@ -221,3 +221,52 @@ deploy:
       type: script
       script: project/_scm_jenkins/dbMigration.groovy
 ```
+
+### Unit test
+```js
+const getByUser = async (user_id: string) => {
+  try {
+    return await getDBClient<DBSettings>("settings")
+      .where("settings.user_id", user_id)
+      .andWhere("settings.deleted_at", null)
+      .leftJoin("types", "types.id", "settings.type_id")
+      .leftJoin("values", "values.id", "settings.value_id")
+      .select("settings.id")
+      .select("settings.custom_value")
+      .select("types.type")
+      .select("values.value");
+  } catch (error) {
+    Logger.error("Data.Settings.get", error.message);
+    throw new DataError(DataErrorType.DATABASE_ERROR, error);
+  }
+};
+```
+解决链式调用中多次select后返回mock数据的问题: 计数器实现
+* 链式调用需要保持方法返回this
+* 最终select需要返回Promise.resolve结果
+```js
+describe("getByUser", () => {
+  it("should fetch settings by user ID", async () => {
+    const mockSettings = [
+      { id: 1, custom_value: "value1", type: "type1", value: "value1" },
+    ];
+    let selectCount = 0;
+    const mockChainInstance = {
+      where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
+      leftJoin: jest.fn().mockReturnThis(),
+      select: jest.fn().mockImplementation(() => {
+        selectCount++;
+        return selectCount === 4
+          ? Promise.resolve(mockSettings)
+          : mockChainInstance;
+      }),
+    };
+    (getDBClient as jest.Mock).mockReturnValue(mockChainInstance);
+
+    const result = await Settings.getByUser(mockUserId);
+    expect(result).toEqual(mockSettings);
+    expect(getDBClient).toHaveBeenCalledWith("settings");
+  });
+});
+```

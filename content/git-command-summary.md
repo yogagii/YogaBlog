@@ -245,6 +245,17 @@ git rebase [feature-branch]
 git push origin dev
 ```
 
+* 解决冲突 (pr: feature -> develop)
+```bash
+git config --get pull.rebase
+# true 说明默认的 pull 行为为 rebase
+git pull --no-rebase origin develop
+# fix conflict
+git add .
+git commit -m 'fix conflict'
+git push origin [current-branch]:feature
+```
+
 * token
 
 https://github.com/settings/tokens/new

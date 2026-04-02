@@ -68,6 +68,60 @@ def testMap(x):
 print(list(map(testMap,range(1,5)))) # [2, 3, 4, 5]
 ```
 
+## Tuple 元组
+
+元组和列表类似，不同之处在于元组元素不能修改
+
+元组表达方式：（）括号，列表是[ ]
+
+```python
+tuple1 = ("Google", "Runoob", "Taobao")
+
+tuple1[0] # "Google"
+tuple1[1:2] # ("Runoob")
+```
+
+## Dictionary 字典
+
+字典是另一种可变容器模型，且可以存储任意类型对象。
+键必须是唯一的，但是值可以取任何数据类型
+
+```python
+dict1 = {'name': 'Bob', 'age': 10}
+
+dict1['Name'] # Bob 
+dict1['sex'] # 如果键不存在会抛错 KeyError: 'age' 
+dict1.get("sex")  # None  字典安全访问
+dict1.get("sex", "Male")  # Male
+```
+
+* 要取映射/字典的键且键应存在: object["data"]
+* 要取映射/字典的键但键可能不存在且要默认值: object.get("data", default)
+
+```python
+data = json.loads('{"name": "Alice", "age": 25, "hobbies": ["Reading", "Swimming"]}') # 用于将 JSON 格式的字符串解析为 Python 数据结构（如字典、列表等）。
+data["age"] = 20
+data["hobbies"].append("Hiking")
+
+new_str = json.dumps(data) # 用于将 Python 对象序列化为 JSON 格式的字符串。
+```
+
+## 对象 Object
+
+```python
+class User:
+    def __init__(self, name):
+        self.name = name
+
+u = User("Alice")
+print(u.name) # "Alice"
+print(u.age) # AttributeError: 'User' object has no attribute 'age'
+# 提供默认值用 getattr
+print(getattr(u, "age", 30))  # 30
+```
+object.data：属性访问（attribute lookup）。适用于对象的属性或类/实例定义了该属性或 property。不存在时抛出 AttributeError（可用 getattr 提供默认值）。
+
+
 ## String 字符串
 
 ```python

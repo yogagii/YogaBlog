@@ -135,11 +135,11 @@ git fetch [remote-name]
 git pull
 ```
 * 存储工作区和缓存区
-```
+```bash
 git stash
 git stash list
 git pull origin main
-git stash apply
+git stash apply # 默认使用最近一个 stash stash@{0}
 ```
 
 * 推送到远程仓库: 
